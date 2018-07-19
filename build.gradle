@@ -6,17 +6,55 @@ subprojects {
         mavenCentral()
     }
 
+    afterEvaluate {
+        compileJava {
+            inputs.property("moduleName", moduleName)
+            doFirst {
+                options.compilerArgs = [
+                        '--module-path', classpath.asPath,
+                ]
+                classpath = files()
+            }
+        }
+
+        compileTestJava {
+            inputs.property("moduleName", moduleName)
+            doFirst {
+                options.compilerArgs = [
+                        '--module-path', classpath.asPath,
+                        '--add-modules', 'junit',
+                        '--add-reads', "$moduleName=junit",
+                        '--patch-module', "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
+                ]
+                classpath = files()
+            }
+        }
+
+        test {
+            inputs.property("moduleName", moduleName)
+            doFirst {
+                jvmArgs = [
+                        '--module-path', classpath.asPath,
+                        '--add-modules', 'ALL-MODULE-PATH',
+                        '--add-reads', "$moduleName=junit",
+                        '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
+                ]
+                classpath = files()
+            }
+        }
+    }
+
     //Default dependencies for all
     dependencies {
         testCompile group: 'junit', name: 'junit', version: '4.12'
-        compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+        compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.8.0-beta2'
     }
 }
 
 project(':Core') {
     version = '1.0'
+    ext.moduleName = 'edulogo.core'
 
     dependencies {
-        compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
     }
 }
