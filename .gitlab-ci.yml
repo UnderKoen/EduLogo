@@ -1,0 +1,15 @@
+image: java:10-jdk
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+before_script:
+  - apt-get update
+  - apt-get install -y openjfx
+  - chmod +x gradlew
+
+test:
+  stage: test
+  script: 
+    - ./gradlew --build-cache assemble
+    - ./gradlew check
