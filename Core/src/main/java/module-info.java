@@ -4,5 +4,5 @@
 module edulogo.core {
     exports nl.edulogo.core;
     exports nl.edulogo.core.utils;
-    requires org.slf4j;
+    requires slf4j.simple;
 }
