@@ -1,11 +1,11 @@
-image: oracle-java10-installer
+image: openjdk:10-jdk
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 before_script:
   - apt-get update
-  - apt-get install -y openjfx
+  - apt-get install -y oracle-java10-installer
   - chmod +x gradlew
 
 test:
