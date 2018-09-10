@@ -65,5 +65,7 @@ project(':Display') {
 
     dependencies {
         compile project(':Core')
+        compile group: 'org.openjfx', name: 'javafx-base', version: '11-ea+25'
+        compile group: 'org.openjfx', name: 'javafx-graphics', version: '11-ea+25'
     }
 }
