@@ -8,6 +8,10 @@ import nl.edulogo.core.Position;
 public class MathUtil {
     private static final double HALF_PI = Math.PI / 2;
 
+    private MathUtil() {
+
+    }
+
     public static Position getRelativePosition(double rotation, double distance) {
         if (rotation < 0)
             throw new IllegalArgumentException("Rotation can't be negative");

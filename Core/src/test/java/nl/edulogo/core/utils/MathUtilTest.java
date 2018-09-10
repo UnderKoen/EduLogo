@@ -11,28 +11,28 @@ public class MathUtilTest {
     public void getRelativePosition() {
         //Multiples of 90
         var pos0 = MathUtil.getRelativePosition(0, 100);
-        PositionTest.assertPosition(0, 100, pos0);
+        PositionAssert.assertPosition(0, 100, pos0);
 
         var pos90 = MathUtil.getRelativePosition(90, 1234.56789);
-        PositionTest.assertPosition(1234.56789, 0, pos90);
+        PositionAssert.assertPosition(1234.56789, 0, pos90);
 
         var pos180 = MathUtil.getRelativePosition(180, 404);
-        PositionTest.assertPosition(0, -404, pos180);
+        PositionAssert.assertPosition(0, -404, pos180);
 
         var pos270 = MathUtil.getRelativePosition(270, -123);
-        PositionTest.assertPosition(123, 0, pos270);
+        PositionAssert.assertPosition(123, 0, pos270);
 
         var pos360 = MathUtil.getRelativePosition(360, 987);
-        PositionTest.assertPosition(0, 987, pos360);
+        PositionAssert.assertPosition(0, 987, pos360);
 
         var pos450 = MathUtil.getRelativePosition(450, -Math.PI);
-        PositionTest.assertPosition(-Math.PI, 0, pos450);
+        PositionAssert.assertPosition(-Math.PI, 0, pos450);
 
         var pos540 = MathUtil.getRelativePosition(540, Math.E);
-        PositionTest.assertPosition(0, -Math.E, pos540);
+        PositionAssert.assertPosition(0, -Math.E, pos540);
 
         var pos630 = MathUtil.getRelativePosition(630, -13.37);
-        PositionTest.assertPosition(13.37, 0, pos630);
+        PositionAssert.assertPosition(13.37, 0, pos630);
 
         //Other
         double[] test = new double[90];
@@ -50,7 +50,7 @@ public class MathUtilTest {
             var x = (Math.sin(radian) * test[i + 1]);
             var y = (Math.sin(radianOpposite) * test[i + 1]);
             var pos = MathUtil.getRelativePosition(test[i], test[i + 1]);
-            PositionTest.assertPosition(x, y, pos);
+            PositionAssert.assertPosition(x, y, pos);
         }
     }
 

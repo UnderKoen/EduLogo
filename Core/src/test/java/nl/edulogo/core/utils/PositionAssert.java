@@ -6,7 +6,7 @@ import org.junit.Assert;
 /**
  * Created by Under_Koen on 19/07/2018.
  */
-public class PositionTest {
+public class PositionAssert {
     public static void assertPosition(double expectedX, double expectedY, Position value) {
         if (value == null) {
             Assert.fail("Value was null");

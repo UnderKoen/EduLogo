@@ -1,3 +1,5 @@
+version = '1.0'
+
 subprojects {
     apply plugin: 'java'
     group ='nl.edulogo'
@@ -54,5 +56,14 @@ project(':Core') {
     ext.moduleName = 'edulogo.core'
 
     dependencies {
+    }
+}
+
+project(':Display') {
+    version = '1.0'
+    ext.moduleName = 'edulogo.display'
+
+    dependencies {
+        compile project(':Core')
     }
 }
