@@ -5,7 +5,7 @@ variables:
 
 before_script:
   - apt-get update
-  - apt-get install -y javajfx
+  - apt-get install -y openjfx
   - chmod +x gradlew
 
 test:
