@@ -1,4 +1,4 @@
-image: openjdk:10-jdk
+image: oracle-java10-installer
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
