@@ -33,7 +33,7 @@ public class Test extends Application {
         display.drawLine(new Position(15, 10), new Position(120, 200), Color.RED);
         display.drawDot(new Position(420, 420));
         display.drawDot(new Position(450, 450), Color.WHITE);
-        display.fillPolygon(new Polygon(new Position(300, 50), new Position(400, 50), new Position(450, 75),
+        display.fillPolygon(new Polygon(new Position(150, 50), new Position(400, 50), new Position(450, 75),
                 new Position(350, 300), new Position(300, 100)), Color.GREEN);
         display.write("HEY", new Position(50, 300));
         display.write("KOEN", new Position(50, 350), new Font(50, Color.RED));
