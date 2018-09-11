@@ -79,12 +79,14 @@ project(':JavaLogo') {
     ext.moduleName = 'edulogo.javalogo'
 
     dependencies {
+        compile project(':Core')
+        compile project(':Display')
     }
 }
 
 project(':Editor') {
     version = '1.0'
-    ext.moduleName = 'edulogo.javalogo'
+    ext.moduleName = 'edulogo.editor'
 
     dependencies {
     }
