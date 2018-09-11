@@ -2,45 +2,51 @@ version = '1.0'
 
 subprojects {
     apply plugin: 'java'
-    group ='nl.edulogo'
+    group = 'nl.edulogo'
     sourceCompatibility = 1.10
     repositories {
         mavenCentral()
     }
     afterEvaluate {
         compileJava {
-            inputs.property("moduleName", moduleName)
-            doFirst {
-                options.compilerArgs = [
-                        '--module-path', classpath.asPath,
-                ]
-                classpath = files()
+            if (project.hasProperty("moduleName")) {
+                inputs.property("moduleName", moduleName)
+                doFirst {
+                    options.compilerArgs = [
+                            '--module-path', classpath.asPath,
+                    ]
+                    classpath = files()
+                }
             }
         }
 
         compileTestJava {
-            inputs.property("moduleName", moduleName)
-            doFirst {
-                options.compilerArgs = [
-                        '--module-path', classpath.asPath,
-                        '--add-modules', 'junit',
-                        '--add-reads', "$moduleName=junit",
-                        '--patch-module', "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
-                ]
-                classpath = files()
+            if (project.hasProperty("moduleName")) {
+                inputs.property("moduleName", moduleName)
+                doFirst {
+                    options.compilerArgs = [
+                            '--module-path', classpath.asPath,
+                            '--add-modules', 'junit',
+                            '--add-reads', "$moduleName=junit",
+                            '--patch-module', "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
+                    ]
+                    classpath = files()
+                }
             }
         }
 
         test {
-            inputs.property("moduleName", moduleName)
-            doFirst {
-                jvmArgs = [
-                        '--module-path', classpath.asPath,
-                        '--add-modules', 'ALL-MODULE-PATH',
-                        '--add-reads', "$moduleName=junit",
-                        '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
-                ]
-                classpath = files()
+            if (project.hasProperty("moduleName")) {
+                inputs.property("moduleName", moduleName)
+                doFirst {
+                    jvmArgs = [
+                            '--module-path', classpath.asPath,
+                            '--add-modules', 'ALL-MODULE-PATH',
+                            '--add-reads', "$moduleName=junit",
+                            '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
+                    ]
+                    classpath = files()
+                }
             }
         }
     }
@@ -65,5 +71,21 @@ project(':Display') {
 
     dependencies {
         compile project(':Core')
+    }
+}
+
+project(':JavaLogo') {
+    version = '1.0'
+    ext.moduleName = 'edulogo.javalogo'
+
+    dependencies {
+    }
+}
+
+project(':Editor') {
+    version = '1.0'
+    ext.moduleName = 'edulogo.javalogo'
+
+    dependencies {
     }
 }
