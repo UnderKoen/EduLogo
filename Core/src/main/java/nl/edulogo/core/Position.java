@@ -28,6 +28,19 @@ public class Position {
         this.y = y;
     }
 
+    public void addX(double x) {
+        setX(this.x + x);
+    }
+
+    public void addY(double y) {
+        setY(this.y + y);
+    }
+
+    public void addPosition(Position position) {
+        addX(position.getX());
+        addY(position.getY());
+    }
+
     @Override
     public String toString() {
         return "Position{" +
