@@ -89,5 +89,6 @@ project(':Editor') {
     ext.moduleName = 'edulogo.editor'
 
     dependencies {
+        compile project(':Core')
     }
 }
