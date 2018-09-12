@@ -1,22 +1,30 @@
 package nl.edulogo.editor;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
-
-import java.util.function.Consumer;
 
 /**
  * Created by Under_Koen on 11/09/2018.
  */
 public class FxEditor extends StackPane implements Editor {
-    public TextArea textArea;
+    private TextArea textArea;
+    private FxConsole console;
 
     public FxEditor() {
         super();
-        textArea = new TextArea("1234567891\n1234567892\n1234567893");
-        textArea.setWrapText(true);
 
-        getChildren().addAll(textArea);
+        textArea = new TextArea();
+        console = new FxConsole();
+
+        textArea.setWrapText(true);
+        textArea.maxHeightProperty().bind(heightProperty().subtract(console.heightProperty()));
+        setAlignment(textArea, Pos.TOP_CENTER);
+
+        console.setMaxHeight(200);
+        setAlignment(console, Pos.BOTTOM_CENTER);
+
+        getChildren().addAll(textArea, console);
     }
 
     @Override
@@ -41,17 +49,7 @@ public class FxEditor extends StackPane implements Editor {
     }
 
     @Override
-    public void print(String text) {
-
-    }
-
-    @Override
-    public void println(String text) {
-
-    }
-
-    @Override
-    public void registerOnRun(Consumer<String> onRun) {
-
+    public Console getConsole() {
+        return console;
     }
 }

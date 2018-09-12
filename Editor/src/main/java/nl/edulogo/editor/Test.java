@@ -1,8 +1,8 @@
 package nl.edulogo.editor;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -15,23 +15,22 @@ public class Test extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        StackPane pane = new StackPane();
-        Scene scene = new Scene(pane, 500, 500);
+        FxEditor editor = new FxEditor();
+        Scene scene = new Scene(editor, 350, 500);
 
         primaryStage.setScene(scene);
 
-        FxEditor editor = new FxEditor();
-        pane.getChildren().add(editor);
-
         primaryStage.show();
 
-        new Thread(() -> {
-            try {
-                Thread.sleep(10000);
-                System.out.println(editor.getCurrentLine());
-            } catch (Exception e) {
-                e.printStackTrace();
+        Platform.runLater(() -> {
+            editor.getConsole().print("1234567890");
+            editor.getConsole().print("|1234567890");
+            editor.getConsole().print("[1234567890");
+            editor.getConsole().print("{1234567890");
+            editor.getConsole().print("(1234567890");
+            for (int i = 0; i < 100; i++) {
+                editor.getConsole().println("Koen is rood: " + i);
             }
-        }).start();
+        });
     }
 }
