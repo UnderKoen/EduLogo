@@ -9,7 +9,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ public class FxConsole extends StackPane implements Console {
     private ScrollPane scroll;
     private StackPane lines;
     private List<Label> textLines;
+    private boolean error = false;
 
     public FxConsole() {
         super();
@@ -40,7 +40,7 @@ public class FxConsole extends StackPane implements Console {
 
     @Override
     public void print(String text) {
-        if (textLines.isEmpty()) {
+        if (textLines.isEmpty() || error) {
             println(text);
         } else {
             Label label = textLines.get(textLines.size() - 1);
@@ -57,7 +57,7 @@ public class FxConsole extends StackPane implements Console {
         label.setWrapText(true);
 
         if (textLines.size() % 2 == 0) {
-            label.setBackground(new Background(new BackgroundFill(Color.gray(0.9), CornerRadii.EMPTY, Insets.EMPTY)));
+            label.setBackground(background(Color.gray(0.9)));
         }
 
         if (!textLines.isEmpty()) {
@@ -68,10 +68,20 @@ public class FxConsole extends StackPane implements Console {
         textLines.add(label);
         lines.getChildren().add(label);
         lines.prefHeightProperty().bind(label.translateYProperty().add(label.heightProperty()));
+
+        error = false;
     }
 
     @Override
     public void error(String text) {
-        lines.getChildren().addAll(new Text(text));
+        println(text);
+        Label line = textLines.get(textLines.size() - 1);
+        line.setTextFill(Color.RED);
+        line.setBackground(background(Color.rgb(255, 0, 0, 0.1 + (textLines.size() % 2) / 20.0)));
+        error = true;
+    }
+
+    private Background background(Color color) {
+        return new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY));
     }
 }

@@ -17,14 +17,16 @@ public class FxEditor extends StackPane implements Editor {
         textArea = new TextArea();
         console = new FxConsole();
 
+        getChildren().addAll(textArea, console);
+
         textArea.setWrapText(true);
         textArea.maxHeightProperty().bind(heightProperty().subtract(console.heightProperty()));
         setAlignment(textArea, Pos.TOP_CENTER);
 
-        console.setMaxHeight(200);
+        console.setMaxHeight(150);
         setAlignment(console, Pos.BOTTOM_CENTER);
 
-        getChildren().addAll(textArea, console);
+        DragResizer.makeResizable(console);
     }
 
     @Override
