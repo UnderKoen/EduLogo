@@ -7,23 +7,28 @@ import javafx.stage.Stage;
 import nl.edulogo.core.Display;
 import nl.edulogo.core.Position;
 import nl.edulogo.core.Size;
+import nl.edulogo.core.utils.MathUtil;
 import nl.edulogo.display.FxDisplay;
 
 public class TekenApplet {
+
     private Display display;
+    private Position currentPos;
+    private double rotation = 0;
 
     public static void main(String[] args) {
         new TekenApplet().start();
     }
 
     public void start() {
+        initialiseer();
+        currentPos = new Position(250, 250);
         display = new FxDisplay(new Size(500, 500));
         Temp.display = (FxDisplay) display;
         new Thread(() -> {
             try {
                 //Thread.sleep(1000);
-                debug();//TODO FIX THIS SHIT
-                System.out.println("wowoowowo");
+                tekenapplet();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -31,14 +36,32 @@ public class TekenApplet {
         Temp.start2();
     }
 
-    private void debug() {
-        test();
+    public void tekenapplet() {
+
     }
 
-    //FUNCTIES
-    public void test() {
-        Temp.display.drawLine(new Position(10, 10), new Position(200, 200));
+    public void initialiseer() {
+
     }
+
+    public void vooruit(double dy) {
+        Position newPos = MathUtil.getRelativePosition(rotation, -dy);
+        newPos.addPosition(currentPos);
+        display.drawLine(currentPos, newPos);
+        currentPos = newPos;
+    }
+
+    public void rechts(double dHoek) {
+        rotation -= dHoek;
+        rotation = rotation % 360;
+        if (rotation < 0) rotation = 360 + rotation;
+    }
+
+    public void links(double dHoek) {
+        rechts(-dHoek);
+    }
+
+
 
     public static class Temp extends Application {
         public static FxDisplay display;
