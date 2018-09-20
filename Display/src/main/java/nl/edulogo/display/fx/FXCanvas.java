@@ -1,24 +1,24 @@
-package nl.edulogo.display;
+package nl.edulogo.display.fx;
 
-import javafx.scene.canvas.Canvas;
+import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import nl.edulogo.core.*;
 
 /**
- * Created by Under_Koen on 10/09/2018.
+ * Created by Under_Koen on 20/09/2018.
  */
-public class FxDisplay implements Display {
-    private Canvas canvas;
+public class FXCanvas implements Canvas, FXView {
+    private javafx.scene.canvas.Canvas canvas;
     private GraphicsContext graphics;
     private Size size;
 
-    public FxDisplay(Size size) {
+    public FXCanvas(Size size) {
         this.size = size;
-        canvas = new Canvas(size.getWidth(), size.getHeight());
+        canvas = new javafx.scene.canvas.Canvas(size.getWidth(), size.getHeight());
         graphics = canvas.getGraphicsContext2D();
     }
 
-    public Canvas getCanvas() {
+    protected javafx.scene.canvas.Canvas getCanvas() {
         return canvas;
     }
 
@@ -118,5 +118,10 @@ public class FxDisplay implements Display {
     @Override
     public void clear() {
         graphics.clearRect(0, 0, size.getWidth(), size.getHeight());
+    }
+
+    @Override
+    public Node getNode() {
+        return canvas;
     }
 }

@@ -7,4 +7,5 @@ module edulogo.display {
     requires javafx.graphics;
 
     exports nl.edulogo.display;
+    exports nl.edulogo.display.fx;
 }

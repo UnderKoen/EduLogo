@@ -3,9 +3,11 @@
  */
 module edulogo.editor {
     requires edulogo.core;
+    requires edulogo.display;
     requires javafx.base;
     requires javafx.graphics;
     requires javafx.controls;
 
     exports nl.edulogo.editor;
+    exports nl.edulogo.editor.fx;
 }

@@ -1,4 +1,4 @@
-package nl.edulogo.editor;
+package nl.edulogo.editor.fx;
 
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;

@@ -1,7 +1,8 @@
-package nl.edulogo.editor;
+package nl.edulogo.editor.fx;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Background;
@@ -9,6 +10,9 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import nl.edulogo.core.Size;
+import nl.edulogo.display.fx.FXView;
+import nl.edulogo.editor.Console;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +20,16 @@ import java.util.List;
 /**
  * Created by Under_Koen on 12/09/2018.
  */
-public class FxConsole extends StackPane implements Console {
+public class FXConsole implements Console, FXView {
+    private StackPane pane;
+
     private ScrollPane scroll;
     private StackPane lines;
     private List<Label> textLines;
     private boolean error = false;
 
-    public FxConsole() {
-        super();
+    public FXConsole() {
+        pane = new StackPane();
 
         scroll = new ScrollPane();
         lines = new StackPane();
@@ -35,7 +41,7 @@ public class FxConsole extends StackPane implements Console {
 
         lines.setAlignment(Pos.TOP_CENTER);
 
-        getChildren().addAll(scroll);
+        pane.getChildren().addAll(scroll);
     }
 
     @Override
@@ -52,7 +58,7 @@ public class FxConsole extends StackPane implements Console {
     public void println(String text) {
         Label label = new Label(text);
 
-        label.minWidthProperty().bind(widthProperty().subtract(2));
+        label.minWidthProperty().bind(pane.widthProperty().subtract(2));
         label.maxWidthProperty().bind(label.minWidthProperty());
         label.setWrapText(true);
 
@@ -83,5 +89,15 @@ public class FxConsole extends StackPane implements Console {
 
     private Background background(Color color) {
         return new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY));
+    }
+
+    @Override
+    public Node getNode() {
+        return pane;
+    }
+
+    @Override
+    public Size getSize() {
+        return new Size(pane.getWidth(), pane.getHeight());
     }
 }
