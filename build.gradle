@@ -90,5 +90,15 @@ project(':Editor') {
 
     dependencies {
         compile project(':Core')
+        compile project(':Display')
+    }
+}
+
+project(':Logo') {
+    version = '1.0'
+    ext.moduleName = 'edulogo.logo'
+
+    dependencies {
+        compile project(':Core')
     }
 }
