@@ -10,8 +10,7 @@ public class Test extends TekenApplet {
 
     @Override
     public void tekenapplet() {
-        System.out.println("de");
-        vooruit(100);
+        
     }
 
     @Override
