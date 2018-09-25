@@ -6,9 +6,9 @@ package nl.edulogo.logo;
 public interface Logo {
     Turtle getTurtle();
 
-    void forward();
+    void forward(double amount);
 
-    void right();
+    void right(double rotation);
 
-    void left();
+    void left(double rotation);
 }

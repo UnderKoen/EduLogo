@@ -7,6 +7,10 @@ public class Position {
     private double x;
     private double y;
 
+    public Position(Position position) {
+        this(position.getX(), position.getY());
+    }
+
     public Position(double x, double y) {
         this.x = x;
         this.y = y;
@@ -39,6 +43,11 @@ public class Position {
     public void addPosition(Position position) {
         addX(position.getX());
         addY(position.getY());
+    }
+
+    @Override
+    public Position clone() {
+        return new Position(this);
     }
 
     @Override

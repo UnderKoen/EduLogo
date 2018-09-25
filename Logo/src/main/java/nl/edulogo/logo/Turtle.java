@@ -1,6 +1,7 @@
 package nl.edulogo.logo;
 
 import nl.edulogo.core.Color;
+import nl.edulogo.core.Font;
 import nl.edulogo.core.Position;
 
 /**
@@ -10,23 +11,30 @@ public class Turtle {
     private Position position;
     private double rotation;
 
+    private Path path;
+
     private Color color;
     private Color fillColor;
 
-    private Path path;
+    private Font font;
 
     private boolean penDown;
 
-    public Turtle(Position position, double rotation) {
-        this(position, rotation, Color.BLACK, null, new Path(), true);
+    public Turtle(Turtle turtle) {
+        this(turtle.getPosition(), turtle.getRotation(), turtle.path, turtle.color, turtle.fillColor, turtle.font, turtle.penDown);
     }
 
-    public Turtle(Position position, double rotation, Color color, Color fillColor, Path path, boolean penDown) {
+    public Turtle(Position position, double rotation) {
+        this(position, rotation, new Path(), Color.BLACK, null, Font.SYSTEM_REGULAR, true);
+    }
+
+    public Turtle(Position position, double rotation, Path path, Color color, Color fillColor, Font font, boolean penDown) {
         this.position = position;
         this.rotation = rotation;
+        this.path = path;
         this.color = color;
         this.fillColor = fillColor;
-        this.path = path;
+        this.font = font;
         this.penDown = penDown;
     }
 
@@ -46,6 +54,14 @@ public class Turtle {
         this.rotation = rotation;
     }
 
+    public Path getPath() {
+        return path;
+    }
+
+    public void setPath(Path path) {
+        this.path = path;
+    }
+
     public Color getColor() {
         return color;
     }
@@ -62,12 +78,12 @@ public class Turtle {
         this.fillColor = fillColor;
     }
 
-    public Path getPath() {
-        return path;
+    public Font getFont() {
+        return font;
     }
 
-    public void setPath(Path path) {
-        this.path = path;
+    public void setFont(Font font) {
+        this.font = font;
     }
 
     public boolean isPenDown() {
@@ -76,5 +92,10 @@ public class Turtle {
 
     public void setPenDown(boolean penDown) {
         this.penDown = penDown;
+    }
+
+    @Override
+    public Turtle clone() {
+        return new Turtle(this);
     }
 }

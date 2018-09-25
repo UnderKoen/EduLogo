@@ -81,6 +81,7 @@ project(':JavaLogo') {
     dependencies {
         compile project(':Core')
         compile project(':Display')
+        compile project(':Logo')
     }
 }
 

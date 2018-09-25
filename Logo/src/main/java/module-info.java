@@ -3,4 +3,6 @@
  */
 module edulogo.logo {
     requires edulogo.core;
+
+    exports nl.edulogo.logo;
 }

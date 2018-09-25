@@ -9,12 +9,15 @@ public class Test extends TekenApplet {
     }
 
     @Override
-    public void tekenapplet() {
-        
+    public void tekenprogramma() {
+        achtergrondkleur("rood");
+        vooruit(100);
+        rechts(90);
+        vooruit(100);
     }
 
     @Override
-    void initialiseer() {
+    public void initialiseer() {
 
     }
 }
