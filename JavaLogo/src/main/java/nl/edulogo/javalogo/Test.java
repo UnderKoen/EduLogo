@@ -14,6 +14,7 @@ public class Test extends TekenApplet {
         vooruit(100);
         rechts(90);
         vooruit(100);
+        schrijf("dab");
     }
 
     @Override

@@ -74,22 +74,24 @@ public abstract class TekenApplet implements JavaLogo {
 
     @Override
     public void penUit() {
-
+        turtle.setPenDown(false);
     }
 
     @Override
     public void penAan() {
-
+        turtle.setPenDown(true);
     }
 
     @Override
     public void penAan(String kl) {
-
+        turtle.setColor(ColorUtil.fromString(kl));
+        turtle.setPenDown(true);
     }
 
     @Override
     public void penAan(int r, int g, int b) {
-
+        turtle.setColor(new Color(r, g, b));
+        turtle.setPenDown(true);
     }
 
     @Override
@@ -135,12 +137,12 @@ public abstract class TekenApplet implements JavaLogo {
 
     @Override
     public void stapx(double dx) {
-
+        stap(dx, 0);
     }
 
     @Override
     public void stapy(double dy) {
-
+        stap(0, dy);
     }
 
     @Override
@@ -170,12 +172,13 @@ public abstract class TekenApplet implements JavaLogo {
 
     @Override
     public void schrijf(String s) {
-
+        canvas.write(s, turtle.getPosition(), turtle.getFont());
     }
 
     @Override
     public void schrijf(String s, Font f) {
-
+        turtle.setFont(f);
+        schrijf(s);
     }
 
     @Override

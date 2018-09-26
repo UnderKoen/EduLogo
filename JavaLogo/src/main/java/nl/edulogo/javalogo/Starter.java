@@ -49,6 +49,6 @@ public class Starter extends Application {
         applet.start();
         FXDisplay<FXCanvas> display = new FXDisplay<>((FXCanvas) applet.canvas);
         display.show();
-        applet.tekenapplet();
+        applet.tekenprogramma();
     }
 }
