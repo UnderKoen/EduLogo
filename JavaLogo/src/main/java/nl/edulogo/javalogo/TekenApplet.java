@@ -7,8 +7,8 @@ import nl.edulogo.javalogo.utils.ColorUtil;
 import nl.edulogo.javalogo.variabele.InvoerVariabele;
 import nl.edulogo.logo.Turtle;
 
-public abstract class TekenApplet implements JavaLogo {
-    protected Canvas canvas;
+public abstract class TekenApplet extends JavaLogo {
+    private Canvas canvas;
     private Turtle turtle;
 
     public static void launch() {
@@ -27,10 +27,9 @@ public abstract class TekenApplet implements JavaLogo {
     }
 
     @Override
-    public abstract void tekenprogramma();
-
-    @Override
-    public abstract void initialiseer();
+    public Canvas getCanvas() {
+        return canvas;
+    }
 
     @Override
     public void maakAnimatieMogelijk() {
@@ -102,28 +101,6 @@ public abstract class TekenApplet implements JavaLogo {
     @Override
     public int geefY() {
         return 0;
-    }
-
-    @Override
-    public void rechts(double dHoek) {
-        double rotation = turtle.getRotation();
-        rotation -= dHoek;
-        rotation = rotation % 360;
-        if (rotation < 0) rotation = 360 + rotation;
-        turtle.setRotation(rotation);
-    }
-
-    @Override
-    public void links(double dHoek) {
-        rechts(-dHoek);
-    }
-
-    @Override
-    public void vooruit(double dy) {
-        Position newPos = MathUtil.getRelativePosition(turtle.getRotation(), -dy);
-        newPos.addPosition(turtle.getPosition());
-        canvas.drawLine(turtle.getPosition(), newPos);
-        turtle.setPosition(newPos);
     }
 
     @Override

@@ -1,5 +1,10 @@
 version = '1.0'
 
+allprojects {
+    apply plugin: 'idea'
+    idea.module.outputDir file("out/production/classes")
+}
+
 subprojects {
     apply plugin: 'java'
     group = 'nl.edulogo'
@@ -92,6 +97,18 @@ project(':Editor') {
     dependencies {
         compile project(':Core')
         compile project(':Display')
+    }
+}
+
+project(':ACSLogo') {
+    version = '1.0'
+    ext.moduleName = 'edulogo.acslogo'
+
+    dependencies {
+        compile project(':Core')
+        compile project(':Display')
+        compile project(':Editor')
+        compile project(':Logo')
     }
 }
 

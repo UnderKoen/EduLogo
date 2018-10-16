@@ -56,6 +56,10 @@ public class FXDisplay<T extends FXView> implements Display<T> {
         setResizeable(resizeable);
     }
 
+    public Stage getStage() {
+        return stage;
+    }
+
     @Override
     public T getView() {
         return view;

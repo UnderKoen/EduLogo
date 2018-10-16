@@ -4,4 +4,5 @@ include 'Display'
 include 'JavaLogo'
 include 'Editor'
 include 'Logo'
+include 'ACSLogo'
 

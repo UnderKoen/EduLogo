@@ -47,7 +47,7 @@ public class Starter extends Application {
     @Override
     public void start(Stage primaryStage) {
         applet.start();
-        FXDisplay<FXCanvas> display = new FXDisplay<>((FXCanvas) applet.canvas);
+        FXDisplay<FXCanvas> display = new FXDisplay<>((FXCanvas) applet.getCanvas());
         display.show();
         applet.tekenprogramma();
     }

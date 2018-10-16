@@ -9,128 +9,118 @@ import nl.edulogo.logo.Logo;
 /**
  * Created by Under_Koen on 25/09/2018.
  */
-interface JavaLogo extends Logo {
-    //Logo extend
-    @Override
-    default void forward(double amount) {
-        vooruit(amount);
-    }
-
-    @Override
-    default void right(double rotation) {
-        rechts(rotation);
-    }
-
-    @Override
-    default void left(double rotation) {
-        links(rotation);
-    }
-
+abstract class JavaLogo extends Logo {
     //Animatie
-    void maakAnimatieMogelijk();
+    public abstract void maakAnimatieMogelijk();
 
-    void pauze(int millisec);
+    public abstract void pauze(int millisec);
 
-    boolean animatieLopend();
+    public abstract boolean animatieLopend();
 
-    void beginAnimatie();
+    public abstract void beginAnimatie();
 
-    void onderbreekAnimatie();
+    public abstract void onderbreekAnimatie();
 
-    void stop();
+    public abstract void stop();
 
-    default void animatie() {
+    public void animatie() {
     }
 
     //Achtergrond
-    void achtergrondkleur(String kl);
+    public abstract void achtergrondkleur(String kl);
 
-    void achtergrondkleur(int r, int g, int b);
+    public abstract void achtergrondkleur(int r, int g, int b);
 
     //Pen
-    void penUit();
+    public abstract void penUit();
 
-    void penAan();
+    public abstract void penAan();
 
-    void penAan(String kl);
+    public abstract void penAan(String kl);
 
-    void penAan(int r, int g, int b);
+    public abstract void penAan(int r, int g, int b);
 
     //Bewegen
-    int geefX();
+    public abstract int geefX();
 
-    int geefY();
+    public abstract int geefY();
 
-    void links(double dHoek);
+    public void links(double dHoek) {
+        left(dHoek);
+    }
 
-    void rechts(double dHoek);
+    public void rechts(double dHoek) {
+        right(dHoek);
+    }
 
-    void vooruit(double dy);
+    public void vooruit(double dy) {
+        forward(dy);
+    }
 
-    void stap(double dx, double dy);
+    public abstract void stap(double dx, double dy);
 
-    void stapx(double dx);
+    public abstract void stapx(double dx);
 
-    void stapy(double dy);
+    public abstract void stapy(double dy);
 
     //Muis
-    void maakMuisActieMogelijk();
+    public abstract void maakMuisActieMogelijk();
 
-    int geefSleepdx();
+    public abstract int geefSleepdx();
 
-    int geefSleepdy();
+    public abstract int geefSleepdy();
 
-    int geefDrukx();
+    public abstract int geefDrukx();
 
-    int geefDruky();
+    public abstract int geefDruky();
 
-    default void muisDrukActie() {
+    public void muisDrukActie() {
     }
 
-    default void muisLosActie() {
+    public void muisLosActie() {
     }
 
-    default void muisSleepActie() {
+    public void muisSleepActie() {
     }
 
     //Tekst
-    void schrijf(String s);
+    public abstract void schrijf(String s);
 
-    void schrijf(String s, Font f);
+    public abstract void schrijf(String s, Font f);
 
     //Trace
-    void maakTraceMogelijk();
+    public abstract void maakTraceMogelijk();
 
     //Invoer Variabele
-    void maakZichtbaar(InvoerVariabele iv);
+    public abstract void maakZichtbaar(InvoerVariabele iv);
 
-    default void invoerVarActie(InvoerVariabele iv) {
+    void invoerVarActie(InvoerVariabele iv) {
     }
 
-    default void schuifInvoerVarActie(SchuifInvoerVariabele iv) {
+    void schuifInvoerVarActie(SchuifInvoerVariabele iv) {
     }
 
     //Vullen
-    Polygon geefVlak();
+    public abstract Polygon geefVlak();
 
-    void vulAan();
+    public abstract void vulAan();
 
-    void vulAan(String kl);
+    public abstract void vulAan(String kl);
 
-    void vulAan(int r, int g, int b);
+    public abstract void vulAan(int r, int g, int b);
 
-    void vulUit();
+    public abstract void vulUit();
 
     //Ander
-    void tekenErbij();
+    public abstract void tekenErbij();
 
-    void tekenOpnieuw();
+    public abstract void tekenOpnieuw();
 
-    void schaal(double s);
+    public abstract void schaal(double s);
 
-    default void initialiseer() {
+    void initialiseer() {
     }
 
-    default void tekenprogramma() {
+    void tekenprogramma() {
     }
 }
