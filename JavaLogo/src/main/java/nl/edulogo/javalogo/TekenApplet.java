@@ -23,7 +23,7 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public Turtle getTurtle() {
-        return turtle.clone();
+        return turtle;
     }
 
     @Override
@@ -170,27 +170,33 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public Polygon geefVlak() {
-        return null;
+        Polygon poly = new Polygon();
+        for (Position pos : turtle.getPath().getPath())
+            poly.addPosition(pos);
+        return poly;
     }
 
     @Override
     public void vulAan() {
-
+        turtle.getPath().clear();
+        turtle.setFillColor(Color.BLACK);
     }
 
     @Override
     public void vulAan(String kl) {
-
+        turtle.getPath().clear();
+        turtle.setFillColor(ColorUtil.fromString(kl));
     }
 
     @Override
     public void vulAan(int r, int g, int b) {
-
+        turtle.getPath().clear();
+        turtle.setFillColor(new Color(r, g, b));
     }
 
     @Override
     public void vulUit() {
-
+        canvas.fillPolygon(geefVlak(), turtle.getFillColor());
     }
 
     @Override

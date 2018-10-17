@@ -9,7 +9,6 @@ import nl.edulogo.core.utils.MathUtil;
  */
 public abstract class Logo {
     public abstract Canvas getCanvas();
-
     public abstract Turtle getTurtle();
 
     public void forward(double amount) {

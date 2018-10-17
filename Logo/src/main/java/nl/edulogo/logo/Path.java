@@ -2,6 +2,7 @@ package nl.edulogo.logo;
 
 import nl.edulogo.core.Position;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class Path {
     private List<Position> path;
 
     public Path(Position... points) {
-        path = Arrays.asList(points);
+        path = new ArrayList<>(Arrays.asList(points));
     }
 
     public Position[] getPath() {
@@ -25,6 +26,10 @@ public class Path {
 
     public void addPoints(Position... points) {
         path.addAll(Arrays.asList(points));
+    }
+
+    public void clear() {
+        path.clear();
     }
 
     public Position getPoint(int index) {

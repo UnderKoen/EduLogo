@@ -39,11 +39,12 @@ public class Turtle {
     }
 
     public Position getPosition() {
-        return position;
+        return this.position;
     }
 
     public void setPosition(Position position) {
         this.position = position;
+        getPath().addPoint(position.clone());
     }
 
     public double getRotation() {
