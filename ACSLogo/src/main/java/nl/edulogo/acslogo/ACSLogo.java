@@ -6,6 +6,7 @@ import nl.edulogo.acslogo.script.arguments.ArgumentType;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.CommandoHandler;
 import nl.edulogo.core.Canvas;
+import nl.edulogo.core.Color;
 import nl.edulogo.core.Position;
 import nl.edulogo.core.Size;
 import nl.edulogo.core.utils.FileUtil;
@@ -52,6 +53,8 @@ public class ACSLogo extends Logo {
 
             canvas.show();
             editor.show();
+
+            init();
         });
     }
 
@@ -65,19 +68,24 @@ public class ACSLogo extends Logo {
                     Number amount = (Number) arguments[0].getValue();
                     forward(amount.doubleValue());
                 }, ArgumentType.NUMBER),
+                new Commando("fd", arguments -> {
+                    Number amount = (Number) arguments[0].getValue();
+                    forward(amount.doubleValue());
+                }, ArgumentType.NUMBER),
                 new Commando("Right", arguments -> {
                     Number amount = (Number) arguments[0].getValue();
                     right(amount.doubleValue());
                 }, ArgumentType.NUMBER),
                 new Commando("Left", arguments -> {
                     Number amount = (Number) arguments[0].getValue();
-                    right(amount.doubleValue());
+                    left(amount.doubleValue());
                 }, ArgumentType.NUMBER));
     }
 
     public void initLogo(Size size) {
         canvas = new FXCanvas(size);
         turtle = new Turtle(new Position(size.getWidth() / 2, size.getHeight() / 2), 0);
+        canvas.fillScreen(Color.WHITE);
     }
 
     @Override
