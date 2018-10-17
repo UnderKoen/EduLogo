@@ -41,10 +41,6 @@ abstract class JavaLogo extends Logo {
     public abstract void penAan(int r, int g, int b);
 
     //Bewegen
-    public abstract int geefX();
-
-    public abstract int geefY();
-
     public void links(double dHoek) {
         left(dHoek);
     }
@@ -66,6 +62,10 @@ abstract class JavaLogo extends Logo {
     //Muis
     public abstract void maakMuisActieMogelijk();
 
+    public abstract int geefX();
+
+    public abstract int geefY();
+
     public abstract int geefSleepdx();
 
     public abstract int geefSleepdy();
@@ -81,6 +81,9 @@ abstract class JavaLogo extends Logo {
     }
 
     public void muisSleepActie() {
+    }
+
+    public void muisBeweegActie() {
     }
 
     //Tekst

@@ -1,5 +1,7 @@
 package nl.edulogo.javalogo;
 
+import nl.edulogo.core.Polygon;
+
 /**
  * Created by Under_Koen on 20/09/2018.
  */
@@ -8,24 +10,50 @@ public class Test extends TekenApplet {
         launch();
     }
 
-    @Override
+    double zijde, beginX, beginY;
+    Polygon vlak;
+    boolean raak;
+
+    public void initialiseer() {
+        maakMuisActieMogelijk();
+        zijde = 100;
+        beginX = 0;
+        beginY = 0;
+    }
+
     public void tekenprogramma() {
+        penUit();
+        stap(beginX, beginY);
+        penAan();
+        vierkant(zijde);
+        vlak = geefVlak();
+    }
+
+    void vierkant(double z) {
         vulAan("rood");
-        for (int i = 0; i < 360; i++) {
-            links(1);
-            vooruit(1);
-        }
-        vulUit();
-        vulAan(0, 0, 255);
-        for (int i = 0; i < 360; i++) {
-            rechts(1);
-            vooruit(1);
-        }
+        vooruit(100);
+        rechts(50);
+        vooruit(100);
+        rechts(120);
+        vooruit(110);
+        rechts(90);
+        vooruit(50);
+        rechts(-50);
+        vooruit(200);
         vulUit();
     }
 
-    @Override
-    public void initialiseer() {
+    public void muisDrukActie() {
+        int x = geefDrukx();
+        int y = geefDruky();
+        raak = vlak.contains(x, y);
+    }
 
+    public void muisSleepActie() {
+        if (raak) {
+            beginX = beginX + geefSleepdx();
+            beginY = beginY + geefSleepdy();
+            tekenOpnieuw();
+        }
     }
 }

@@ -15,11 +15,7 @@ public abstract class TekenApplet extends JavaLogo {
         Starter.start();
     }
 
-    public void start() {
-        initialiseer();
-        turtle = new Turtle(new Position(250, 250), 0);
-        canvas = new FXCanvas(new Size(500, 500));
-    }
+    private MouseHandler mouseHandler;
 
     @Override
     public Turtle getTurtle() {
@@ -93,23 +89,17 @@ public abstract class TekenApplet extends JavaLogo {
         turtle.setPenDown(true);
     }
 
-    @Override
-    public int geefX() {
-        return 0;
-    }
+    private Polygon vlak;
+    private boolean vulAan = false;
 
-    @Override
-    public int geefY() {
-        return 0;
-    }
+    public void start() {
+        turtle = new Turtle(new Position(250, 250), 0);
+        canvas = new FXCanvas(new Size(500, 500));
+        initialiseer();
 
-    @Override
-    public void stap(double dx, double dy) {
-        Position newPos = MathUtil.getRelativePosition(turtle.getRotation(), -dy);
-        newPos.addPosition(MathUtil.getRelativePosition(turtle.getRotation() + 90, dx));
-        newPos.addPosition(turtle.getPosition());
-        canvas.drawLine(turtle.getPosition(), newPos);
-        turtle.setPosition(newPos);
+        //TODO CAN DRAW
+
+        tekenprogramma();
     }
 
     @Override
@@ -123,28 +113,51 @@ public abstract class TekenApplet extends JavaLogo {
     }
 
     @Override
-    public void maakMuisActieMogelijk() {
+    public void vooruit(double dy) {
+        super.vooruit(dy);
+        newLocation();
+    }
 
+    @Override
+    public void stap(double dx, double dy) {
+        Position newPos = MathUtil.getRelativePosition(turtle.getRotation(), -dy);
+        newPos.addPosition(MathUtil.getRelativePosition(turtle.getRotation() + 90, dx));
+        newPos.addPosition(turtle.getPosition());
+        if (turtle.isPenDown()) canvas.drawLine(turtle.getPosition(), newPos);
+        newLocation();
+        turtle.setPosition(newPos);
+    }
+
+    private void newLocation() {
+        if (vulAan) vlak.addPosition(turtle.getPosition());
+    }
+
+    @Override
+    public void maakMuisActieMogelijk() {
+        if (mouseHandler != null) return;
+        mouseHandler = new MouseHandler(this);
+        FXCanvas fxCanvas = (FXCanvas) canvas;
+        fxCanvas.getNode().setEventDispatcher(mouseHandler);
+    }
+
+    @Override
+    public int geefX() {
+        return mouseHandler.getMouseX();
+    }
+
+    @Override
+    public int geefY() {
+        return mouseHandler.getMouseY();
     }
 
     @Override
     public int geefSleepdx() {
-        return 0;
+        return mouseHandler.getDraggedX();
     }
 
     @Override
     public int geefSleepdy() {
-        return 0;
-    }
-
-    @Override
-    public int geefDrukx() {
-        return 0;
-    }
-
-    @Override
-    public int geefDruky() {
-        return 0;
+        return mouseHandler.getDraggedY();
     }
 
     @Override
@@ -169,34 +182,46 @@ public abstract class TekenApplet extends JavaLogo {
     }
 
     @Override
+    public int geefDrukx() {
+        return mouseHandler.getMousePressX();
+    }
+
+    @Override
+    public int geefDruky() {
+        return mouseHandler.getMousePressY();
+    }
+
+    @Override
     public Polygon geefVlak() {
-        Polygon poly = new Polygon();
-        for (Position pos : turtle.getPath().getPath())
-            poly.addPosition(pos);
-        return poly;
+        return vlak;
     }
 
     @Override
     public void vulAan() {
-        turtle.getPath().clear();
-        turtle.setFillColor(Color.BLACK);
+        vulAan(Color.BLACK);
     }
 
     @Override
     public void vulAan(String kl) {
-        turtle.getPath().clear();
-        turtle.setFillColor(ColorUtil.fromString(kl));
+        vulAan(ColorUtil.fromString(kl));
     }
 
     @Override
     public void vulAan(int r, int g, int b) {
-        turtle.getPath().clear();
-        turtle.setFillColor(new Color(r, g, b));
+        vulAan(new Color(r, g, b));
+    }
+
+    public void vulAan(Color color) {
+        turtle.setFillColor(color);
+        vulAan = true;
+        vlak = new Polygon();
     }
 
     @Override
     public void vulUit() {
+        if (!vulAan) return;
         canvas.fillPolygon(geefVlak(), turtle.getFillColor());
+        vulAan = false;
     }
 
     @Override
@@ -206,7 +231,9 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void tekenOpnieuw() {
-
+        achtergrondkleur("wit");
+        turtle = new Turtle(new Position(250, 250), 0);
+        tekenprogramma();
     }
 
     @Override

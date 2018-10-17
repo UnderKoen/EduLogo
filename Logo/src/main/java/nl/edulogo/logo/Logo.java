@@ -15,7 +15,7 @@ public abstract class Logo {
         Turtle turtle = getTurtle();
         Position newPos = MathUtil.getRelativePosition(turtle.getRotation(), -amount);
         newPos.addPosition(turtle.getPosition());
-        getCanvas().drawLine(turtle.getPosition(), newPos);
+        if (turtle.isPenDown()) getCanvas().drawLine(turtle.getPosition(), newPos);
         turtle.setPosition(newPos);
     }
 
