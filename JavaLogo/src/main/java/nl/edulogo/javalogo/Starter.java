@@ -14,25 +14,12 @@ public class Starter extends Application {
     private static TekenApplet applet;
 
     static void start() {
-        StackTraceElement[] cause = Thread.currentThread().getStackTrace();
-
-        Integer starter = null;
-        for (int i = 0; i < cause.length; i++) {
-            if (Starter.class.getName().equals(cause[i].getClassName()) && "start".equals(cause[i].getMethodName())) {
-                starter = i;
-                break;
-            }
-        }
-
-        if (starter == null) return;
-        if (cause.length < starter + 3) return;
-
-        StackTraceElement e = cause[starter + 2];
-
-        if (e == null) return;
+        String clsN = System.getProperty("sun.java.command");
+        clsN = clsN.split(" ")[0];
+        if (clsN.contains("/")) clsN = clsN.split("/")[1];
 
         try {
-            Class cls = Class.forName(e.getClassName(), false, Thread.currentThread().getContextClassLoader());
+            Class cls = Class.forName(clsN, false, Thread.currentThread().getContextClassLoader());
             if (TekenApplet.class.isAssignableFrom(cls)) {
                 Class<? extends TekenApplet> appletClass = cls;
                 Constructor constructor = appletClass.getConstructor();

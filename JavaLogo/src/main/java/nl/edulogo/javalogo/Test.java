@@ -6,10 +6,6 @@ import nl.edulogo.core.Polygon;
  * Created by Under_Koen on 20/09/2018.
  */
 public class Test extends TekenApplet {
-    public static void main(String[] args) {
-        launch();
-    }
-
     double zijde, beginX, beginY;
     Polygon vlak;
     boolean raak;

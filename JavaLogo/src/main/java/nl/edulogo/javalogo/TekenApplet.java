@@ -11,7 +11,7 @@ public abstract class TekenApplet extends JavaLogo {
     private Canvas canvas;
     private Turtle turtle;
 
-    public static void launch() {
+    public static void main(String[] args) {
         Starter.start();
     }
 

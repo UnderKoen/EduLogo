@@ -121,9 +121,7 @@ abstract class JavaLogo extends Logo {
 
     public abstract void schaal(double s);
 
-    void initialiseer() {
-    }
+    public abstract void initialiseer();
 
-    void tekenprogramma() {
-    }
+    public abstract void tekenprogramma();
 }
