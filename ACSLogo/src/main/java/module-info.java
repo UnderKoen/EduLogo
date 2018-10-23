@@ -9,8 +9,10 @@ module edulogo.acslogo {
 
     requires javafx.base;
     requires javafx.graphics;
+    requires javafx.controls;
     requires java.scripting;
 
     exports nl.edulogo.acslogo;
+    exports nl.edulogo.acslogo.script;
     exports nl.edulogo.acslogo.script.arguments to junit;
 }

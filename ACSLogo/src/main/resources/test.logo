@@ -3,4 +3,3 @@ forward 100
 right 10
 forward 100 left 80 forward -400/-200*20
 right 100
-fd 100

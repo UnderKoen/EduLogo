@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script;
 
+import nl.edulogo.acslogo.ConsoleHandler;
 import nl.edulogo.acslogo.script.arguments.Argument;
 import nl.edulogo.acslogo.script.arguments.ArgumentType;
 import nl.edulogo.acslogo.script.commandos.Commando;
@@ -17,14 +18,15 @@ import java.text.ParseException;
 public class Parser {
     private static ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
 
-    //TODO CONSOLE HANDLER
-    private CommandoHandler handler;
+    private ConsoleHandler consoleHandler;
+    private CommandoHandler commandoHandler;
 
-    public Parser(CommandoHandler handler) {
-        this.handler = handler;
+    public Parser(ConsoleHandler consoleHandler, CommandoHandler commandoHandler) {
+        this.consoleHandler = consoleHandler;
+        this.commandoHandler = commandoHandler;
     }
 
-    public void parse(Line line) {
+    public void parse(Line line) throws ParsingException {
         String code = line.getCode();
         String[] pieces = code.split(" ");
         PieceType[] types = new PieceType[pieces.length];
@@ -44,6 +46,10 @@ public class Parser {
                     list_depht -= 1;
                 }
                 continue;
+            } else {
+                if (piece.contains("]")) {
+                    throw new ParsingException("Can't close list that hasn't been opened.");
+                }
             }
 
             if (piece.startsWith("//") || (i > 0 && types[i - 1] == PieceType.COMMENT)) {
@@ -68,6 +74,9 @@ public class Parser {
 
             types[i] = PieceType.COMMANDO;
         }
+        if (list_depht > 0) {
+            throw new ParsingException("Should close list.");
+        }
 
         for (int i = 0; i < pieces.length; i++) {
             String piece = pieces[i];
@@ -75,7 +84,7 @@ public class Parser {
 
             System.out.println(piece + " -=- " + type + " -=- " + i);
             if (type == PieceType.COMMANDO) {
-                Commando cmd = handler.getCommando(piece);
+                Commando cmd = commandoHandler.getCommando(piece);
                 if (cmd == null) continue; //TODO error shit
 
                 ArgumentType[] argumentTypes = cmd.getArguments();
@@ -114,9 +123,19 @@ public class Parser {
         }
     }
 
-    public void parse(Script script) {
+    public void parse(Script script) throws ParsingException {
         for (Line line : script.getLines()) {
             parse(line);
+        }
+    }
+
+    public void parseSafe(Script script) {
+        try {
+            for (Line line : script.getLines()) {
+                parse(line);
+            }
+        } catch (ParsingException ex) {
+            consoleHandler.error(ex);
         }
     }
 

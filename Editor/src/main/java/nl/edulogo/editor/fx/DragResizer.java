@@ -1,11 +1,11 @@
 package nl.edulogo.editor.fx;
 
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 
 public class DragResizer {
-
     /**
      * The margin around the control that a user can click in to start resizing
      * the region.
@@ -14,13 +14,15 @@ public class DragResizer {
 
     private final Region region;
     private boolean dragging;
+    private ObservableValue<? extends Number> maxHeightProperty;
 
-    private DragResizer(Region region) {
+    private DragResizer(Region region, ObservableValue<? extends Number> maxHeightProperty) {
         this.region = region;
+        this.maxHeightProperty = maxHeightProperty;
     }
 
-    public static void makeResizable(Region region) {
-        final DragResizer resizer = new DragResizer(region);
+    public static void makeResizable(Region region, ObservableValue<? extends Number> maxHeightProperty) {
+        final DragResizer resizer = new DragResizer(region, maxHeightProperty);
 
         region.getParent().addEventFilter(MouseEvent.MOUSE_PRESSED, resizer::mousePressed);
         region.getParent().addEventFilter(MouseEvent.MOUSE_DRAGGED, resizer::mouseDragged);
@@ -46,7 +48,10 @@ public class DragResizer {
         if (!dragging) return;
 
         double dif = region.getLayoutY() - event.getY();
-        region.setMaxHeight(region.getHeight() + dif);
+        double newHeight = region.getHeight() + dif;
+
+        double max = maxHeightProperty.getValue().doubleValue();
+        region.setMaxHeight((newHeight > max) ? max : newHeight);
     }
 
     private void mousePressed(MouseEvent event) {

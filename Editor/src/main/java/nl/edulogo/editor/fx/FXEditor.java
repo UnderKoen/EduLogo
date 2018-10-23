@@ -2,6 +2,7 @@ package nl.edulogo.editor.fx;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
 import nl.edulogo.core.Size;
@@ -13,6 +14,7 @@ import nl.edulogo.editor.Editor;
  * Created by Under_Koen on 11/09/2018.
  */
 public class FXEditor implements Editor, FXView {
+    private MenuBar menuBar;
     private StackPane pane;
     private TextArea textArea;
     private FXConsole console;
@@ -20,20 +22,26 @@ public class FXEditor implements Editor, FXView {
     public FXEditor() {
         pane = new StackPane();
 
+        menuBar = new MenuBar();
         textArea = new TextArea();
         console = new FXConsole();
         StackPane consolePane = (StackPane) console.getNode();
 
-        pane.getChildren().addAll(textArea, consolePane);
+        pane.getChildren().addAll(menuBar, textArea, consolePane);
+
+        menuBar.prefWidthProperty().bind(pane.widthProperty());
+        StackPane.setAlignment(menuBar, Pos.TOP_CENTER);
 
         textArea.setWrapText(true);
-        textArea.maxHeightProperty().bind(pane.heightProperty().subtract(consolePane.heightProperty()));
+        textArea.maxHeightProperty().bind(pane.heightProperty().subtract(consolePane.heightProperty()).subtract(menuBar.heightProperty()));
+        textArea.translateYProperty().bind(menuBar.heightProperty());
+
         StackPane.setAlignment(textArea, Pos.TOP_CENTER);
 
         consolePane.setMaxHeight(150);
         StackPane.setAlignment(consolePane, Pos.BOTTOM_CENTER);
 
-        DragResizer.makeResizable(consolePane);
+        DragResizer.makeResizable(consolePane, pane.heightProperty().subtract(menuBar.heightProperty()));
     }
 
     @Override
@@ -70,5 +78,9 @@ public class FXEditor implements Editor, FXView {
     @Override
     public Size getSize() {
         return new Size(pane.getWidth(), pane.getHeight());
+    }
+
+    public MenuBar getMenuBar() {
+        return menuBar;
     }
 }
