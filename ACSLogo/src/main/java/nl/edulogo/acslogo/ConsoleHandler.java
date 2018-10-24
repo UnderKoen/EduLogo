@@ -1,6 +1,6 @@
 package nl.edulogo.acslogo;
 
-import nl.edulogo.acslogo.script.ParsingException;
+import nl.edulogo.acslogo.script.parser.ParsingException;
 import nl.edulogo.editor.Console;
 
 /**

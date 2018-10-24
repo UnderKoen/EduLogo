@@ -1,4 +1,4 @@
-package nl.edulogo.acslogo.script;
+package nl.edulogo.acslogo.script.parser;
 
 /**
  * Created by Under_Koen on 18/10/2018.

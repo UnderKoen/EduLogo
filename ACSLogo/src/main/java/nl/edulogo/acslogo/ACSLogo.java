@@ -5,11 +5,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import nl.edulogo.acslogo.script.Parser;
 import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.arguments.ArgumentType;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.CommandoHandler;
+import nl.edulogo.acslogo.script.parser.Parser;
 import nl.edulogo.core.Canvas;
 import nl.edulogo.core.Color;
 import nl.edulogo.core.Position;
@@ -58,15 +58,15 @@ public class ACSLogo extends Logo {
 
     public void registerCommands() {
         commandoHandler.registerCommandos(
-                new Commando("Forward", arguments -> {
+                new Commando("forward", arguments -> {
                     Number amount = (Number) arguments[0].getValue();
                     forward(amount.doubleValue());
                 }, ArgumentType.NUMBER),
-                new Commando("Right", arguments -> {
+                new Commando("right", arguments -> {
                     Number amount = (Number) arguments[0].getValue();
                     right(amount.doubleValue());
                 }, ArgumentType.NUMBER),
-                new Commando("Left", arguments -> {
+                new Commando("left", arguments -> {
                     Number amount = (Number) arguments[0].getValue();
                     left(amount.doubleValue());
                 }, ArgumentType.NUMBER));
@@ -112,8 +112,9 @@ public class ACSLogo extends Logo {
         fxEditor.getMenuBar().getMenus().addAll(runMenu);
     }
 
-    public void run(String script) {
-        parser.parseSafe(new Script(script));
+    public void run(String code) {
+        Script script = parser.parseSafe(code);
+        script.getFields().forEach(f -> System.out.println(f.getType() + ": " + f.getField()));
     }
 
     @Override

@@ -16,7 +16,7 @@ public class Argument<T> {
             }
         }
         if (type == null) {
-            throw new IllegalArgumentException("value should be a ArgumentType");
+            throw new IllegalArgumentException("Value should be a ArgumentType.");
         }
     }
 
