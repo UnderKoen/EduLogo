@@ -13,8 +13,15 @@ public class ConsoleHandler {
         this.console = console;
     }
 
+    public void output(Object obj) {
+        console.println(obj.toString());
+    }
+
     public void error(ParsingException ex) {
         console.error(ex.getMessage());
     }
 
+    public void error(Exception ex) {
+        console.error(ex.getMessage());
+    }
 }

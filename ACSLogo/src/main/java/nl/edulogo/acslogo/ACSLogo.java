@@ -9,6 +9,7 @@ import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.arguments.ArgumentType;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.CommandoHandler;
+import nl.edulogo.acslogo.script.executor.Executor;
 import nl.edulogo.acslogo.script.parser.Parser;
 import nl.edulogo.core.Canvas;
 import nl.edulogo.core.Color;
@@ -28,6 +29,7 @@ public class ACSLogo extends Logo {
     private CommandoHandler commandoHandler;
     private ConsoleHandler consoleHandler;
     private Parser parser;
+    private Executor executor;
     private Editor editor;
 
     private Turtle turtle;
@@ -53,7 +55,8 @@ public class ACSLogo extends Logo {
         consoleHandler = new ConsoleHandler(editor.getConsole());
         registerCommands();
 
-        parser = new Parser(consoleHandler, commandoHandler);
+        parser = new Parser(consoleHandler);
+        executor = new Executor(consoleHandler, commandoHandler);
     }
 
     public void registerCommands() {
@@ -62,6 +65,10 @@ public class ACSLogo extends Logo {
                     Number amount = (Number) arguments[0].getValue();
                     forward(amount.doubleValue());
                 }, ArgumentType.NUMBER),
+                new Commando("repeat", arguments -> {
+                    Number amount = (Number) arguments[0].getValue();
+                    forward(amount.doubleValue());
+                }, ArgumentType.NUMBER, ArgumentType.STRING),
                 new Commando("right", arguments -> {
                     Number amount = (Number) arguments[0].getValue();
                     right(amount.doubleValue());
@@ -114,7 +121,7 @@ public class ACSLogo extends Logo {
 
     public void run(String code) {
         Script script = parser.parseSafe(code);
-        script.getFields().forEach(f -> System.out.println(f.getType() + ": " + f.getField()));
+        //executor.executeSafe(script);
     }
 
     @Override
