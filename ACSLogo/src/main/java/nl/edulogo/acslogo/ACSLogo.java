@@ -56,7 +56,7 @@ public class ACSLogo extends Logo {
         registerCommands();
 
         parser = new Parser(consoleHandler);
-        executor = new Executor(consoleHandler, commandoHandler);
+        executor = new Executor(parser, consoleHandler, commandoHandler);
     }
 
     public void registerCommands() {
@@ -121,7 +121,7 @@ public class ACSLogo extends Logo {
 
     public void run(String code) {
         Script script = parser.parseSafe(code);
-        //executor.executeSafe(script);
+        executor.executeSafe(script);
     }
 
     @Override

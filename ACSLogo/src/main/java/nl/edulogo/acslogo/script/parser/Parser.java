@@ -11,14 +11,13 @@ import java.util.List;
  * Created by Under_Koen on 15/10/2018.
  */
 public class Parser {
-    private ConsoleHandler consoleHandler;
-
     //TODO make class for all special chars
     private static List<Character> dividers = Arrays.asList(' ', '\n');
+    private static List<Character> dividersAdd = Arrays.asList('[', '(', '-');
+    private static List<Character> dividersAddOne = Arrays.asList('+', '*', '/', '<', '>', '=', ']', ')');
+    private static List<Character> skip = Arrays.asList('\\', ' ', '\n');
 
-    private boolean isComment;
-    private int listDepht;
-    private int statementDepht;
+    private ConsoleHandler consoleHandler;
 
     public Script parseSafe(String code) {
         try {
@@ -29,23 +28,14 @@ public class Parser {
         return null;
     }
 
-    private static List<Character> dividersAdd = Arrays.asList('[', '(');
-    private static List<Character> dividersAddOne = Arrays.asList('+', '-', '*', '/', '<', '>', '=', ']', ')');
-    private static List<Character> skip = Arrays.asList('\\', ' ', '\n');
-
     public Parser(ConsoleHandler consoleHandler) {
         this.consoleHandler = consoleHandler;
     }
 
     public Script parse(String code) throws ParsingException {
         code = makeReady(code);
-        Piece[] pieces = toPieces(code);
-
-        for (int i = 0; i < pieces.length; i++) {
-            System.out.println(pieces[i].piece + ": " + pieces[i].getType());
-        }
-
-        return new Script(null);
+        List<Piece> pieces = toPieces(code);
+        return new Script(pieces);
     }
 
     private String makeReady(String string) {
@@ -55,8 +45,8 @@ public class Parser {
         return string;
     }
 
-    private Piece[] toPieces(String string) throws ParsingException {
-        List<Piece> pieces = new ArrayList<>();
+    public List<Piece> toPieces(String string) throws ParsingException {
+        List<ParentPiece> pieces = new ArrayList<>();
         char[] chars = string.toCharArray();
 
         List<Character> allDividers = new ArrayList<>();
@@ -64,7 +54,7 @@ public class Parser {
         allDividers.addAll(dividersAdd);
         allDividers.addAll(dividersAddOne);
 
-        Piece piece = new Piece();
+        ParentPiece piece = new ParentPiece();
         boolean backslash = false;
         int list = 0;
         int statement = 0;
@@ -75,7 +65,7 @@ public class Parser {
 
             if (skipNext || (allDividers.contains(c) && !backslash && canAdd)) {
                 pieces.add(piece);
-                piece = new Piece();
+                piece = new ParentPiece();
             }
 
             if (!skip.contains(c) || !canAdd || backslash || (dividersAdd.contains(c) || dividersAddOne.contains(c))) {
@@ -95,10 +85,10 @@ public class Parser {
 
         pieces.add(piece);
         pieces.removeIf(p -> p.getPiece().isEmpty() || p.getPiece().equals(" "));
-        for (Piece p : pieces) {
+        for (ParentPiece p : pieces) {
             p.checkType();
         }
 
-        return pieces.toArray(new Piece[0]);
+        return new ArrayList<>(pieces);
     }
 }
