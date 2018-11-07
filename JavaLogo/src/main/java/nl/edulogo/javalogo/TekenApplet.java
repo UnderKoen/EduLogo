@@ -91,6 +91,7 @@ public abstract class TekenApplet extends JavaLogo {
 
     private Polygon vlak;
     private boolean vulAan = false;
+    private boolean canDraw = false;
 
     public void start() {
         turtle = new Turtle(new Position(250, 250), 0);
@@ -98,7 +99,7 @@ public abstract class TekenApplet extends JavaLogo {
         initialiseer();
 
         //TODO CAN DRAW
-
+        canDraw = true;
         tekenprogramma();
     }
 
@@ -114,12 +115,18 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void vooruit(double dy) {
+        if (!canDraw) {
+            return;
+        }
         super.vooruit(dy);
         newLocation();
     }
 
     @Override
     public void stap(double dx, double dy) {
+        if (!canDraw) {
+            return;
+        }
         Position newPos = MathUtil.getRelativePosition(turtle.getRotation(), -dy);
         newPos.addPosition(MathUtil.getRelativePosition(turtle.getRotation() + 90, dx));
         newPos.addPosition(turtle.getPosition());
@@ -162,6 +169,9 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void schrijf(String s) {
+        if (!canDraw) {
+            return;
+        }
         canvas.write(s, turtle.getPosition(), turtle.getFont());
     }
 
@@ -212,6 +222,9 @@ public abstract class TekenApplet extends JavaLogo {
     }
 
     public void vulAan(Color color) {
+        if (!canDraw) {
+            return;
+        }
         turtle.setFillColor(color);
         vulAan = true;
         vlak = new Polygon();
@@ -231,6 +244,9 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void tekenOpnieuw() {
+        if (!canDraw) {
+            return;
+        }
         achtergrondkleur("wit");
         turtle = new Turtle(new Position(250, 250), 0);
         tekenprogramma();
