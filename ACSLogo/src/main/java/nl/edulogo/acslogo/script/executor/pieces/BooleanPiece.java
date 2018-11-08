@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script.executor.pieces;
 
+import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.parser.Piece;
 import nl.edulogo.acslogo.script.parser.PieceType;
 
@@ -7,12 +8,12 @@ import nl.edulogo.acslogo.script.parser.PieceType;
  * Created by Under_Koen on 04/11/2018.
  */
 public class BooleanPiece implements Piece {
-    private Boolean value;
+    private Value value;
 
     public BooleanPiece(Piece bool) {
         if (bool.getType() != PieceType.BOOLEAN) throw new IllegalArgumentException();
         String b = bool.getPiece().replaceFirst("\"", "");
-        value = b.equalsIgnoreCase("true");
+        value = new Value(b.equalsIgnoreCase("true"));
     }
 
     @Override
@@ -21,7 +22,7 @@ public class BooleanPiece implements Piece {
     }
 
     @Override
-    public Boolean getValue() {
+    public Value getValue() {
         return value;
     }
 }

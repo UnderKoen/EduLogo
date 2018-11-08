@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script.executor.pieces;
 
+import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.parser.Piece;
 import nl.edulogo.acslogo.script.parser.PieceType;
 
@@ -12,12 +13,12 @@ import java.util.Objects;
  * Created by Under_Koen on 04/11/2018.
  */
 public class ListPiece implements Piece {
-    private ListObject value;
+    private Value value;
 
     public ListPiece(Piece list) {
         if (list.getType() != PieceType.LIST) throw new IllegalArgumentException();
         String inside = list.getPiece().replaceAll("^\\[(.*)\\]$", "$1");
-        value = new ListObject(inside.split(" "));
+        value = new Value(new ListObject(inside.split(" ")));
     }
 
     @Override
@@ -26,7 +27,7 @@ public class ListPiece implements Piece {
     }
 
     @Override
-    public ListObject getValue() {
+    public Value getValue() {
         return value;
     }
 

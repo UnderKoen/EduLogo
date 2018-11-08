@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script.executor.pieces;
 
+import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
 import nl.edulogo.acslogo.script.parser.ParsingException;
 import nl.edulogo.acslogo.script.parser.Piece;
@@ -14,7 +15,7 @@ import java.util.Map;
  * Created by Under_Koen on 04/11/2018.
  */
 public class ComparisonPiece implements Piece {
-    private Boolean value;
+    private Value value;
     private Piece left;
     private Piece comparison;
     private Piece right;
@@ -88,8 +89,8 @@ public class ComparisonPiece implements Piece {
     }
 
     @Override
-    public Boolean getValue() throws ParsingException, ExecutorException {
-        if (value == null) value = calc();
+    public Value getValue() throws ParsingException, ExecutorException {
+        if (value == null) value = new Value(calc());
         return value;
     }
 }

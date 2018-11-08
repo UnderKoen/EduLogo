@@ -1,22 +1,19 @@
 package nl.edulogo.acslogo.script.commandos;
 
-import nl.edulogo.acslogo.script.arguments.Argument;
-import nl.edulogo.acslogo.script.arguments.ArgumentType;
-
 /**
  * Created by Under_Koen on 15/10/2018.
  */
 public class Commando {
     private String name;
-    private ArgumentType[] arguments;
+    private int arguments;
     private Runnable runnable;
 
-    public Commando(String name, ArgumentType... arguments) {
+    public Commando(String name, int arguments) {
         this.name = name;
         this.arguments = arguments;
     }
 
-    public Commando(String name, Runnable runnable, ArgumentType... arguments) {
+    public Commando(String name, Runnable runnable, int arguments) {
         this(name, arguments);
         this.runnable = runnable;
     }
@@ -25,11 +22,14 @@ public class Commando {
         return name;
     }
 
-    public ArgumentType[] getArguments() {
+    public int getArguments() {
         return arguments;
     }
 
-    public void call(Argument... arguments) {
-        if (runnable != null) runnable.run(arguments);
+    public Value call(Value... arguments) {
+        Value response = null;
+        if (runnable != null) response = runnable.run(arguments);
+        if (response == null) response = new Value(null);
+        return response;
     }
 }

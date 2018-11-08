@@ -3,7 +3,6 @@ package nl.edulogo.acslogo.script.parser;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
 import nl.edulogo.acslogo.script.executor.pieces.ListPiece;
 
-import java.math.BigDecimal;
 
 /**
  * Created by Under_Koen on 02/11/2018.
@@ -18,14 +17,14 @@ public enum PieceType {
     LIST,           // [10 "de 10]
     STATEMENT,      // (10 * 10)
     COMMANDO,       // forward
-    NONE;            // NULL
+    NONE;           // NULL
 
     public static PieceType getType(Object value) throws ExecutorException {
         if (value == null) {
             return PieceType.NONE;
         } else if (value instanceof Boolean) {
             return PieceType.BOOLEAN;
-        } else if (value instanceof BigDecimal) {
+        } else if (value instanceof Double) {
             return PieceType.NUMBER;
         } else if (value instanceof String) {
             return PieceType.STRING;

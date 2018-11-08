@@ -1,6 +1,6 @@
 package nl.edulogo.acslogo.script.parser;
 
-import nl.edulogo.acslogo.script.executor.ExecutorException;
+import nl.edulogo.acslogo.script.commandos.Value;
 
 /**
  * Created by Under_Koen on 04/11/2018.
@@ -57,7 +57,13 @@ public class ParentPiece implements Piece {
                 type = PieceType.COMPARISON;
                 break;
             case '-':
-                type = (piece.matches("^-\\d+\\.?\\d*$")) ? PieceType.NUMBER : PieceType.CALCULATION;
+                if (piece.equals("-")) {
+                    type = PieceType.CALCULATION;
+                } else if (piece.matches("^-\\d+\\.?\\d*$")) {
+                    type = PieceType.NUMBER;
+                } else {
+                    throw new ParsingException("Unexpected object -");
+                }
                 break;
             case '+':
             case '*':
@@ -77,7 +83,7 @@ public class ParentPiece implements Piece {
     }
 
     @Override
-    public Object getValue() throws ParsingException, ExecutorException {
-        return null;
+    public Value getValue() {
+        return new Value(null);
     }
 }

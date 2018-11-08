@@ -6,7 +6,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import nl.edulogo.acslogo.script.Script;
-import nl.edulogo.acslogo.script.arguments.ArgumentType;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.CommandoHandler;
 import nl.edulogo.acslogo.script.executor.Executor;
@@ -64,19 +63,24 @@ public class ACSLogo extends Logo {
                 new Commando("forward", arguments -> {
                     Number amount = (Number) arguments[0].getValue();
                     forward(amount.doubleValue());
-                }, ArgumentType.NUMBER),
+                    return null;
+                }, 1),
                 new Commando("repeat", arguments -> {
                     Number amount = (Number) arguments[0].getValue();
                     forward(amount.doubleValue());
-                }, ArgumentType.NUMBER, ArgumentType.STRING),
+                    return null;
+                }, 2),
                 new Commando("right", arguments -> {
                     Number amount = (Number) arguments[0].getValue();
                     right(amount.doubleValue());
-                }, ArgumentType.NUMBER),
+                    return null;
+                }, 1),
                 new Commando("left", arguments -> {
                     Number amount = (Number) arguments[0].getValue();
                     left(amount.doubleValue());
-                }, ArgumentType.NUMBER));
+                    return null;
+                }, 1)
+        );
     }
 
     public void initLogo(Size size, Size editorSize) {

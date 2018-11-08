@@ -1,13 +1,11 @@
 package nl.edulogo.acslogo.script.executor.pieces;
 
+import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
 import nl.edulogo.acslogo.script.parser.ParsingException;
 import nl.edulogo.acslogo.script.parser.Piece;
 import nl.edulogo.acslogo.script.parser.PieceType;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -16,7 +14,7 @@ import java.util.*;
 public class CalculationPiece implements Piece {
     private static List<String> first = Arrays.asList("*", "/");
     private static List<String> second = Arrays.asList("+", "-");
-    private BigDecimal value = null;
+    private Value value = null;
     private Piece left;
     private Piece calculation;
     private Piece right;
@@ -80,35 +78,39 @@ public class CalculationPiece implements Piece {
         return PieceType.NUMBER;
     }
 
-    public BigDecimal calc(MathContext mc) throws ExecutorException, ParsingException {
-        BigDecimal l = getNumber(left);
-        BigDecimal r = getNumber(right);
+    public Double calc() throws ExecutorException, ParsingException {
+        Double l = getNumber(left);
+        Double r = getNumber(right);
         switch (calculation.getPiece()) {
             case "-":
-                return l.min(r);
+                return l - r;
             case "+":
-                return l.add(r, mc);
+                return l + r;
             case "*":
-                return l.multiply(r, mc);
+                return l * r;
             case "/":
-                return l.divide(r, mc);
+                return l / r;
             default:
                 throw new ExecutorException("Calculation should be one of -, +, * or / but is " + calculation.getPiece());
         }
     }
 
-    private BigDecimal getNumber(Piece piece) throws ExecutorException, ParsingException {
+    private Double getNumber(Piece piece) throws ExecutorException, ParsingException {
         Object v = piece.getValue();
-        if (v instanceof BigDecimal) {
-            return (BigDecimal) v;
+        if (v instanceof Double) {
+            return (Double) v;
         } else {
             throw new ExecutorException("Can't do calculations with " + piece.getPiece());
         }
     }
 
     @Override
-    public BigDecimal getValue() throws ExecutorException, ParsingException {
-        if (value == null) value = calc(new MathContext(MathContext.DECIMAL64.getPrecision(), RoundingMode.DOWN));
+    public Value getValue() throws ExecutorException, ParsingException {
+        if (value == null) value = new Value(calc());
         return value;
+    }
+
+    public Piece getMostRight() {
+        return (right instanceof CalculationPiece) ? ((CalculationPiece) right).getMostRight() : right;
     }
 }

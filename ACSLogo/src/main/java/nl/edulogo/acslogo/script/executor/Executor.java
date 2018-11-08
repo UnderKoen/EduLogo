@@ -3,6 +3,7 @@ package nl.edulogo.acslogo.script.executor;
 import nl.edulogo.acslogo.ConsoleHandler;
 import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.CommandoHandler;
+import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.pieces.*;
 import nl.edulogo.acslogo.script.parser.Parser;
 import nl.edulogo.acslogo.script.parser.ParsingException;
@@ -26,7 +27,7 @@ public class Executor {
         this.variableHandler = new VariableHandler();
     }
 
-    public Piece execute(Script script) throws ExecutorException, ParsingException {
+    public Value execute(Script script) throws ExecutorException, ParsingException {
         List<Piece> pieces = script.getPieces();
         for (int i = 0; i < pieces.size(); i++) {
             Piece piece = pieces.get(i);
@@ -49,6 +50,9 @@ public class Executor {
                 case VARIABLE:
                     piece = new VariablePiece(piece, variableHandler);
                     break;
+                case COMMANDO:
+                    piece = new CommandoPiece(piece, commandoHandler);
+                    break;
                 case NONE:
                     throw new IllegalArgumentException("There should not be a piece in script with type NONE.");
                 case COMPARISON:
@@ -61,14 +65,16 @@ public class Executor {
 
         pieces = CalculationPiece.calcSteps(pieces);
         pieces = ComparisonPiece.calcSteps(pieces);
-        return pieces.get(pieces.size() - 1); //TODO
+        pieces = CommandoPiece.findArguments(pieces);
+
+        return pieces.get(pieces.size() - 1).getValue(); //todo
     }
 
     public void executeSafe(Script script) {
         try {
             //TODO make console better <- fx element
-            Piece out = execute(script);
-            if (out != null && !out.getPiece().isEmpty()) consoleHandler.output(out.getPiece());
+            Value out = execute(script);
+            if (out != null && out.getValue() != null) consoleHandler.output(out);
         } catch (ExecutorException | ParsingException ex) {
             consoleHandler.error(ex);
         } catch (Exception ex) {

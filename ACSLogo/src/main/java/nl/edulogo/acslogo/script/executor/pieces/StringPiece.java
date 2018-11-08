@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script.executor.pieces;
 
+import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.parser.Piece;
 import nl.edulogo.acslogo.script.parser.PieceType;
 
@@ -7,11 +8,11 @@ import nl.edulogo.acslogo.script.parser.PieceType;
  * Created by Under_Koen on 04/11/2018.
  */
 public class StringPiece implements Piece {
-    private String value;
+    private Value value;
 
     public StringPiece(Piece string) {
         if (string.getType() != PieceType.STRING) throw new IllegalArgumentException();
-        value = string.getPiece().replaceFirst("\"", "");
+        value = new Value(string.getPiece().replaceFirst("\"", ""));
     }
 
     @Override
@@ -20,7 +21,7 @@ public class StringPiece implements Piece {
     }
 
     @Override
-    public String getValue() {
+    public Value getValue() {
         return value;
     }
 }

@@ -1,6 +1,7 @@
 package nl.edulogo.acslogo.script.executor.pieces;
 
 import nl.edulogo.acslogo.script.Script;
+import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.Executor;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
 import nl.edulogo.acslogo.script.parser.Parser;
@@ -17,7 +18,7 @@ public class StatementPiece implements Piece {
     private String script;
     private PieceType type = PieceType.STATEMENT;
     private boolean run = false;
-    private Object value = null;
+    private Value value = null;
 
     public StatementPiece(Piece statement, Parser parser, Executor executor) {
         if (statement.getType() != PieceType.STATEMENT) throw new IllegalArgumentException();
@@ -28,13 +29,13 @@ public class StatementPiece implements Piece {
 
     public void run() throws ParsingException, ExecutorException {
         Script code = parser.parse(script);
-        value = executor.execute(code).getValue();
-        type = PieceType.getType(value);
+        value = executor.execute(code);
+        type = PieceType.getType(value.getValue());
         run = true;
     }
 
     @Override
-    public Object getValue() throws ParsingException, ExecutorException {
+    public Value getValue() throws ParsingException, ExecutorException {
         if (!run) run();
         return value;
     }
