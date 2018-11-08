@@ -9,7 +9,6 @@ public class MathUtil {
     private static final double HALF_PI = Math.PI / 2;
 
     private MathUtil() {
-
     }
 
     public static Position getRelativePosition(double rotation, double distance) {

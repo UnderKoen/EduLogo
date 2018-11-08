@@ -9,10 +9,10 @@ public class Image {
     private File file;
 
     public Image(File file) {
-        this.file = file;
         if (!file.isFile()) throw new IllegalArgumentException("File should be a file.");
         if (!file.exists()) throw new IllegalArgumentException("File should exist.");
         if (!file.canRead()) throw new IllegalArgumentException("Should be able to read file.");
+        this.file = file;
     }
 
     public File getFile() {

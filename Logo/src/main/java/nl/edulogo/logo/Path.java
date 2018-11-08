@@ -16,10 +16,6 @@ public class Path {
         path = new ArrayList<>(Arrays.asList(points));
     }
 
-    public Position[] getPath() {
-        return path.toArray(new Position[0]);
-    }
-
     public void addPoint(Position point) {
         path.add(point);
     }
@@ -34,6 +30,10 @@ public class Path {
 
     public Position getPoint(int index) {
         return path.get(index);
+    }
+
+    public Position[] getPoints() {
+        return path.toArray(new Position[0]);
     }
 
     public Position[] getPoints(int from, int to) {
