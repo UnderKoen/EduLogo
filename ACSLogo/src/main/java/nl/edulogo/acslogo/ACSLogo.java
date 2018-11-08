@@ -6,7 +6,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import nl.edulogo.acslogo.script.Script;
-import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.CommandoHandler;
 import nl.edulogo.acslogo.script.executor.Executor;
 import nl.edulogo.acslogo.script.parser.Parser;
@@ -54,33 +53,12 @@ public class ACSLogo extends Logo {
         consoleHandler = new ConsoleHandler(editor.getConsole());
         registerCommands();
 
-        parser = new Parser(consoleHandler);
-        executor = new Executor(parser, consoleHandler, commandoHandler);
+        executor = new Executor(consoleHandler, commandoHandler);
+        parser = new Parser(consoleHandler, executor);
     }
 
     public void registerCommands() {
-        commandoHandler.registerCommandos(
-                new Commando("forward", arguments -> {
-                    Number amount = (Number) arguments[0].getValue();
-                    forward(amount.doubleValue());
-                    return null;
-                }, 1),
-                new Commando("repeat", arguments -> {
-                    Number amount = (Number) arguments[0].getValue();
-                    forward(amount.doubleValue());
-                    return null;
-                }, 2),
-                new Commando("right", arguments -> {
-                    Number amount = (Number) arguments[0].getValue();
-                    right(amount.doubleValue());
-                    return null;
-                }, 1),
-                new Commando("left", arguments -> {
-                    Number amount = (Number) arguments[0].getValue();
-                    left(amount.doubleValue());
-                    return null;
-                }, 1)
-        );
+        commandoHandler.registerCommandos(Commandos.getCommandos(this));
     }
 
     public void initLogo(Size size, Size editorSize) {

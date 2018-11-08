@@ -1,6 +1,6 @@
 package nl.edulogo.acslogo.script.commandos;
 
-import nl.edulogo.acslogo.script.executor.pieces.ListPiece;
+import nl.edulogo.acslogo.script.parser.pieces.ListPiece;
 
 /**
  * Created by Under_Koen on 07/11/2018.
@@ -16,7 +16,7 @@ public class Value {
             type = ValueType.NONE;
         } else if (value instanceof Boolean) {
             type = ValueType.BOOLEAN;
-        } else if (value instanceof Double) {
+        } else if (value instanceof Number) {
             type = ValueType.NUMBER;
         } else if (value instanceof String) {
             type = ValueType.STRING;

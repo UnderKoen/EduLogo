@@ -1,4 +1,4 @@
-package nl.edulogo.acslogo.script.executor.pieces;
+package nl.edulogo.acslogo.script.parser.pieces;
 
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.parser.Piece;
@@ -50,13 +50,7 @@ public class ListPiece implements Piece {
 
         @Override
         public String toString() {
-            StringBuilder builder = new StringBuilder("[");
-            for (int i = 0; i < list.size(); i++) {
-                builder.append(list.get(i));
-                if (i + 1 < list.size()) builder.append(" ");
-            }
-            builder.append("]");
-            return builder.toString();
+            return String.format("[%s]", String.join(" ", list));
         }
 
         @Override

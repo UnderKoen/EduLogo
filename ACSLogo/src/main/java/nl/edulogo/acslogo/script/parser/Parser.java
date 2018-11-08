@@ -2,6 +2,8 @@ package nl.edulogo.acslogo.script.parser;
 
 import nl.edulogo.acslogo.ConsoleHandler;
 import nl.edulogo.acslogo.script.Script;
+import nl.edulogo.acslogo.script.executor.Executor;
+import nl.edulogo.acslogo.script.parser.pieces.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +20,7 @@ public class Parser {
     private static List<Character> skip = Arrays.asList('\\', ' ', '\n');
 
     private ConsoleHandler consoleHandler;
+    private Executor executor;
 
     public Script parseSafe(String code) {
         try {
@@ -28,8 +31,9 @@ public class Parser {
         return null;
     }
 
-    public Parser(ConsoleHandler consoleHandler) {
+    public Parser(ConsoleHandler consoleHandler, Executor executor) {
         this.consoleHandler = consoleHandler;
+        this.executor = executor;
     }
 
     public Script parse(String code) throws ParsingException {
@@ -89,6 +93,49 @@ public class Parser {
             p.checkType();
         }
 
-        return new ArrayList<>(pieces);
+        return toPiecesOfType(pieces);
+    }
+
+    private List<Piece> toPiecesOfType(List<ParentPiece> parentPieces) throws ParsingException {
+        List<Piece> pieces = new ArrayList<>(parentPieces);
+        for (int i = 0; i < pieces.size(); i++) {
+            Piece piece = pieces.get(i);
+            switch (piece.getType()) {
+                case NUMBER:
+                    piece = new NumberPiece(piece);
+                    break;
+                case STATEMENT:
+                    piece = new StatementPiece(piece, this, executor);
+                    break;
+                case LIST:
+                    piece = new ListPiece(piece);
+                    break;
+                case STRING:
+                    piece = new StringPiece(piece);
+                    break;
+                case BOOLEAN:
+                    piece = new BooleanPiece(piece);
+                    break;
+                case VARIABLE:
+                    piece = new VariablePiece(piece, executor.getVariableHandler());
+                    break;
+                case COMMANDO:
+                    piece = new CommandoPiece(piece, executor.getCommandoHandler());
+                    break;
+                case NONE:
+                    throw new IllegalArgumentException("There should not be a piece in script with type NONE.");
+                case COMPARISON:
+                case CALCULATION:
+                default:
+                    continue;
+            }
+            pieces.set(i, piece);
+        }
+
+        pieces = CalculationPiece.calcSteps(pieces);
+        pieces = ComparisonPiece.calcSteps(pieces);
+        pieces = CommandoPiece.findArguments(pieces);
+
+        return pieces;
     }
 }

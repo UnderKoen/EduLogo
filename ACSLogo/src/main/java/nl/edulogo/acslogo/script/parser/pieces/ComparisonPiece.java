@@ -1,4 +1,4 @@
-package nl.edulogo.acslogo.script.executor.pieces;
+package nl.edulogo.acslogo.script.parser.pieces;
 
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
@@ -68,8 +68,8 @@ public class ComparisonPiece implements Piece {
     }
 
     public Boolean calc() throws ExecutorException, ParsingException {
-        Object l = left.getValue();
-        Object r = right.getValue();
+        Object l = left.getValue().getValue();
+        Object r = right.getValue().getValue();
 
         switch (comparison.getPiece()) {
             case ">":

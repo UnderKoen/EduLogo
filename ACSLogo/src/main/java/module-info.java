@@ -14,4 +14,5 @@ module edulogo.acslogo {
 
     exports nl.edulogo.acslogo;
     exports nl.edulogo.acslogo.script;
+    exports nl.edulogo.acslogo.script.commandos;
 }

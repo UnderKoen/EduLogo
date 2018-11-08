@@ -7,6 +7,7 @@ public class Commando {
     private String name;
     private int arguments;
     private Runnable runnable;
+    private String[] aliases;
 
     public Commando(String name, int arguments) {
         this.name = name;
@@ -18,8 +19,19 @@ public class Commando {
         this.runnable = runnable;
     }
 
+    public Commando(String name, Runnable runnable, int arguments, String... aliases) {
+        this.name = name;
+        this.arguments = arguments;
+        this.runnable = runnable;
+        this.aliases = aliases;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public String[] getAliases() {
+        return aliases;
     }
 
     public int getArguments() {

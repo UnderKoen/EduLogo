@@ -1,4 +1,4 @@
-package nl.edulogo.acslogo.script.executor.pieces;
+package nl.edulogo.acslogo.script.parser.pieces;
 
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.parser.Piece;

@@ -1,4 +1,4 @@
-package nl.edulogo.acslogo.script.executor.pieces;
+package nl.edulogo.acslogo.script.parser.pieces;
 
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
@@ -96,7 +96,7 @@ public class CalculationPiece implements Piece {
     }
 
     private Double getNumber(Piece piece) throws ExecutorException, ParsingException {
-        Object v = piece.getValue();
+        Object v = piece.getValue().getValue();
         if (v instanceof Double) {
             return (Double) v;
         } else {

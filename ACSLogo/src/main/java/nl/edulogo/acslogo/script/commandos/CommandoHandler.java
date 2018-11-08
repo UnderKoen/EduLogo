@@ -1,6 +1,7 @@
 package nl.edulogo.acslogo.script.commandos;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,6 +31,12 @@ public class CommandoHandler {
         return commandos.stream()
                 .filter(cmd -> cmd.getName().equalsIgnoreCase(name))
                 .findAny()
-                .orElse(null);
+                .orElseGet(() -> {
+                    for (Commando commando : commandos) {
+                        if (commando.getAliases() == null) continue;
+                        if (Arrays.asList(commando.getAliases()).contains(name)) return commando;
+                    }
+                    return null;
+                });
     }
 }

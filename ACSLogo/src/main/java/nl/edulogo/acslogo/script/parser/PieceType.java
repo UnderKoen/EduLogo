@@ -1,7 +1,7 @@
 package nl.edulogo.acslogo.script.parser;
 
 import nl.edulogo.acslogo.script.executor.ExecutorException;
-import nl.edulogo.acslogo.script.executor.pieces.ListPiece;
+import nl.edulogo.acslogo.script.parser.pieces.ListPiece;
 
 
 /**
@@ -24,7 +24,7 @@ public enum PieceType {
             return PieceType.NONE;
         } else if (value instanceof Boolean) {
             return PieceType.BOOLEAN;
-        } else if (value instanceof Double) {
+        } else if (value instanceof Number) {
             return PieceType.NUMBER;
         } else if (value instanceof String) {
             return PieceType.STRING;
