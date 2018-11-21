@@ -1,8 +1,6 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
 import nl.edulogo.acslogo.script.commandos.Value;
-import nl.edulogo.acslogo.script.parser.Piece;
-import nl.edulogo.acslogo.script.parser.PieceType;
 
 import java.util.ArrayList;
 import java.util.Arrays;

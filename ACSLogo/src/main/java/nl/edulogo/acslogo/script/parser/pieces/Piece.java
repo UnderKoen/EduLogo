@@ -1,7 +1,8 @@
-package nl.edulogo.acslogo.script.parser;
+package nl.edulogo.acslogo.script.parser.pieces;
 
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
+import nl.edulogo.acslogo.script.parser.ParsingException;
 
 /**
  * Created by Under_Koen on 02/11/2018.
@@ -11,12 +12,9 @@ public interface Piece {
 
     Value getValue() throws ParsingException, ExecutorException;
 
-    default Value getValueSafe() {
-        try {
-            return getValue();
-        } catch (ParsingException | ExecutorException e) {
-            return new Value(null);
-        }
+    default Value getValueSafe() throws ParsingException, ExecutorException {
+        Value value = getValue();
+        return (value != null) ? value : new Value(null);
     }
 
     default String getPiece() {

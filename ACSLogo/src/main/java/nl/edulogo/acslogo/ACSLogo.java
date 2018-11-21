@@ -17,13 +17,13 @@ import nl.edulogo.display.fx.FXCanvas;
 import nl.edulogo.display.fx.FXDisplay;
 import nl.edulogo.editor.Editor;
 import nl.edulogo.editor.fx.FXEditor;
-import nl.edulogo.logo.Logo;
+import nl.edulogo.logo.AdvancedLogo;
 import nl.edulogo.logo.Turtle;
 
 /**
  * Created by Under_Koen on 15/10/2018.
  */
-public class ACSLogo extends Logo {
+public class ACSLogo extends AdvancedLogo {
     private CommandoHandler commandoHandler;
     private ConsoleHandler consoleHandler;
     private Parser parser;

@@ -3,8 +3,6 @@ package nl.edulogo.acslogo.script.parser.pieces;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
 import nl.edulogo.acslogo.script.parser.ParsingException;
-import nl.edulogo.acslogo.script.parser.Piece;
-import nl.edulogo.acslogo.script.parser.PieceType;
 
 import java.util.*;
 

@@ -2,7 +2,6 @@ package nl.edulogo.display.fx;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import nl.edulogo.core.Color;
 import nl.edulogo.core.Position;
 import nl.edulogo.core.Size;
 
@@ -19,8 +18,9 @@ public class Test extends Application {
         Size size = new Size(500, 500);
         FXCanvas canvas = new FXCanvas(size);
         FXDisplay<FXCanvas> display = new FXDisplay<>(size, size, new Size(1000, 1000), canvas);
-        canvas.fillScreen(Color.RED);
-        canvas.drawLine(new Position(0, 0), new Position(500, 500));
+        canvas.drawLine(new Position(200, 200), new Position(300, 300));
+        canvas.drawLine(new Position(300, 200), new Position(200, 300));
+        canvas.arc(new Position(250, 250), 100, 100, 90, 360);
         display.show();
     }
 }

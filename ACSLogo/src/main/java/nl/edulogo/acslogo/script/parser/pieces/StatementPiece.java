@@ -6,8 +6,6 @@ import nl.edulogo.acslogo.script.executor.Executor;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
 import nl.edulogo.acslogo.script.parser.Parser;
 import nl.edulogo.acslogo.script.parser.ParsingException;
-import nl.edulogo.acslogo.script.parser.Piece;
-import nl.edulogo.acslogo.script.parser.PieceType;
 
 /**
  * Created by Under_Koen on 04/11/2018.

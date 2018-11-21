@@ -1,6 +1,8 @@
 package nl.edulogo.acslogo.script.parser;
 
 import nl.edulogo.acslogo.script.commandos.Value;
+import nl.edulogo.acslogo.script.parser.pieces.Piece;
+import nl.edulogo.acslogo.script.parser.pieces.PieceType;
 
 /**
  * Created by Under_Koen on 04/11/2018.

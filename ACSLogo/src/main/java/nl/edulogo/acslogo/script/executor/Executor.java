@@ -5,7 +5,7 @@ import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.CommandoHandler;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.parser.ParsingException;
-import nl.edulogo.acslogo.script.parser.Piece;
+import nl.edulogo.acslogo.script.parser.pieces.Piece;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class Executor {
         this.variableHandler = new VariableHandler();
     }
 
-    public Value execute(Script script) throws ExecutorException {
+    public Value execute(Script script) throws ExecutorException, ParsingException {
         List<Piece> pieces = script.getPieces();
 
         Value last = new Value(null);

@@ -1,7 +1,6 @@
-package nl.edulogo.acslogo.script.parser;
+package nl.edulogo.acslogo.script.parser.pieces;
 
 import nl.edulogo.acslogo.script.executor.ExecutorException;
-import nl.edulogo.acslogo.script.parser.pieces.ListPiece;
 
 
 /**

@@ -2,6 +2,7 @@ package nl.edulogo.display.fx;
 
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.ArcType;
 import nl.edulogo.core.*;
 
 /**
@@ -113,6 +114,17 @@ public class FXCanvas implements Canvas, FXView {
 
         setColor(color);
         graphics.fillPolygon(x, y, positions.length);
+    }
+
+    @Override
+    public void arc(Position center, double radiusX, double radiusY, double startAngle, double length) {
+        arc(center, radiusX, radiusY, startAngle, length, Color.BLACK);
+    }
+
+    @Override
+    public void arc(Position center, double radiusX, double radiusY, double startAngle, double length, Color color) {
+        setColor(color);
+        graphics.strokeArc(center.getX() - radiusX, center.getY() - radiusY, radiusX * 2, radiusY * 2, startAngle, length, ArcType.OPEN);
     }
 
     @Override

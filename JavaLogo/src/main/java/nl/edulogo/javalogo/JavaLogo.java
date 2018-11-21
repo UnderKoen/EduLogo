@@ -4,12 +4,12 @@ import nl.edulogo.core.Font;
 import nl.edulogo.core.Polygon;
 import nl.edulogo.javalogo.variabele.InvoerVariabele;
 import nl.edulogo.javalogo.variabele.SchuifInvoerVariabele;
-import nl.edulogo.logo.Logo;
+import nl.edulogo.logo.BasicLogo;
 
 /**
  * Created by Under_Koen on 25/09/2018.
  */
-abstract class JavaLogo extends Logo {
+abstract class JavaLogo extends BasicLogo {
     //Animatie
     public abstract void maakAnimatieMogelijk();
 

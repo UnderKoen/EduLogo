@@ -1,5 +1,7 @@
 package nl.edulogo.acslogo.script.commandos;
 
+import nl.edulogo.acslogo.script.executor.ExecutorException;
+
 /**
  * Created by Under_Koen on 15/10/2018.
  */
@@ -38,7 +40,7 @@ public class Commando {
         return arguments;
     }
 
-    public Value call(Value... arguments) {
+    public Value call(Value... arguments) throws ExecutorException {
         Value response = null;
         if (runnable != null) response = runnable.run(arguments);
         if (response == null) response = new Value(null);

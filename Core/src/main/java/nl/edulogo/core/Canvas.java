@@ -27,5 +27,9 @@ public interface Canvas {
 
     void fillPolygon(Polygon polygon, Color color);
 
+    void arc(Position center, double radiusX, double radiusY, double startAngle, double length);
+
+    void arc(Position center, double radiusX, double radiusY, double startAngle, double length, Color color);
+
     void clear();
 }

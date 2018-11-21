@@ -3,12 +3,10 @@ package nl.edulogo.acslogo.script.parser.pieces;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.CommandoHandler;
 import nl.edulogo.acslogo.script.commandos.Value;
+import nl.edulogo.acslogo.script.executor.ExecutorException;
 import nl.edulogo.acslogo.script.parser.ParsingException;
-import nl.edulogo.acslogo.script.parser.Piece;
-import nl.edulogo.acslogo.script.parser.PieceType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -61,9 +59,11 @@ public class CommandoPiece implements Piece {
     }
 
     @Override
-    public Value getValue() {
-        return commando.call(Arrays.stream(arguments)
-                .map(Piece::getValueSafe)
-                .toArray(Value[]::new));
+    public Value getValue() throws ParsingException, ExecutorException {
+        Value[] values = new Value[arguments.length];
+        for (int i = 0; i < arguments.length; i++) {
+            values[i] = arguments[i].getValueSafe();
+        }
+        return commando.call(values);
     }
 }

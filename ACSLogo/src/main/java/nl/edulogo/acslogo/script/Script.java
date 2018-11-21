@@ -1,6 +1,6 @@
 package nl.edulogo.acslogo.script;
 
-import nl.edulogo.acslogo.script.parser.Piece;
+import nl.edulogo.acslogo.script.parser.pieces.Piece;
 
 import java.util.List;
 
