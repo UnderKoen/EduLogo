@@ -24,6 +24,8 @@ import nl.edulogo.logo.Turtle;
  * Created by Under_Koen on 15/10/2018.
  */
 public class ACSLogo extends AdvancedLogo {
+    private static OS os = new OS();
+
     private CommandoHandler commandoHandler;
     private ConsoleHandler consoleHandler;
     private Parser parser;
@@ -82,8 +84,9 @@ public class ACSLogo extends AdvancedLogo {
         MenuItem run = new MenuItem("Run");
         MenuItem runSelected = new MenuItem("Run Selected");
 
-        run.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.META_DOWN));
-        runSelected.setAccelerator(new KeyCodeCombination(KeyCode.ENTER, KeyCombination.META_DOWN));
+        KeyCombination.Modifier mod = (os.getType() == OS.Type.MAC)? KeyCombination.META_DOWN : KeyCombination.CONTROL_DOWN;
+        run.setAccelerator(new KeyCodeCombination(KeyCode.R,mod));
+        runSelected.setAccelerator(new KeyCodeCombination(KeyCode.ENTER, mod));
 
         run.setOnAction(event -> {
             String text = editor.getText();
