@@ -1,9 +1,15 @@
 package nl.edulogo.acslogo;
 
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
 import nl.edulogo.acslogo.script.parser.pieces.ListPiece.ListObject;
+import nl.edulogo.core.Position;
+import nl.edulogo.core.Size;
+import nl.edulogo.display.fx.FXCanvas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,15 +46,41 @@ public class Commandos {
         commandos.add(new Commando("arTanh", Commandos::arTanh, 1));
         commandos.add(new Commando("aTan2", Commandos::aTan2, 2));
 
-        //TODO background / bg
+        commandos.add(new Commando("ascii", Commandos::ascii, 1));
+
+        commandos.add(new Commando("background", Commandos::background, 0, "bg"));
 
         commandos.add(new Commando("butFirst", Commandos::butFirst, 1));
         commandos.add(new Commando("butLast", Commandos::butLast, 1));
 
-        //TODO button?/ buttonP
+        commandos.add(new Commando("buttonP", Commandos::buttonP, 0, "button?"));
+        //Zelfde als buttonP maar dan over je rechter muis, heeft geen iplementatie van acslogo
+        commandos.add(new Commando("buttonS", Commandos::buttonS, 0));
 
-        commandos.add(new Commando("ascii", Commandos::ascii, 1));
+        commandos.add(new Commando("canvasSize", Commandos::canvasSize, 0));
+
+        commandos.add(new Commando("catch", Commandos::catchM, 2));
+
+        /*TODO FILE STUFF:
+         * -CD
+         * -CloseReadFile
+         * -CloseWriteFile
+         * -
+         */
+
         commandos.add(new Commando("char", Commandos::charM, 1));
+
+        commandos.add(new Commando("clean", Commandos::clean, 0));
+        commandos.add(new Commando("clearScreen", Commandos::clearScreen, 0, "cs"));
+
+        commandos.add(new Commando("colorAtPoint", Commandos::colorAtPoint, 1, "colourAtPoint"));
+
+        commandos.add(new Commando("cos", Commandos::cos, 1, "cosine"));
+        commandos.add(new Commando("cosh", Commandos::cosh, 1));
+
+        commandos.add(new Commando("count", Commandos::count, 1));
+
+        commandos.add(new Commando("home", Commandos::home, 0));
 
         return commandos.toArray(new Commando[0]);
     }
@@ -118,6 +150,10 @@ public class Commandos {
         return new Value(Character.hashCode(c));
     }
 
+    public static Value background(Value... arguments) {
+        return new Value(logo.colorHandler.getBackground());
+    }
+
     public static Value butFirst(Value... arguments) throws ExecutorException {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
@@ -146,9 +182,95 @@ public class Commandos {
         }
     }
 
+    public static Value buttonP(Value... arguments) {
+        return new Value(logo.mouseHandler.isLeftMouseDown());
+    }
+
+    public static Value buttonS(Value... arguments) {
+        return new Value(logo.mouseHandler.isRightMouseDown());
+    }
+
+    public static Value canvasSize(Value... arguments) {
+        Size s = logo.getCanvas().getSize();
+        return new Value(new ListObject(s.getWidth() + "", s.getHeight() + ""));
+    }
+
+    public static Value catchM(Value... arguments) {
+        String error = (String) arguments[0].getValue();
+        ListObject l = (ListObject) arguments[1].getValue();
+
+        try {
+            logo.run(String.join(" ", l.getList()));
+        } catch (Catch ex) {
+            if (!ex.getError().equals(error)) throw ex;
+        }
+
+        return null;
+    }
+
     public static Value charM(Value... arguments) {
         int i = ((Double) arguments[0].getValue()).intValue();
         return new Value((char) i + "");
+    }
+
+    public static Value clean(Value... arguments) {
+        logo.getCanvas().fillScreen(logo.colorHandler.getBackgroundColor());
+        return null;
+    }
+
+    public static Value clearScreen(Value... arguments) {
+        clean();
+        home();
+        logo.getTurtle().setPenDown(true);
+        return null;
+    }
+
+    public static Value colorAtPoint(Value... arguments) throws ExecutorException {
+        //TODO fix bigger than canvas and fix that [0 0] is middle of screen
+        List<String> l = ((ListObject) arguments[0].getValue()).getList();
+        if (l.size() != 2) throw new ExecutorException("Color at point needs a list with two numbers");
+        int x = Integer.parseInt(l.get(0));
+        int y = Integer.parseInt(l.get(1));
+
+        FXCanvas fxCanvas = (FXCanvas) logo.getCanvas();
+        WritableImage img = fxCanvas.getNode().snapshot(new SnapshotParameters(), null);
+        Color color = img.getPixelReader().getColor(x, y);
+
+        List<String> r = new ArrayList<>();
+        r.add((int) (color.getRed() * 255) + "");
+        r.add((int) (color.getGreen() * 255) + "");
+        r.add((int) (color.getBlue() * 255) + "");
+
+        return new Value(new ListObject(r));
+    }
+
+    public static Value cos(Value... arguments) {
+        double d = (Double) arguments[0].getValue();
+        return new Value(Math.cos(Math.toRadians(d)));
+    }
+
+    public static Value cosh(Value... arguments) {
+        double d = (Double) arguments[0].getValue();
+        return new Value(Math.cosh(Math.toRadians(d)));
+    }
+
+    public static Value count(Value... arguments) {
+        Value v = arguments[0];
+        if (v.getType() == Value.ValueType.LIST) {
+            List<String> l = ((ListObject) v.getValue()).getList();
+            return new Value(l.size());
+        } else {
+            String s = v.getValue().toString();
+            return new Value(s.toCharArray().length);
+        }
+    }
+
+
+    public static Value home(Value... arguments) {
+        Size s = logo.getCanvas().getSize();
+        logo.getTurtle().setPosition(new Position(s.getWidth() / 2.0, s.getHeight() / 2.0));
+        logo.getTurtle().setRotation(0);
+        return null;
     }
 
     public static Value repeat(Value... arguments) {

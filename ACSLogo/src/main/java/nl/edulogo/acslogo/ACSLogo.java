@@ -28,6 +28,8 @@ public class ACSLogo extends AdvancedLogo {
 
     private CommandoHandler commandoHandler;
     private ConsoleHandler consoleHandler;
+    protected ColorHandler colorHandler;
+    protected MouseHandler mouseHandler;
     private Parser parser;
     private Executor executor;
     private Editor editor;
@@ -53,6 +55,11 @@ public class ACSLogo extends AdvancedLogo {
 
         commandoHandler = new CommandoHandler();
         consoleHandler = new ConsoleHandler(editor.getConsole());
+        colorHandler = new ColorHandler(Color.WHITE, Color.BLACK, Color.RED, Color.BLUE, Color.YELLOW, new Color(177, 121, 51),
+                Color.CYAN, new Color(146, 146, 146), Color.MAGENTA, new Color(255, 144, 0), new Color(161, 0, 149),
+                new Color(190, 0, 242), new Color(194, 171, 0), new Color(217, 192, 166),
+                new Color(238, 214, 188), new Color(0, 238, 217));
+        mouseHandler = new MouseHandler((FXCanvas) canvas);
         registerCommands();
 
         executor = new Executor(consoleHandler, commandoHandler);
@@ -65,7 +72,7 @@ public class ACSLogo extends AdvancedLogo {
 
     public void initLogo(Size size, Size editorSize) {
         canvas = new FXCanvas(size);
-        turtle = new Turtle(new Position(size.getWidth() / 2, size.getHeight() / 2), 0);
+        turtle = new Turtle(new Position(size.getWidth() / 2.0, size.getHeight() / 2.0), 0);
         canvas.fillScreen(Color.WHITE);
 
         editor = new FXEditor();
@@ -106,7 +113,7 @@ public class ACSLogo extends AdvancedLogo {
 
     public void run(String code) {
         Script script = parser.parseSafe(code);
-        executor.executeSafe(script);
+        if (script != null) executor.executeSafe(script);
     }
 
     @Override

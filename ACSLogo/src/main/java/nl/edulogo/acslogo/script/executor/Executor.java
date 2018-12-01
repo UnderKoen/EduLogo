@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script.executor;
 
+import nl.edulogo.acslogo.Catch;
 import nl.edulogo.acslogo.ConsoleHandler;
 import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.CommandoHandler;
@@ -41,6 +42,8 @@ public class Executor {
             if (out != null && out.getValue() != null) consoleHandler.output(out);
         } catch (ExecutorException | ParsingException ex) {
             consoleHandler.error(ex);
+        } catch (Catch ex) {
+            consoleHandler.error("No catch for: " + ex.getError());
         } catch (Exception ex) {
             ex.printStackTrace();
             //TODO handle this

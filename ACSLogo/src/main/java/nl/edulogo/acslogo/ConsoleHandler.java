@@ -1,6 +1,5 @@
 package nl.edulogo.acslogo;
 
-import nl.edulogo.acslogo.script.parser.ParsingException;
 import nl.edulogo.editor.Console;
 
 /**
@@ -17,11 +16,11 @@ public class ConsoleHandler {
         console.println(obj.toString());
     }
 
-    public void error(ParsingException ex) {
-        console.error(ex.getMessage());
+    public void error(String s) {
+        console.error(s);
     }
 
     public void error(Exception ex) {
-        console.error(ex.getMessage());
+        error(ex.getMessage());
     }
 }
