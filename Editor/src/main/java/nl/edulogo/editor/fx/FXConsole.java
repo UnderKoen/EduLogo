@@ -1,14 +1,12 @@
 package nl.edulogo.editor.fx;
 
+import javafx.beans.binding.DoubleExpression;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import nl.edulogo.core.Size;
 import nl.edulogo.display.fx.FXView;
@@ -24,24 +22,27 @@ public class FXConsole implements Console, FXView {
     private StackPane pane;
 
     private ScrollPane scroll;
-    private StackPane lines;
+    private VBox lines;
     private List<Label> textLines;
     private boolean error = false;
+    private DoubleExpression size;
 
     public FXConsole() {
         pane = new StackPane();
 
-        scroll = new ScrollPane();
-        lines = new StackPane();
+        lines = new VBox();
+        scroll = new ScrollPane(lines);
         textLines = new ArrayList<>();
 
-        scroll.setContent(lines);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.maxHeightProperty().bind(pane.heightProperty());
 
-        lines.setAlignment(Pos.TOP_CENTER);
+        lines.setAlignment(Pos.TOP_LEFT);
 
-        pane.getChildren().addAll(scroll);
+        lines.heightProperty().addListener((observable, oldValue, newValue) -> scroll.setVvalue(scroll.getVmax()));
+
+        pane.getChildren().add(scroll);
     }
 
     @Override
@@ -66,16 +67,9 @@ public class FXConsole implements Console, FXView {
             label.setBackground(background(Color.gray(0.9)));
         }
 
-        if (!textLines.isEmpty()) {
-            Label line = textLines.get(textLines.size() - 1);
-            label.translateYProperty().bind(line.translateYProperty().add(line.heightProperty()));
-        }
+        lines.getChildren().add(label);
 
         textLines.add(label);
-        lines.getChildren().add(label);
-        lines.prefHeightProperty().bind(label.translateYProperty().add(label.heightProperty()));
-        lines.requestLayout();
-
         error = false;
     }
 

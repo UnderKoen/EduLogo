@@ -5,6 +5,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import nl.edulogo.acslogo.display.Procedures;
+import nl.edulogo.acslogo.display.fx.FXProcedures;
 import nl.edulogo.acslogo.handlers.ColorHandler;
 import nl.edulogo.acslogo.handlers.CommandoHandler;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
@@ -17,6 +19,7 @@ import nl.edulogo.core.Canvas;
 import nl.edulogo.core.Color;
 import nl.edulogo.core.Position;
 import nl.edulogo.core.Size;
+import nl.edulogo.display.Display;
 import nl.edulogo.display.fx.FXCanvas;
 import nl.edulogo.display.fx.FXDisplay;
 import nl.edulogo.editor.Editor;
@@ -41,6 +44,8 @@ public class ACSLogo extends AdvancedLogo {
 
     private Turtle turtle;
     private Canvas canvas;
+
+    private Display<? extends Procedures> proceduresDisplay;
 
     public ACSLogo() {
         setupDisplay();
@@ -69,6 +74,8 @@ public class ACSLogo extends AdvancedLogo {
         registerCommands();
 
         procedureHandler = new ProcedureHandler(this, commandoHandler);
+        proceduresDisplay = new FXDisplay<>(new Size(700, 500), new FXProcedures(procedureHandler));
+        proceduresDisplay.setTitle("Procedures");
 
         executor = new Executor(consoleHandler, commandoHandler);
         parser = new Parser(consoleHandler, executor);
@@ -86,7 +93,10 @@ public class ACSLogo extends AdvancedLogo {
         editor = new FXEditor();
 
         FXDisplay<FXCanvas> canvasD = new FXDisplay<>((FXCanvas) canvas);
+        canvasD.setTitle("Canvas");
+
         FXDisplay<FXEditor> editorD = new FXDisplay<>(editorSize, (FXEditor) editor);
+        editorD.setTitle("Editor");
 
         canvasD.show();
         editorD.show();
@@ -116,7 +126,22 @@ public class ACSLogo extends AdvancedLogo {
 
         runMenu.getItems().addAll(run, runSelected);
 
-        fxEditor.getMenuBar().getMenus().addAll(runMenu);
+        Menu window = new Menu("Window");
+        MenuItem canvas = new MenuItem("Show canvas");
+        MenuItem procedures = new MenuItem("Show procedures");
+
+        canvas.setOnAction(event -> {
+            FXCanvas c = (FXCanvas) this.canvas;
+            if (!c.getNode().getScene().getWindow().isShowing()) new FXDisplay<>(c).show();
+        });
+
+        procedures.setOnAction(event -> {
+            proceduresDisplay.show();
+        });
+
+        window.getItems().addAll(canvas, procedures);
+
+        fxEditor.getMenuBar().getMenus().addAll(runMenu, window);
     }
 
     public void run(String code) {

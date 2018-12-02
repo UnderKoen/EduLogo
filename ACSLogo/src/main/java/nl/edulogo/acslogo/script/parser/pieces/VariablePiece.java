@@ -28,7 +28,7 @@ public class VariablePiece implements Piece {
     public Value getValue() throws ExecutorException {
         if (value == null) {
             value = handler.getVariable(key);
-            type = PieceType.getType(value);
+            type = PieceType.getType(value.getValue());
         }
         return value;
     }

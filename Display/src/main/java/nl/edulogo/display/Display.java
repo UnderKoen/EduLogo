@@ -27,4 +27,6 @@ public interface Display<T extends View> {
     Size getMaxSize();
 
     void setMaxSize(Size size);
+
+    void setTitle(String title);
 }

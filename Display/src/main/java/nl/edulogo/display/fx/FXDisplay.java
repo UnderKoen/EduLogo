@@ -123,4 +123,9 @@ public class FXDisplay<T extends FXView> implements Display<T> {
         stage.setMaxWidth(maxSize.getWidth());
         stage.setMaxHeight(maxSize.getHeight() + 22);
     }
+
+    @Override
+    public void setTitle(String title) {
+        stage.setTitle(title);
+    }
 }
