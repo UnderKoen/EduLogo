@@ -3,14 +3,18 @@ package nl.edulogo.acslogo;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
+import nl.edulogo.acslogo.script.parser.ParsingException;
 import nl.edulogo.acslogo.script.parser.pieces.ListPiece.ListObject;
 import nl.edulogo.core.Position;
 import nl.edulogo.core.Size;
 import nl.edulogo.display.fx.FXCanvas;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +83,12 @@ public class Commandos {
         commandos.add(new Commando("cosh", Commandos::cosh, 1));
 
         commandos.add(new Commando("count", Commandos::count, 1));
+
+        commandos.add(new Commando("currentPath", Commandos::currentPath, 0));
+
+        commandos.add(new Commando("date", Commandos::date, 0));
+
+        commandos.add(new Commando("define", Commandos::define, 2));
 
         commandos.add(new Commando("home", Commandos::home, 0));
 
@@ -215,6 +225,7 @@ public class Commandos {
 
     public static Value clean(Value... arguments) {
         logo.getCanvas().fillScreen(logo.colorHandler.getBackgroundColor());
+        logo.getTurtle().getPath().clear();
         return null;
     }
 
@@ -265,6 +276,37 @@ public class Commandos {
         }
     }
 
+    public static Value currentPath(Value... arguments) {
+        List<String> l = new ArrayList<>();
+        Position[] points = logo.getTurtle().getPath().getPoints();
+        for (Position pos : points) {
+            l.add(String.format("[%d %d]", Math.round(pos.getX()), Math.round(pos.getY())));
+        }
+        return new Value(new ListObject(l));
+    }
+
+    public static Value date(Value... arguments) {
+        String s = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return new Value(s);
+    }
+
+    public static Value define(Value... arguments) throws ExecutorException {
+        String name = (String) arguments[0].getValue();
+        ListObject l = (ListObject) arguments[1].getValue();
+        try {
+            Script script = logo.getParser().parse(String.join(" ", l.getList()));
+
+            if (script.getPieces().size() != 2)
+                throw new ExecutorException("Define should have two list inside the list.");
+            ListObject para = (ListObject) script.getPieces().get(0).getValue().getValue();
+            ListObject code = (ListObject) script.getPieces().get(1).getValue().getValue();
+
+            logo.procedureHandler.registerProcedure(name, para.getList(), String.join(" ", code.getList()));
+        } catch (ParsingException e) {
+            throw new ExecutorException(e.getMessage());
+        }
+        return null;
+    }
 
     public static Value home(Value... arguments) {
         Size s = logo.getCanvas().getSize();

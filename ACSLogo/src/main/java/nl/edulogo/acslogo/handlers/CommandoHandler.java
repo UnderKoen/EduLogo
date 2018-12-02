@@ -1,4 +1,6 @@
-package nl.edulogo.acslogo.script.commandos;
+package nl.edulogo.acslogo.handlers;
+
+import nl.edulogo.acslogo.script.commandos.Commando;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +27,10 @@ public class CommandoHandler {
         for (Commando commando : commandos) {
             registerCommando(commando);
         }
+    }
+
+    public void removeCommando(Commando commando) {
+        commandos.remove(commando);
     }
 
     public Commando getCommando(String name) {

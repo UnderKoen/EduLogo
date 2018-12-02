@@ -1,9 +1,10 @@
 package nl.edulogo.acslogo.script.executor;
 
 import nl.edulogo.acslogo.Catch;
-import nl.edulogo.acslogo.ConsoleHandler;
+import nl.edulogo.acslogo.handlers.CommandoHandler;
+import nl.edulogo.acslogo.handlers.ConsoleHandler;
+import nl.edulogo.acslogo.handlers.VariableHandler;
 import nl.edulogo.acslogo.script.Script;
-import nl.edulogo.acslogo.script.commandos.CommandoHandler;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.parser.ParsingException;
 import nl.edulogo.acslogo.script.parser.pieces.Piece;
@@ -37,7 +38,6 @@ public class Executor {
 
     public void executeSafe(Script script) {
         try {
-            //TODO make console better <- fx element
             Value out = execute(script);
             if (out != null && out.getValue() != null) consoleHandler.output(out);
         } catch (ExecutorException | ParsingException ex) {

@@ -41,7 +41,7 @@ public class Commando {
     }
 
     public Value call(Value... arguments) throws ExecutorException {
-        Value response = null;
+        Value response = new Value(null);
         if (runnable != null) response = runnable.run(arguments);
         if (response == null) response = new Value(null);
         return response;

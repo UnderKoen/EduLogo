@@ -74,6 +74,7 @@ public class FXConsole implements Console, FXView {
         textLines.add(label);
         lines.getChildren().add(label);
         lines.prefHeightProperty().bind(label.translateYProperty().add(label.heightProperty()));
+        lines.requestLayout();
 
         error = false;
     }

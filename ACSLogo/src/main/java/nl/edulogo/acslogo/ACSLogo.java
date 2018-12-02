@@ -5,8 +5,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import nl.edulogo.acslogo.handlers.ColorHandler;
+import nl.edulogo.acslogo.handlers.CommandoHandler;
+import nl.edulogo.acslogo.handlers.ConsoleHandler;
+import nl.edulogo.acslogo.handlers.MouseHandler;
+import nl.edulogo.acslogo.handlers.procedures.ProcedureHandler;
 import nl.edulogo.acslogo.script.Script;
-import nl.edulogo.acslogo.script.commandos.CommandoHandler;
 import nl.edulogo.acslogo.script.executor.Executor;
 import nl.edulogo.acslogo.script.parser.Parser;
 import nl.edulogo.core.Canvas;
@@ -28,8 +32,9 @@ public class ACSLogo extends AdvancedLogo {
 
     private CommandoHandler commandoHandler;
     private ConsoleHandler consoleHandler;
-    protected ColorHandler colorHandler;
-    protected MouseHandler mouseHandler;
+    ColorHandler colorHandler;
+    MouseHandler mouseHandler;
+    ProcedureHandler procedureHandler;
     private Parser parser;
     private Executor executor;
     private Editor editor;
@@ -60,7 +65,10 @@ public class ACSLogo extends AdvancedLogo {
                 new Color(190, 0, 242), new Color(194, 171, 0), new Color(217, 192, 166),
                 new Color(238, 214, 188), new Color(0, 238, 217));
         mouseHandler = new MouseHandler((FXCanvas) canvas);
+
         registerCommands();
+
+        procedureHandler = new ProcedureHandler(this, commandoHandler);
 
         executor = new Executor(consoleHandler, commandoHandler);
         parser = new Parser(consoleHandler, executor);
@@ -124,5 +132,13 @@ public class ACSLogo extends AdvancedLogo {
     @Override
     public Turtle getTurtle() {
         return turtle;
+    }
+
+    public Parser getParser() {
+        return parser;
+    }
+
+    public Executor getExecutor() {
+        return executor;
     }
 }

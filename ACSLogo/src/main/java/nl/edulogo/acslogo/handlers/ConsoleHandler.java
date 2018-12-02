@@ -1,4 +1,4 @@
-package nl.edulogo.acslogo;
+package nl.edulogo.acslogo.handlers;
 
 import nl.edulogo.editor.Console;
 

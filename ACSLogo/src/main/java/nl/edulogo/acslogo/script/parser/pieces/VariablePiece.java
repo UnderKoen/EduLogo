@@ -1,8 +1,8 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
+import nl.edulogo.acslogo.handlers.VariableHandler;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
-import nl.edulogo.acslogo.script.executor.VariableHandler;
 
 /**
  * Created by Under_Koen on 04/11/2018.

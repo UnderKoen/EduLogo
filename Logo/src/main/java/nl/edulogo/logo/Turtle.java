@@ -44,7 +44,7 @@ public class Turtle {
 
     public void setPosition(Position position) {
         this.position = position;
-        getPath().addPoint(position.clone());
+        if (isPenDown()) getPath().addPoint(position.clone());
     }
 
     public double getRotation() {
