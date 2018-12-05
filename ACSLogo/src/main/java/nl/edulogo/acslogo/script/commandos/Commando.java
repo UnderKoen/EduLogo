@@ -6,7 +6,7 @@ import nl.edulogo.acslogo.script.executor.ExecutorException;
  * Created by Under_Koen on 15/10/2018.
  */
 public class Commando {
-    private String name;
+    protected String name;
     private int arguments;
     private Runnable runnable;
     private String[] aliases;

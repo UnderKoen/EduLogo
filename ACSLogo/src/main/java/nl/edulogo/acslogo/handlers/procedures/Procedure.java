@@ -8,12 +8,17 @@ import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.ExecutorException;
 import nl.edulogo.acslogo.script.parser.ParsingException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Procedure extends Commando {
-    private ACSLogo logo;
-    private String code;
-    private List<String> parameters;
+    protected ACSLogo logo;
+    protected String code;
+    protected List<String> parameters;
+
+    protected Procedure(Procedure procedure) {
+        this(procedure.name, new ArrayList<>(procedure.parameters), procedure.code, procedure.logo);
+    }
 
     public Procedure(String name, List<String> parameters, String code, ACSLogo logo) {
         super(name, parameters.size());
@@ -36,5 +41,13 @@ public class Procedure extends Commando {
         } catch (ParsingException e) {
             throw new ExecutorException(e.getMessage());
         }
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public List<String> getParameters() {
+        return parameters;
     }
 }

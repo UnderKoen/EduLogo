@@ -3,7 +3,7 @@ package nl.edulogo.acslogo.handlers.procedures;
 import nl.edulogo.acslogo.ACSLogo;
 import nl.edulogo.acslogo.handlers.CommandoHandler;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,18 +15,29 @@ public class ProcedureHandler {
     public ProcedureHandler(ACSLogo logo, CommandoHandler commandoHandler) {
         this.logo = logo;
         this.commandoHandler = commandoHandler;
-        procedures = new HashMap<>();
+        procedures = new LinkedHashMap<>();
+    }
+
+    public Map<String, Procedure> getProcedures() {
+        return procedures;
+    }
+
+    public void registerProcedure(Procedure procedure) {
+        String name = procedure.getName();
+
+        removeProcedure(name);
+
+        commandoHandler.registerCommando(procedure);
+        procedures.put(name, procedure);
     }
 
     public void registerProcedure(String name, List<String> parameters, String code) {
-        if (procedures.containsKey(name)) {
-            Procedure p = procedures.remove(name);
-            commandoHandler.removeCommando(p);
-        }
+        Procedure procedure = createProcedure(name, parameters, code);
+        registerProcedure(procedure);
+    }
 
-        Procedure procedure = new Procedure(name, parameters, code, logo);
-        commandoHandler.registerCommando(procedure);
-        procedures.put(name, procedure);
+    public Procedure createProcedure(String name, List<String> parameters, String code) {
+        return new Procedure(name, parameters, code, logo);
     }
 
     public void removeProcedure(String name) {
@@ -34,5 +45,9 @@ public class ProcedureHandler {
             Procedure p = procedures.remove(name);
             commandoHandler.removeCommando(p);
         }
+    }
+
+    public ACSLogo getLogo() {
+        return logo;
     }
 }
