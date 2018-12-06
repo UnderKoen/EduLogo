@@ -5,7 +5,7 @@ public class OS {
     private Type type;
 
     public OS() {
-        name = System.getProperty("os.name");
+        name = System.getProperty("os.name").toLowerCase();
     }
 
     public String getName() {
@@ -30,6 +30,6 @@ public class OS {
     }
 
     public enum Type {
-        WINDOWS, MAC, LINUX, OTHER;
+        WINDOWS, MAC, LINUX, OTHER
     }
 }
