@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script.parser;
 
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.parser.pieces.Piece;
 import nl.edulogo.acslogo.script.parser.pieces.PieceType;
@@ -25,7 +26,8 @@ public class ParentPiece implements Piece {
     }
 
     @Override
-    public PieceType getType() {
+    public PieceType getType() throws ParsingException {
+        if (type == null) checkType();
         return type;
     }
 

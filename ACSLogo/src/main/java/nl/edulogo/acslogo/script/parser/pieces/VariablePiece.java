@@ -1,8 +1,9 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
 import nl.edulogo.acslogo.handlers.VariableHandler;
+import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Value;
-import nl.edulogo.acslogo.script.executor.ExecutorException;
 
 /**
  * Created by Under_Koen on 04/11/2018.
@@ -13,7 +14,7 @@ public class VariablePiece implements Piece {
     private Value value = null;
     private PieceType type = PieceType.VARIABLE;
 
-    public VariablePiece(Piece piece, VariableHandler handler) {
+    public VariablePiece(Piece piece, VariableHandler handler) throws ParsingException {
         if (piece.getType() != PieceType.VARIABLE) throw new IllegalArgumentException();
         this.handler = handler;
         this.key = piece.getPiece().replaceFirst(":", "");

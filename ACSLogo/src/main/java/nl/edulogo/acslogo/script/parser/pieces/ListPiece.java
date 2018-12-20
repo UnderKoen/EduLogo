@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Value;
 
 import java.util.ArrayList;
@@ -13,10 +14,36 @@ import java.util.Objects;
 public class ListPiece implements Piece {
     private Value value;
 
-    public ListPiece(Piece list) {
+    public ListPiece(Piece list) throws ParsingException {
         if (list.getType() != PieceType.LIST) throw new IllegalArgumentException();
         String inside = list.getPiece().replaceAll("^\\[(.*)\\]$", "$1");
-        value = new Value(new ListObject(inside.split(" ")));
+        List<String> l = new ArrayList<>();
+        StringBuffer s = new StringBuffer();
+        int index = 0;
+
+        for (char c : inside.toCharArray()) {
+            if (c == '[') {
+                index++;
+            } else if (c == ']') {
+                index--;
+                s.append(c);
+                c = ' ';
+            }
+
+            if (c == ' ' && index == 0) {
+                l.add(s.toString());
+                s = new StringBuffer();
+            } else {
+                s.append(c);
+            }
+        }
+
+        String last = s.toString();
+        if (!last.isEmpty()) {
+            l.add(last);
+        }
+
+        value = new Value(new ListObject(l));
     }
 
     @Override

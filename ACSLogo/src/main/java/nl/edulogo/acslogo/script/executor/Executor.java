@@ -4,9 +4,10 @@ import nl.edulogo.acslogo.Catch;
 import nl.edulogo.acslogo.handlers.CommandoHandler;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
 import nl.edulogo.acslogo.handlers.VariableHandler;
+import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.Value;
-import nl.edulogo.acslogo.script.parser.ParsingException;
 import nl.edulogo.acslogo.script.parser.pieces.Piece;
 
 import java.util.List;

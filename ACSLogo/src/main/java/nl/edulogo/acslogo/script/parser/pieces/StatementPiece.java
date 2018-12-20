@@ -1,11 +1,11 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
+import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.Executor;
-import nl.edulogo.acslogo.script.executor.ExecutorException;
 import nl.edulogo.acslogo.script.parser.Parser;
-import nl.edulogo.acslogo.script.parser.ParsingException;
 
 /**
  * Created by Under_Koen on 04/11/2018.
@@ -18,7 +18,7 @@ public class StatementPiece implements Piece {
     private boolean run = false;
     private Value value = null;
 
-    public StatementPiece(Piece statement, Parser parser, Executor executor) {
+    public StatementPiece(Piece statement, Parser parser, Executor executor) throws ParsingException {
         if (statement.getType() != PieceType.STATEMENT) throw new IllegalArgumentException();
         this.script = statement.getPiece().replaceAll("^\\((.*)\\)$", "$1");
         this.parser = parser;

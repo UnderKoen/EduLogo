@@ -3,15 +3,20 @@ package nl.edulogo.acslogo;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.Value;
-import nl.edulogo.acslogo.script.executor.ExecutorException;
-import nl.edulogo.acslogo.script.parser.ParsingException;
+import nl.edulogo.acslogo.script.parser.ParentPiece;
+import nl.edulogo.acslogo.script.parser.pieces.ListPiece;
 import nl.edulogo.acslogo.script.parser.pieces.ListPiece.ListObject;
+import nl.edulogo.acslogo.script.parser.pieces.Piece;
+import nl.edulogo.acslogo.script.parser.pieces.PieceType;
 import nl.edulogo.core.Position;
 import nl.edulogo.core.Size;
 import nl.edulogo.display.fx.FXCanvas;
+import nl.edulogo.logo.Path;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -69,7 +74,9 @@ public class Commandos {
          * -CD
          * -CloseReadFile
          * -CloseWriteFile
-         * -
+         * -Dir
+         * -DrawImage
+         * -EofP
          */
 
         commandos.add(new Commando("char", Commandos::charM, 1));
@@ -89,6 +96,29 @@ public class Commandos {
         commandos.add(new Commando("date", Commandos::date, 0));
 
         commandos.add(new Commando("define", Commandos::define, 2));
+        commandos.add(new Commando("defineP", Commandos::defineP, 1, "define?"));
+
+        commandos.add(new Commando("difference", Commandos::difference, 2));
+
+        commandos.add(new Commando("dot", Commandos::dot, 1));
+
+        commandos.add(new Commando("emptyP", Commandos::emptyP, 1, "empty?"));
+        commandos.add(new Commando("equalP", Commandos::equalP, 2, "equal?"));
+
+        commandos.add(new Commando("exp", Commandos::exp, 1));
+
+        /*TODO export
+         * ExportEPS
+         * ExportPDF
+         * ExportTiff
+         */
+
+        commandos.add(new Commando("fill", Commandos::fill, 0));
+        commandos.add(new Commando("fillIn", Commandos::fillIn, 0));
+        commandos.add(new Commando("fillCurrentPath", Commandos::fillCurrentPath, 0));
+        commandos.add(new Commando("fillPath", Commandos::fillPath, 1));
+
+        commandos.add(new Commando("first", Commandos::first, 1));
 
         commandos.add(new Commando("home", Commandos::home, 0));
 
@@ -290,21 +320,114 @@ public class Commandos {
         return new Value(s);
     }
 
-    public static Value define(Value... arguments) throws ExecutorException {
+    public static Value define(Value... arguments) throws ExecutorException, ParsingException {
         String name = (String) arguments[0].getValue();
         ListObject l = (ListObject) arguments[1].getValue();
-        try {
-            Script script = logo.getParser().parse(String.join(" ", l.getList()));
+        Script script = logo.getParser().parse(String.join(" ", l.getList()));
 
-            if (script.getPieces().size() != 2)
-                throw new ExecutorException("Define should have two list inside the list.");
-            ListObject para = (ListObject) script.getPieces().get(0).getValue().getValue();
-            ListObject code = (ListObject) script.getPieces().get(1).getValue().getValue();
+        if (script.getPieces().size() != 2)
+            throw new ExecutorException("Define should have two list inside the list.");
+        ListObject para = (ListObject) script.getPieces().get(0).getValue().getValue();
+        ListObject code = (ListObject) script.getPieces().get(1).getValue().getValue();
 
-            logo.procedureHandler.registerProcedure(name, para.getList(), String.join(" ", code.getList()));
-        } catch (ParsingException e) {
-            throw new ExecutorException(e.getMessage());
+        logo.procedureHandler.registerProcedure(name, para.getList(), String.join(" ", code.getList()));
+
+        return null;
+    }
+
+    public static Value defineP(Value... arguments) {
+        String name = (String) arguments[0].getValue();
+        return new Value(logo.procedureHandler.getProcedures().keySet().contains(name));
+    }
+
+    public static Value difference(Value... arguments) {
+        double d1 = (Double) arguments[0].getValue();
+        double d2 = (Double) arguments[1].getValue();
+        return new Value(d1 - d2);
+    }
+
+    public static Value dot(Value... arguments) {
+        List<String> list = ((ListObject) arguments[0].getValue()).getList();
+        double x = Double.parseDouble(list.get(0));
+        double y = Double.parseDouble(list.get(1));
+        logo.getCanvas().drawDot(new Position(x, y));
+        return null;
+    }
+
+    public static Value emptyP(Value... arguments) {
+        Value v = arguments[0];
+        if (v.getType() == Value.ValueType.LIST) {
+            List<String> l = ((ListObject) v.getValue()).getList();
+            return new Value(l.isEmpty());
+        } else {
+            String s = v.getValue().toString();
+            return new Value(s.isEmpty());
         }
+    }
+
+    public static Value equalP(Value... arguments) {
+        String s1 = arguments[0].toString();
+        String s2 = arguments[1].toString();
+        return new Value(s1.equals(s2));
+    }
+
+    public static Value exp(Value... arguments) {
+        Double d = (double) arguments[0].getValue();
+        return new Value(Math.exp(d));
+    }
+
+    public static Value fill(Value... arguments) {
+        logo.fillScreen(logo.getTurtle().getColor());
+        return null;
+    }
+
+    public static Value fillIn(Value... arguments) {
+        //TODO Paint bucket mode
+        return null;
+    }
+
+    public static Value fillCurrentPath(Value... arguments) {
+        logo.fillPath();
+        return null;
+    }
+
+    public static Value fillPath(Value... arguments) throws ExecutorException, ParsingException {
+        List<String> list = ((ListObject) arguments[0].getValue()).getList();
+        Path path = new Path();
+
+        Script script = logo.getParser().parse(String.join(" ", list));
+        for (Piece piece : script.getPieces()) {
+            List<String> location = ((ListObject) piece.getValue().getValue()).getList();
+            double x = Double.parseDouble(location.get(0));
+            double y = Double.parseDouble(location.get(1));
+            path.addPoint(new Position(x, y));
+        }
+        logo.fillPath(path);
+        return null;
+    }
+
+    public static Value first(Value... arguments) throws ExecutorException, ParsingException {
+        Value v = arguments[0];
+        if (v.getType() == Value.ValueType.LIST) {
+            List<String> l = ((ListObject) v.getValue()).getList();
+            if (l.isEmpty()) throw new ExecutorException("An empty list is a invalid input.");
+            String s = l.get(0);
+            Piece piece = new ParentPiece(s);
+            if (piece.getType() == PieceType.LIST) {
+                piece = new ListPiece(piece);
+                return piece.getValue();
+            } else {
+                return new Value(l.get(0));
+            }
+        } else {
+            String s = v.getValue().toString();
+            if (s.isEmpty()) throw new ExecutorException("An empty string is a invalid input.");
+            return new Value(String.valueOf(s.charAt(0)));
+        }
+    }
+
+    public static Value firstPut(Value arguments) {
+        //todo fix (first [100])/2
         return null;
     }
 

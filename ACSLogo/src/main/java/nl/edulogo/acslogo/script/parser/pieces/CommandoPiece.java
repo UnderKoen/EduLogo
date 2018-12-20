@@ -1,10 +1,10 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
 import nl.edulogo.acslogo.handlers.CommandoHandler;
+import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.Value;
-import nl.edulogo.acslogo.script.executor.ExecutorException;
-import nl.edulogo.acslogo.script.parser.ParsingException;
 
 import java.util.ArrayList;
 import java.util.List;

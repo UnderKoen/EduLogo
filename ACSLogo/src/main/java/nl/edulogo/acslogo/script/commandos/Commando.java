@@ -1,6 +1,7 @@
 package nl.edulogo.acslogo.script.commandos;
 
-import nl.edulogo.acslogo.script.executor.ExecutorException;
+import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.ParsingException;
 
 /**
  * Created by Under_Koen on 15/10/2018.
@@ -40,7 +41,7 @@ public class Commando {
         return arguments;
     }
 
-    public Value call(Value... arguments) throws ExecutorException {
+    public Value call(Value... arguments) throws ExecutorException, ParsingException {
         Value response = new Value(null);
         if (runnable != null) response = runnable.run(arguments);
         if (response == null) response = new Value(null);

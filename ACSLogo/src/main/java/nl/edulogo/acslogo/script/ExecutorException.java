@@ -1,4 +1,4 @@
-package nl.edulogo.acslogo.script.executor;
+package nl.edulogo.acslogo.script;
 
 /**
  * Created by Under_Koen on 31/10/2018.

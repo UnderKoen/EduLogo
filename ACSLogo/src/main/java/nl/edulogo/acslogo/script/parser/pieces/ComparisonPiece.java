@@ -1,8 +1,8 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
+import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Value;
-import nl.edulogo.acslogo.script.executor.ExecutorException;
-import nl.edulogo.acslogo.script.parser.ParsingException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class ComparisonPiece implements Piece {
     private Piece comparison;
     private Piece right;
 
-    public ComparisonPiece(Piece left, Piece comparison, Piece right) {
+    public ComparisonPiece(Piece left, Piece comparison, Piece right) throws ParsingException {
         if (testType(left)) throw new IllegalArgumentException();
         if (comparison.getType() != PieceType.COMPARISON) throw new IllegalArgumentException();
         if (testType(right)) throw new IllegalArgumentException();
@@ -28,7 +28,7 @@ public class ComparisonPiece implements Piece {
         this.right = right;
     }
 
-    public static List<Piece> calcSteps(List<Piece> pieces) {
+    public static List<Piece> calcSteps(List<Piece> pieces) throws ParsingException {
         while (true) {
             List<Piece> piecesT = calcOneStep(pieces);
             if (piecesT == null) break;
@@ -38,7 +38,7 @@ public class ComparisonPiece implements Piece {
         return pieces;
     }
 
-    private static List<Piece> calcOneStep(List<Piece> pieces) {
+    private static List<Piece> calcOneStep(List<Piece> pieces) throws ParsingException {
         pieces = new ArrayList<>(pieces);
         Map<Integer, Piece> comparisons = new HashMap<>();
         for (int i = 0; i < pieces.size(); i++) {
@@ -61,7 +61,7 @@ public class ComparisonPiece implements Piece {
         return pieces;
     }
 
-    private boolean testType(Piece piece) {
+    private boolean testType(Piece piece) throws ParsingException {
         return piece.getType() == PieceType.NONE;
     }
 

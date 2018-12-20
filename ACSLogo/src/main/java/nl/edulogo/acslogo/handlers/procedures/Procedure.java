@@ -2,11 +2,11 @@ package nl.edulogo.acslogo.handlers.procedures;
 
 import nl.edulogo.acslogo.ACSLogo;
 import nl.edulogo.acslogo.handlers.VariableHandler;
+import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.Value;
-import nl.edulogo.acslogo.script.executor.ExecutorException;
-import nl.edulogo.acslogo.script.parser.ParsingException;
 
 import java.util.ArrayList;
 import java.util.List;

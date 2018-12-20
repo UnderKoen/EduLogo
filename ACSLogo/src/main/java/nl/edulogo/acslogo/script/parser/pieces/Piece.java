@@ -1,14 +1,14 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
+import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Value;
-import nl.edulogo.acslogo.script.executor.ExecutorException;
-import nl.edulogo.acslogo.script.parser.ParsingException;
 
 /**
  * Created by Under_Koen on 02/11/2018.
  */
 public interface Piece {
-    PieceType getType();
+    PieceType getType() throws ParsingException;
 
     Value getValue() throws ParsingException, ExecutorException;
 

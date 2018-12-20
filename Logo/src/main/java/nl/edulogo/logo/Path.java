@@ -1,5 +1,6 @@
 package nl.edulogo.logo;
 
+import nl.edulogo.core.Polygon;
 import nl.edulogo.core.Position;
 
 import java.util.ArrayList;
@@ -34,6 +35,10 @@ public class Path {
 
     public Position[] getPoints() {
         return path.toArray(new Position[0]);
+    }
+
+    public Polygon toPolygon() {
+        return new Polygon(getPoints());
     }
 
     public Position[] getPoints(int from, int to) {

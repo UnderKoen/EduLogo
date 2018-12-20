@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Value;
 
 /**
@@ -8,7 +9,7 @@ import nl.edulogo.acslogo.script.commandos.Value;
 public class BooleanPiece implements Piece {
     private Value value;
 
-    public BooleanPiece(Piece bool) {
+    public BooleanPiece(Piece bool) throws ParsingException {
         if (bool.getType() != PieceType.BOOLEAN) throw new IllegalArgumentException();
         String b = bool.getPiece().replaceFirst("\"", "");
         value = new Value(b.equalsIgnoreCase("true"));

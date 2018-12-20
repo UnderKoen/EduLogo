@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Value;
 
 /**
@@ -8,7 +9,7 @@ import nl.edulogo.acslogo.script.commandos.Value;
 public class NumberPiece implements Piece {
     private Value value;
 
-    public NumberPiece(Piece number) {
+    public NumberPiece(Piece number) throws ParsingException {
         if (number.getType() != PieceType.NUMBER) throw new IllegalArgumentException();
         value = new Value(new Double(number.getPiece()));
     }

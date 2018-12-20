@@ -14,7 +14,7 @@ public class ColorHandler {
         for (int i = 0; i < colors.length; i++) {
             this.colors.put(i, colors[i]);
         }
-        background = 3;
+        background = 0;
     }
 
     public Color getColor(int i) {

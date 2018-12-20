@@ -9,4 +9,8 @@ public abstract class AdvancedLogo extends BasicLogo {
 
         getCanvas().arc(turtle.getPosition(), radius, radius, turtle.getRotation() + 90, -degree);
     }
+
+    public void fillPath(Path path) {
+        getCanvas().fillPolygon(path.toPolygon(), getTurtle().getFillColor());
+    }
 }

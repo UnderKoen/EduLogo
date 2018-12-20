@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Value;
 
 /**
@@ -8,7 +9,7 @@ import nl.edulogo.acslogo.script.commandos.Value;
 public class StringPiece implements Piece {
     private Value value;
 
-    public StringPiece(Piece string) {
+    public StringPiece(Piece string) throws ParsingException {
         if (string.getType() != PieceType.STRING) throw new IllegalArgumentException();
         value = new Value(string.getPiece().replaceFirst("\"", ""));
     }

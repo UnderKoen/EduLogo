@@ -2,7 +2,6 @@ package nl.edulogo.logo;
 
 import nl.edulogo.core.Color;
 import nl.edulogo.core.Image;
-import nl.edulogo.core.Polygon;
 import nl.edulogo.core.Position;
 import nl.edulogo.core.utils.MathUtil;
 
@@ -28,7 +27,7 @@ public abstract class BasicLogo implements Logo {
 
     public void fillPath() {
         Turtle turtle = getTurtle();
-        getCanvas().fillPolygon(new Polygon(turtle.getPath().getPoints()), turtle.getFillColor());
+        getCanvas().fillPolygon(turtle.getPath().toPolygon(), turtle.getFillColor());
     }
 
     public void write(String text) {

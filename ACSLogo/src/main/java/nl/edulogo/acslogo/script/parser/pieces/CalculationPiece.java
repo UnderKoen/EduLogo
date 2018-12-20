@@ -1,8 +1,8 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
+import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Value;
-import nl.edulogo.acslogo.script.executor.ExecutorException;
-import nl.edulogo.acslogo.script.parser.ParsingException;
 
 import java.util.*;
 
@@ -17,7 +17,7 @@ public class CalculationPiece implements Piece {
     private Piece calculation;
     private Piece right;
 
-    public CalculationPiece(Piece left, Piece calculation, Piece right) {
+    public CalculationPiece(Piece left, Piece calculation, Piece right) throws ParsingException {
         if (testType(left)) throw new IllegalArgumentException();
         if (calculation.getType() != PieceType.CALCULATION) throw new IllegalArgumentException();
         if (testType(right)) throw new IllegalArgumentException();
@@ -27,7 +27,7 @@ public class CalculationPiece implements Piece {
         this.right = right;
     }
 
-    public static List<Piece> calcSteps(List<Piece> pieces) {
+    public static List<Piece> calcSteps(List<Piece> pieces) throws ParsingException {
         while (true) {
             List<Piece> piecesT = calcOneStep(pieces);
             if (piecesT == null) break;
@@ -37,7 +37,7 @@ public class CalculationPiece implements Piece {
         return pieces;
     }
 
-    private static List<Piece> calcOneStep(List<Piece> pieces) {
+    private static List<Piece> calcOneStep(List<Piece> pieces) throws ParsingException {
         pieces = new ArrayList<>(pieces);
         Map<Integer, Piece> calculations = new HashMap<>();
         for (int i = 0; i < pieces.size(); i++) {
@@ -64,7 +64,7 @@ public class CalculationPiece implements Piece {
         return pieces;
     }
 
-    private boolean testType(Piece piece) {
+    private boolean testType(Piece piece) throws ParsingException {
         if (piece.getType() == PieceType.NUMBER) return false;
         if (piece.getType() == PieceType.STATEMENT) return false;
         if (piece.getType() == PieceType.VARIABLE) return false;

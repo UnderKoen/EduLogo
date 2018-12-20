@@ -87,7 +87,7 @@ public class ACSLogo extends AdvancedLogo {
 
     public void initLogo(Size size, Size editorSize) {
         canvas = new FXCanvas(size);
-        turtle = new Turtle(new Position(size.getWidth() / 2.0, size.getHeight() / 2.0), 0);
+        turtle = new ACSTurtle(new Position(size.getWidth() / 2.0, size.getHeight() / 2.0), 0);
         canvas.fillScreen(Color.WHITE);
 
         editor = new FXEditor();
