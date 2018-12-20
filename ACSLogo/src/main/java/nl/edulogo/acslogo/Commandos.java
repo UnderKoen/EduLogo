@@ -92,13 +92,15 @@ public class Commandos {
 
         commandos.add(new Commando("home", Commandos::home, 0));
 
+        commandos.add(new Commando("xpos", Commandos::defaultM, 0));
+
         return commandos.toArray(new Commando[0]);
     }
 
     //Default method
     @Deprecated
     public static Value defaultM(Value... arguments) {
-        return null;
+        return new Value(logo.getTurtle().getPosition().getX());
     }
 
     public static Value abs(Value... arguments) {
