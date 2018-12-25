@@ -3,6 +3,8 @@ package nl.edulogo.acslogo.script.commandos;
 import nl.edulogo.acslogo.script.ExecutorException;
 import nl.edulogo.acslogo.script.ParsingException;
 
+import java.util.Arrays;
+
 /**
  * Created by Under_Koen on 15/10/2018.
  */
@@ -13,7 +15,7 @@ public class Commando {
     private String[] aliases;
 
     public Commando(String name, int arguments) {
-        this.name = name;
+        this.name = name.toLowerCase();
         this.arguments = arguments;
     }
 
@@ -23,10 +25,8 @@ public class Commando {
     }
 
     public Commando(String name, Runnable runnable, int arguments, String... aliases) {
-        this.name = name;
-        this.arguments = arguments;
-        this.runnable = runnable;
-        this.aliases = aliases;
+        this(name, runnable, arguments);
+        this.aliases = Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
     }
 
     public String getName() {

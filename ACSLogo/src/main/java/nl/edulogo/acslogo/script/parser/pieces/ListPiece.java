@@ -2,11 +2,13 @@ package nl.edulogo.acslogo.script.parser.pieces;
 
 import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Value;
+import nl.edulogo.acslogo.utils.ValueUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Created by Under_Koen on 04/11/2018.
@@ -16,34 +18,7 @@ public class ListPiece implements Piece {
 
     public ListPiece(Piece list) throws ParsingException {
         if (list.getType() != PieceType.LIST) throw new IllegalArgumentException();
-        String inside = list.getPiece().replaceAll("^\\[(.*)\\]$", "$1");
-        List<String> l = new ArrayList<>();
-        StringBuffer s = new StringBuffer();
-        int index = 0;
-
-        for (char c : inside.toCharArray()) {
-            if (c == '[') {
-                index++;
-            } else if (c == ']') {
-                index--;
-                s.append(c);
-                c = ' ';
-            }
-
-            if (c == ' ' && index == 0) {
-                l.add(s.toString());
-                s = new StringBuffer();
-            } else {
-                s.append(c);
-            }
-        }
-
-        String last = s.toString();
-        if (!last.isEmpty()) {
-            l.add(last);
-        }
-
-        value = new Value(new ListObject(l));
+        value = ValueUtil.stringToListValue(list.getPiece());
     }
 
     @Override
@@ -57,25 +32,37 @@ public class ListPiece implements Piece {
     }
 
     public static class ListObject {
-        List<String> list;
+        List<Value> list;
 
-        public ListObject(String... list) {
+        public ListObject(Object... list) {
+            this(Arrays.stream(list).map(Value::new).collect(Collectors.toList()));
+        }
+
+        public ListObject(Value... list) {
             this(Arrays.asList(list));
         }
 
-        public ListObject(List<String> list) {
+        public ListObject(List<Value> list) {
             this.list = new ArrayList<>(list);
             this.list.removeIf(Objects::isNull);
-            this.list.removeIf(String::isEmpty);
+            this.list.removeIf(v -> v.toString().isEmpty());
         }
 
-        public List<String> getList() {
+        public List<Value> getList() {
             return new ArrayList<>(list);
+        }
+
+        public List<String> getStringList() {
+            return list.stream().map(Value::toString).collect(Collectors.toList());
         }
 
         @Override
         public String toString() {
-            return String.format("[%s]", String.join(" ", list));
+            return String.format("[%s]", getInner());
+        }
+
+        public String getInner() {
+            return list.stream().map(Value::toString).collect(Collectors.joining(" "));
         }
 
         @Override

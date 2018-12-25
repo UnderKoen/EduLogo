@@ -8,11 +8,7 @@ import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.Value;
-import nl.edulogo.acslogo.script.parser.ParentPiece;
-import nl.edulogo.acslogo.script.parser.pieces.ListPiece;
 import nl.edulogo.acslogo.script.parser.pieces.ListPiece.ListObject;
-import nl.edulogo.acslogo.script.parser.pieces.Piece;
-import nl.edulogo.acslogo.script.parser.pieces.PieceType;
 import nl.edulogo.core.Position;
 import nl.edulogo.core.Size;
 import nl.edulogo.display.fx.FXCanvas;
@@ -197,12 +193,12 @@ public class Commandos {
     public static Value butFirst(Value... arguments) throws ExecutorException {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
-            List<String> l = ((ListObject) v.getValue()).getList();
+            List<Value> l = ((ListObject) v.getValue()).getList();
             if (l.isEmpty()) throw new ExecutorException("An empty list is a invalid input.");
             l.remove(0);
             return new Value(new ListObject(l));
         } else {
-            String s = v.getValue().toString();
+            String s = v.toString();
             if (s.isEmpty()) throw new ExecutorException("An empty string is a invalid input.");
             return new Value(s.substring(1));
         }
@@ -211,12 +207,12 @@ public class Commandos {
     public static Value butLast(Value... arguments) throws ExecutorException {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
-            List<String> l = ((ListObject) v.getValue()).getList();
+            List<Value> l = ((ListObject) v.getValue()).getList();
             if (l.isEmpty()) throw new ExecutorException("An empty list is a invalid input.");
             l.remove(l.size() - 1);
             return new Value(new ListObject(l));
         } else {
-            String s = v.getValue().toString();
+            String s = v.toString();
             if (s.isEmpty()) throw new ExecutorException("An empty string is a invalid input.");
             return new Value(s.substring(0, s.toCharArray().length - 1));
         }
@@ -232,7 +228,7 @@ public class Commandos {
 
     public static Value canvasSize(Value... arguments) {
         Size s = logo.getCanvas().getSize();
-        return new Value(new ListObject(s.getWidth() + "", s.getHeight() + ""));
+        return new Value(new ListObject(s.getWidth(), s.getHeight()));
     }
 
     public static Value catchM(Value... arguments) {
@@ -240,7 +236,7 @@ public class Commandos {
         ListObject l = (ListObject) arguments[1].getValue();
 
         try {
-            logo.run(String.join(" ", l.getList()));
+            logo.run(l.getInner());
         } catch (Catch ex) {
             if (!ex.getError().equals(error)) throw ex;
         }
@@ -268,19 +264,19 @@ public class Commandos {
 
     public static Value colorAtPoint(Value... arguments) throws ExecutorException {
         //TODO fix bigger than canvas and fix that [0 0] is middle of screen
-        List<String> l = ((ListObject) arguments[0].getValue()).getList();
+        List<Value> l = ((ListObject) arguments[0].getValue()).getList();
         if (l.size() != 2) throw new ExecutorException("Color at point needs a list with two numbers");
-        int x = Integer.parseInt(l.get(0));
-        int y = Integer.parseInt(l.get(1));
+        int x = (int) l.get(0).getValue();
+        int y = (int) l.get(1).getValue();
 
         FXCanvas fxCanvas = (FXCanvas) logo.getCanvas();
         WritableImage img = fxCanvas.getNode().snapshot(new SnapshotParameters(), null);
         Color color = img.getPixelReader().getColor(x, y);
 
-        List<String> r = new ArrayList<>();
-        r.add((int) (color.getRed() * 255) + "");
-        r.add((int) (color.getGreen() * 255) + "");
-        r.add((int) (color.getBlue() * 255) + "");
+        List<Object> r = new ArrayList<>();
+        r.add((int) (color.getRed() * 255));
+        r.add((int) (color.getGreen() * 255));
+        r.add((int) (color.getBlue() * 255));
 
         return new Value(new ListObject(r));
     }
@@ -298,19 +294,19 @@ public class Commandos {
     public static Value count(Value... arguments) {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
-            List<String> l = ((ListObject) v.getValue()).getList();
+            List<Value> l = ((ListObject) v.getValue()).getList();
             return new Value(l.size());
         } else {
-            String s = v.getValue().toString();
+            String s = v.toString();
             return new Value(s.toCharArray().length);
         }
     }
 
     public static Value currentPath(Value... arguments) {
-        List<String> l = new ArrayList<>();
+        List<Value> l = new ArrayList<>();
         Position[] points = logo.getTurtle().getPath().getPoints();
         for (Position pos : points) {
-            l.add(String.format("[%d %d]", Math.round(pos.getX()), Math.round(pos.getY())));
+            l.add(new Value(new ListObject(Math.round(pos.getX()), Math.round(pos.getY()))));
         }
         return new Value(new ListObject(l));
     }
@@ -323,14 +319,14 @@ public class Commandos {
     public static Value define(Value... arguments) throws ExecutorException, ParsingException {
         String name = (String) arguments[0].getValue();
         ListObject l = (ListObject) arguments[1].getValue();
-        Script script = logo.getParser().parse(String.join(" ", l.getList()));
+        Script script = logo.getParser().parse(l.getInner());
 
         if (script.getPieces().size() != 2)
             throw new ExecutorException("Define should have two list inside the list.");
         ListObject para = (ListObject) script.getPieces().get(0).getValue().getValue();
         ListObject code = (ListObject) script.getPieces().get(1).getValue().getValue();
 
-        logo.procedureHandler.registerProcedure(name, para.getList(), String.join(" ", code.getList()));
+        logo.procedureHandler.registerProcedure(name, para.getStringList(), code.getInner());
 
         return null;
     }
@@ -341,15 +337,15 @@ public class Commandos {
     }
 
     public static Value difference(Value... arguments) {
-        double d1 = (Double) arguments[0].getValue();
-        double d2 = (Double) arguments[1].getValue();
+        double d1 = (double) arguments[0].getValue();
+        double d2 = (double) arguments[1].getValue();
         return new Value(d1 - d2);
     }
 
     public static Value dot(Value... arguments) {
-        List<String> list = ((ListObject) arguments[0].getValue()).getList();
-        double x = Double.parseDouble(list.get(0));
-        double y = Double.parseDouble(list.get(1));
+        List<Value> list = ((ListObject) arguments[0].getValue()).getList();
+        double x = (double) list.get(0).getValue();
+        double y = (double) list.get(1).getValue();
         logo.getCanvas().drawDot(new Position(x, y));
         return null;
     }
@@ -357,10 +353,10 @@ public class Commandos {
     public static Value emptyP(Value... arguments) {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
-            List<String> l = ((ListObject) v.getValue()).getList();
+            List<Value> l = ((ListObject) v.getValue()).getList();
             return new Value(l.isEmpty());
         } else {
-            String s = v.getValue().toString();
+            String s = v.toString();
             return new Value(s.isEmpty());
         }
     }
@@ -377,7 +373,7 @@ public class Commandos {
     }
 
     public static Value fill(Value... arguments) {
-        logo.fillScreen(logo.getTurtle().getColor());
+        //TODO Paint bucket mode oposite until same color
         return null;
     }
 
@@ -392,14 +388,14 @@ public class Commandos {
     }
 
     public static Value fillPath(Value... arguments) throws ExecutorException, ParsingException {
-        List<String> list = ((ListObject) arguments[0].getValue()).getList();
+        List<Value> list = ((ListObject) arguments[0].getValue()).getList();
         Path path = new Path();
 
-        Script script = logo.getParser().parse(String.join(" ", list));
-        for (Piece piece : script.getPieces()) {
-            List<String> location = ((ListObject) piece.getValue().getValue()).getList();
-            double x = Double.parseDouble(location.get(0));
-            double y = Double.parseDouble(location.get(1));
+        for (Value value : list) {
+            if (value.getType() != Value.ValueType.LIST) throw new ExecutorException("Path is not correct");
+            List<Value> location = ((ListObject) value.getValue()).getList();
+            double x = (double) location.get(0).getValue();
+            double y = (double) location.get(1).getValue();
             path.addPoint(new Position(x, y));
         }
         logo.fillPath(path);
@@ -409,18 +405,11 @@ public class Commandos {
     public static Value first(Value... arguments) throws ExecutorException, ParsingException {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
-            List<String> l = ((ListObject) v.getValue()).getList();
+            List<Value> l = ((ListObject) v.getValue()).getList();
             if (l.isEmpty()) throw new ExecutorException("An empty list is a invalid input.");
-            String s = l.get(0);
-            Piece piece = new ParentPiece(s);
-            if (piece.getType() == PieceType.LIST) {
-                piece = new ListPiece(piece);
-                return piece.getValue();
-            } else {
-                return new Value(l.get(0));
-            }
+            return l.get(0);
         } else {
-            String s = v.getValue().toString();
+            String s = v.toString();
             if (s.isEmpty()) throw new ExecutorException("An empty string is a invalid input.");
             return new Value(String.valueOf(s.charAt(0)));
         }
@@ -442,7 +431,7 @@ public class Commandos {
         int t = ((Double) arguments[0].getValue()).intValue();
         ListObject l = (ListObject) arguments[1].getValue();
         for (int i = 0; i < t; i++) {
-            logo.run(String.join(" ", l.getList()));
+            logo.run(l.getInner());
         }
         return null;
     }

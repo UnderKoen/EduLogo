@@ -37,7 +37,7 @@ public class FXCanvas implements Canvas, FXView {
     @Override
     public void drawLine(Position from, Position to, Color color) {
         setColor(color);
-        graphics.strokeLine(from.getX(), from.getY(), to.getX(), to.getY());
+        graphics.strokeLine(from.getX() + 0.5, from.getY() + 0.5, to.getX() + 0.5, to.getY() + 0.5);
     }
 
     @Override

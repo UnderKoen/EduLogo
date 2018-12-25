@@ -34,13 +34,14 @@ public class CommandoHandler {
     }
 
     public Commando getCommando(String name) {
+        final String nameLower = name.toLowerCase();
         return commandos.stream()
-                .filter(cmd -> cmd.getName().equalsIgnoreCase(name))
+                .filter(cmd -> cmd.getName().equals(nameLower))
                 .findAny()
                 .orElseGet(() -> {
                     for (Commando commando : commandos) {
                         if (commando.getAliases() == null) continue;
-                        if (Arrays.asList(commando.getAliases()).contains(name)) return commando;
+                        if (Arrays.asList(commando.getAliases()).contains(nameLower)) return commando;
                     }
                     return null;
                 });
