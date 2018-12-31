@@ -2,6 +2,8 @@ package nl.edulogo.acslogo.utils;
 
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.parser.pieces.ListPiece;
+import nl.edulogo.core.Font;
+import nl.edulogo.core.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,5 +67,17 @@ public class ValueUtil {
         }
 
         return new Value(new ListPiece.ListObject(returnList));
+    }
+
+    public static Value fontToValue(String font) {
+        return new Value(new ListPiece.ListObject((Object[]) font.split(" ")));
+    }
+
+    public static Value fontToValue(Font font) {
+        return fontToValue(font.getName());
+    }
+
+    public static Value positionToValue(Position position) {
+        return new Value(new ListPiece.ListObject(position.getX(), position.getY()));
     }
 }

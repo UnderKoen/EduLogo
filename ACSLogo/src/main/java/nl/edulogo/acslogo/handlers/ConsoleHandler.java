@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.handlers;
 
+import javafx.application.Platform;
 import nl.edulogo.editor.Console;
 
 /**
@@ -13,14 +14,14 @@ public class ConsoleHandler {
     }
 
     public void output(Object obj) {
-        console.println(obj.toString());
+        Platform.runLater(() -> console.println(obj.toString()));
     }
 
     public void error(String s) {
-        console.error(s);
+        Platform.runLater(() -> console.error(s));
     }
 
     public void error(Exception ex) {
-        error(ex.getMessage());
+        Platform.runLater(() -> error(ex.getMessage()));
     }
 }

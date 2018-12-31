@@ -10,8 +10,10 @@ import nl.edulogo.acslogo.display.fx.FXProcedures;
 import nl.edulogo.acslogo.handlers.ColorHandler;
 import nl.edulogo.acslogo.handlers.CommandoHandler;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
-import nl.edulogo.acslogo.handlers.MouseHandler;
+import nl.edulogo.acslogo.handlers.mouse.MouseHandler;
 import nl.edulogo.acslogo.handlers.procedures.ProcedureHandler;
+import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.executor.Executor;
 import nl.edulogo.acslogo.script.parser.Parser;
@@ -31,6 +33,7 @@ import nl.edulogo.logo.Turtle;
  * Created by Under_Koen on 15/10/2018.
  */
 public class ACSLogo extends AdvancedLogo {
+    //TODO when closing editor window close canvas and everything else
     private static OS os = new OS();
 
     private CommandoHandler commandoHandler;
@@ -44,6 +47,7 @@ public class ACSLogo extends AdvancedLogo {
 
     private Turtle turtle;
     private Canvas canvas;
+    private Thread running;
 
     private Display<? extends Procedures> proceduresDisplay;
 
@@ -108,6 +112,7 @@ public class ACSLogo extends AdvancedLogo {
         Menu runMenu = new Menu("Run");
         MenuItem run = new MenuItem("Run");
         MenuItem runSelected = new MenuItem("Run Selected");
+        MenuItem stop = new MenuItem("Stop");
 
         KeyCombination.Modifier mod = (os.getType() == OS.Type.MAC)? KeyCombination.META_DOWN : KeyCombination.CONTROL_DOWN;
         run.setAccelerator(new KeyCodeCombination(KeyCode.R,mod));
@@ -124,7 +129,13 @@ public class ACSLogo extends AdvancedLogo {
             run(text);
         });
 
-        runMenu.getItems().addAll(run, runSelected);
+        stop.setOnAction(event -> {
+            if (running == null) return;
+            running.interrupt();
+            running = null;
+        });
+
+        runMenu.getItems().addAll(run, runSelected, stop);
 
         Menu window = new Menu("Window");
         MenuItem canvas = new MenuItem("Show canvas");
@@ -145,8 +156,18 @@ public class ACSLogo extends AdvancedLogo {
     }
 
     public void run(String code) {
-        Script script = parser.parseSafe(code);
-        if (script != null) executor.executeSafe(script);
+        if (running != null) return;
+        running = new Thread(() -> {
+            Script script = parser.parseSafe(code);
+            if (script != null) executor.executeSafe(script);
+            running = null;
+        });
+        running.start();
+    }
+
+    public void runRaw(String code) throws ParsingException, ExecutorException {
+        Script script = parser.parse(code);
+        if (script != null) executor.execute(script);
     }
 
     @Override

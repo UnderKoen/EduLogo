@@ -23,6 +23,8 @@ public class Value {
         } else if (value instanceof ListPiece.ListObject) {
             type = ValueType.LIST;
         } else {
+            System.out.println(value);
+            System.out.println(value.getClass());
             throw new IllegalArgumentException();
         }
     }

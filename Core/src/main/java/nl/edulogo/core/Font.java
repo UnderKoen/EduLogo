@@ -11,6 +11,10 @@ public class Font {
     private double size = 13.0;
     private Color color = Color.BLACK;
 
+    public Font(String name) {
+        this.name = name;
+    }
+
     public Font(double size) {
         this.size = size;
     }

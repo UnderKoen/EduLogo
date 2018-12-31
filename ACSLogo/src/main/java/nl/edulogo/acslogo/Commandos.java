@@ -3,12 +3,16 @@ package nl.edulogo.acslogo;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import nl.edulogo.acslogo.handlers.mouse.Waitable;
 import nl.edulogo.acslogo.script.ExecutorException;
 import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.Commando;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.parser.pieces.ListPiece.ListObject;
+import nl.edulogo.acslogo.utils.ValueUtil;
+import nl.edulogo.acslogo.utils.WaitableUtil;
+import nl.edulogo.core.Font;
 import nl.edulogo.core.Position;
 import nl.edulogo.core.Size;
 import nl.edulogo.display.fx.FXCanvas;
@@ -18,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Under_Koen on 08/11/2018.
@@ -73,6 +78,13 @@ public class Commandos {
          * -Dir
          * -DrawImage
          * -EofP
+         * -FPrint
+         * -FReadChar
+         * -FReadChars
+         * -FReadList
+         * -FReadWord
+         * -FShow
+         * -FType
          */
 
         commandos.add(new Commando("char", Commandos::charM, 1));
@@ -115,6 +127,19 @@ public class Commandos {
         commandos.add(new Commando("fillPath", Commandos::fillPath, 1));
 
         commandos.add(new Commando("first", Commandos::first, 1));
+        commandos.add(new Commando("firstPut", Commandos::firstPut, 2));
+
+        commandos.add(new Commando("fontFace", Commandos::fontFace, 0, "font"));
+        commandos.add(new Commando("fontFaces", Commandos::fontFaces, 0, "fonts"));
+        commandos.add(new Commando("fontFamilies", Commandos::fontFamilies, 0));
+        commandos.add(new Commando("fontFamily", Commandos::fontFamily, 0));
+        commandos.add(new Commando("fontTraits", Commandos::fontTraits, 0));
+
+        commandos.add(new Commando("getMouseChange", Commandos::getMouseChange, 0));
+        commandos.add(new Commando("getLeftMouseClick", Commandos::getLeftMouseClick, 0, "getMouseClick"));
+        commandos.add(new Commando("getRightMouseClick", Commandos::getRightMouseClick, 0));
+        commandos.add(new Commando("getMouseMoved", Commandos::getMouseMoved, 0));
+
 
         commandos.add(new Commando("home", Commandos::home, 0));
 
@@ -186,6 +211,12 @@ public class Commandos {
         return new Value(Character.hashCode(c));
     }
 
+    public static Value back(Value... arguments) {
+        double amount = (Double) arguments[0].getValue();
+        logo.forward(-amount);
+        return null;
+    }
+
     public static Value background(Value... arguments) {
         return new Value(logo.colorHandler.getBackground());
     }
@@ -231,12 +262,12 @@ public class Commandos {
         return new Value(new ListObject(s.getWidth(), s.getHeight()));
     }
 
-    public static Value catchM(Value... arguments) {
+    public static Value catchM(Value... arguments) throws ParsingException, ExecutorException {
         String error = (String) arguments[0].getValue();
         ListObject l = (ListObject) arguments[1].getValue();
 
         try {
-            logo.run(l.getInner());
+            logo.runRaw(l.getInner());
         } catch (Catch ex) {
             if (!ex.getError().equals(error)) throw ex;
         }
@@ -306,7 +337,7 @@ public class Commandos {
         List<Value> l = new ArrayList<>();
         Position[] points = logo.getTurtle().getPath().getPoints();
         for (Position pos : points) {
-            l.add(new Value(new ListObject(Math.round(pos.getX()), Math.round(pos.getY()))));
+            l.add(ValueUtil.positionToValue(pos));
         }
         return new Value(new ListObject(l));
     }
@@ -387,7 +418,7 @@ public class Commandos {
         return null;
     }
 
-    public static Value fillPath(Value... arguments) throws ExecutorException, ParsingException {
+    public static Value fillPath(Value... arguments) throws ExecutorException {
         List<Value> list = ((ListObject) arguments[0].getValue()).getList();
         Path path = new Path();
 
@@ -402,7 +433,7 @@ public class Commandos {
         return null;
     }
 
-    public static Value first(Value... arguments) throws ExecutorException, ParsingException {
+    public static Value first(Value... arguments) throws ExecutorException {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
             List<Value> l = ((ListObject) v.getValue()).getList();
@@ -415,9 +446,80 @@ public class Commandos {
         }
     }
 
-    public static Value firstPut(Value arguments) {
-        //todo fix (first [100])/2
+    public static Value firstPut(Value... arguments) {
+        Value add = arguments[0];
+        Value to = arguments[1];
+        if (to.getType() == Value.ValueType.LIST) {
+            List<Value> list = ((ListObject) to.getValue()).getList();
+            list.add(0, add);
+            return new Value(new ListObject(list));
+        } else {
+            return new Value(add.toString() + to.toString());
+        }
+    }
+
+    public static Value fontFace(Value... arguments) {
+        Font font = logo.getTurtle().getFont();
+        return ValueUtil.fontToValue(font);
+    }
+
+    public static Value fontFaces(Value... arguments) {
+        List<Value> fonts = javafx.scene.text.Font.getFontNames().stream()
+                .map(ValueUtil::fontToValue)
+                .collect(Collectors.toList());
+        return new Value(new ListObject(fonts));
+    }
+
+    public static Value fontFamilies(Value... arguments) {
+        List<Value> fonts = javafx.scene.text.Font.getFamilies().stream()
+                .map(ValueUtil::fontToValue)
+                .collect(Collectors.toList());
+        return new Value(new ListObject(fonts));
+    }
+
+    public static Value fontFamily(Value... arguments) {
+        Font font = logo.getTurtle().getFont();
+        return ValueUtil.fontToValue(new javafx.scene.text.Font(font.getName(), font.getSize()).getFamily());
+    }
+
+    public static Value fontTraits(Value... arguments) {
+        Font font = logo.getTurtle().getFont();
+        return ValueUtil.fontToValue(new javafx.scene.text.Font(font.getName(), font.getSize()).getStyle());
+    }
+
+    public static Value forward(Value... arguments) {
+        double amount = (Double) arguments[0].getValue();
+        logo.forward(amount / 2.0);
         return null;
+    }
+
+    public static Value getMouseChange(Value... arguments) {
+        Waitable<Position> left = logo.mouseHandler.getLeftMouseClick();
+        Waitable<Position> right = logo.mouseHandler.getRightMouseClick();
+        Waitable<Position> moved = logo.mouseHandler.getMouseMove();
+
+        Waitable updated = WaitableUtil.waitFor(left, right, moved);
+        Position pos = (Position) updated.reset();
+
+        return new Value(new ListObject(ValueUtil.positionToValue(pos), new Value(updated == left), new Value(updated == right)));
+    }
+
+    public static Value getLeftMouseClick(Value... arguments) {
+        Waitable<Position> left = logo.mouseHandler.getLeftMouseClick();
+        Position pos = WaitableUtil.waitFor(left);
+        return ValueUtil.positionToValue(pos)
+    }
+
+    public static Value getRightMouseClick(Value... arguments) {
+        Waitable<Position> right = logo.mouseHandler.getRightMouseClick();
+        Position pos = WaitableUtil.waitFor(right);
+        return ValueUtil.positionToValue(pos)
+    }
+
+    public static Value getMouseMoved(Value... arguments) {
+        Waitable<Position> moved = logo.mouseHandler.getMouseMove();
+        Position pos = WaitableUtil.waitFor(moved);
+        return ValueUtil.positionToValue(pos)
     }
 
     public static Value home(Value... arguments) {
@@ -427,24 +529,12 @@ public class Commandos {
         return null;
     }
 
-    public static Value repeat(Value... arguments) {
+    public static Value repeat(Value... arguments) throws ParsingException, ExecutorException {
         int t = ((Double) arguments[0].getValue()).intValue();
         ListObject l = (ListObject) arguments[1].getValue();
         for (int i = 0; i < t; i++) {
-            logo.run(l.getInner());
+            logo.runRaw(l.getInner());
         }
-        return null;
-    }
-
-    public static Value forward(Value... arguments) {
-        double amount = (Double) arguments[0].getValue();
-        logo.forward(amount / 2.0);
-        return null;
-    }
-
-    public static Value back(Value... arguments) {
-        double amount = (Double) arguments[0].getValue();
-        logo.forward(-amount);
         return null;
     }
 
