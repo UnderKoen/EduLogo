@@ -31,5 +31,9 @@ public interface Canvas {
 
     void arc(Position center, double radiusX, double radiusY, double startAngle, double length, Color color);
 
+    void rotate(double degrees);
+
+    void translate(Position position);
+
     void clear();
 }

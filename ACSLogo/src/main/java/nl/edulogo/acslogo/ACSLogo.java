@@ -5,22 +5,24 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.stage.Stage;
 import nl.edulogo.acslogo.display.Procedures;
+import nl.edulogo.acslogo.display.TurtleGraphics;
 import nl.edulogo.acslogo.display.fx.FXProcedures;
+import nl.edulogo.acslogo.display.fx.FXTurtleGraphics;
 import nl.edulogo.acslogo.handlers.ColorHandler;
 import nl.edulogo.acslogo.handlers.CommandoHandler;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
+import nl.edulogo.acslogo.handlers.Variable.PropertyHandler;
 import nl.edulogo.acslogo.handlers.mouse.MouseHandler;
 import nl.edulogo.acslogo.handlers.procedures.ProcedureHandler;
 import nl.edulogo.acslogo.script.ExecutorException;
 import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
+import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.Executor;
 import nl.edulogo.acslogo.script.parser.Parser;
-import nl.edulogo.core.Canvas;
-import nl.edulogo.core.Color;
-import nl.edulogo.core.Position;
-import nl.edulogo.core.Size;
+import nl.edulogo.core.*;
 import nl.edulogo.display.Display;
 import nl.edulogo.display.fx.FXCanvas;
 import nl.edulogo.display.fx.FXDisplay;
@@ -29,10 +31,15 @@ import nl.edulogo.editor.fx.FXEditor;
 import nl.edulogo.logo.AdvancedLogo;
 import nl.edulogo.logo.Turtle;
 
+import java.io.File;
+
 /**
  * Created by Under_Koen on 15/10/2018.
  */
 public class ACSLogo extends AdvancedLogo {
+    private static final int TURTLE_SIZE = 48;
+    private static final double TURTLE_ALPHA = 0.8;
+
     //TODO when closing editor window close canvas and everything else
     private static OS os = new OS();
 
@@ -41,9 +48,12 @@ public class ACSLogo extends AdvancedLogo {
     ColorHandler colorHandler;
     MouseHandler mouseHandler;
     ProcedureHandler procedureHandler;
+    PropertyHandler propertyHandler;
     private Parser parser;
     private Executor executor;
     private Editor editor;
+    private TurtleGraphics<FXCanvas> turtleGraphics;
+    private Position start;
 
     private Turtle turtle;
     private Canvas canvas;
@@ -74,6 +84,7 @@ public class ACSLogo extends AdvancedLogo {
                 new Color(190, 0, 242), new Color(194, 171, 0), new Color(217, 192, 166),
                 new Color(238, 214, 188), new Color(0, 238, 217));
         mouseHandler = new MouseHandler((FXCanvas) canvas);
+        propertyHandler = new PropertyHandler();
 
         registerCommands();
 
@@ -91,7 +102,9 @@ public class ACSLogo extends AdvancedLogo {
 
     public void initLogo(Size size, Size editorSize) {
         canvas = new FXCanvas(size);
-        turtle = new ACSTurtle(new Position(size.getWidth() / 2.0, size.getHeight() / 2.0), 0);
+        turtleGraphics = new FXTurtleGraphics(TURTLE_SIZE);
+        start = new Position(size.getWidth() / 2.0, size.getHeight() / 2.0);
+        turtle = new ACSTurtle(start, 0, turtleGraphics);
         canvas.fillScreen(Color.WHITE);
 
         editor = new FXEditor();
@@ -101,6 +114,10 @@ public class ACSLogo extends AdvancedLogo {
 
         FXDisplay<FXEditor> editorD = new FXDisplay<>(editorSize, (FXEditor) editor);
         editorD.setTitle("Editor");
+
+        turtleGraphics.addToCanvas((FXCanvas) canvas);
+        turtleGraphics.setImage(new Image(new File("C:\\Users\\koenv\\Desktop\\img.png")));
+        turtleGraphics.setAlpha(TURTLE_ALPHA);
 
         canvasD.show();
         editorD.show();
@@ -114,8 +131,8 @@ public class ACSLogo extends AdvancedLogo {
         MenuItem runSelected = new MenuItem("Run Selected");
         MenuItem stop = new MenuItem("Stop");
 
-        KeyCombination.Modifier mod = (os.getType() == OS.Type.MAC)? KeyCombination.META_DOWN : KeyCombination.CONTROL_DOWN;
-        run.setAccelerator(new KeyCodeCombination(KeyCode.R,mod));
+        KeyCombination.Modifier mod = (os.getType() == OS.Type.MAC) ? KeyCombination.META_DOWN : KeyCombination.CONTROL_DOWN;
+        run.setAccelerator(new KeyCodeCombination(KeyCode.R, mod));
         runSelected.setAccelerator(new KeyCodeCombination(KeyCode.ENTER, mod));
 
         run.setOnAction(event -> {
@@ -143,7 +160,8 @@ public class ACSLogo extends AdvancedLogo {
 
         canvas.setOnAction(event -> {
             FXCanvas c = (FXCanvas) this.canvas;
-            if (!c.getNode().getScene().getWindow().isShowing()) new FXDisplay<>(c).show();
+            Stage s = (Stage) c.getNode().getScene().getWindow();
+            if (!s.isShowing()) s.show();
         });
 
         procedures.setOnAction(event -> {
@@ -165,9 +183,10 @@ public class ACSLogo extends AdvancedLogo {
         running.start();
     }
 
-    public void runRaw(String code) throws ParsingException, ExecutorException {
+    public Value runRaw(String code) throws ParsingException, ExecutorException {
         Script script = parser.parse(code);
-        if (script != null) executor.execute(script);
+        if (script != null) return executor.execute(script);
+        return null;
     }
 
     @Override
@@ -186,5 +205,17 @@ public class ACSLogo extends AdvancedLogo {
 
     public Executor getExecutor() {
         return executor;
+    }
+
+    public TurtleGraphics getTurtleGraphics() {
+        return turtleGraphics;
+    }
+
+    public Position getStart() {
+        return start;
+    }
+
+    void setStart(Position start) {
+        this.start = start;
     }
 }

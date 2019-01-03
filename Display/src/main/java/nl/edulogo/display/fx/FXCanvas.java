@@ -128,6 +128,16 @@ public class FXCanvas implements Canvas, FXView {
     }
 
     @Override
+    public void rotate(double degrees) {
+        graphics.rotate(degrees);
+    }
+
+    @Override
+    public void translate(Position position) {
+        graphics.translate(position.getX(), position.getY());
+    }
+
+    @Override
     public void clear() {
         graphics.clearRect(0, 0, size.getWidth(), size.getHeight());
     }

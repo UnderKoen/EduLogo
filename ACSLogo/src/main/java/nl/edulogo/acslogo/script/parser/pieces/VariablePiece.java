@@ -1,6 +1,6 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
-import nl.edulogo.acslogo.handlers.VariableHandler;
+import nl.edulogo.acslogo.handlers.Variable.VariableHandler;
 import nl.edulogo.acslogo.script.ExecutorException;
 import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.commandos.Value;

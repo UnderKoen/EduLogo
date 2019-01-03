@@ -1,7 +1,6 @@
-package nl.edulogo.acslogo.display;
+package nl.edulogo.acslogo.handlers.procedures;
 
 import nl.edulogo.acslogo.ACSLogo;
-import nl.edulogo.acslogo.handlers.procedures.Procedure;
 
 import java.util.List;
 

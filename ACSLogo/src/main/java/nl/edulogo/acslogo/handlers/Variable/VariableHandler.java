@@ -1,4 +1,4 @@
-package nl.edulogo.acslogo.handlers;
+package nl.edulogo.acslogo.handlers.Variable;
 
 import nl.edulogo.acslogo.script.commandos.Value;
 

@@ -1,6 +1,7 @@
 package nl.edulogo.acslogo.script.parser.pieces;
 
 import nl.edulogo.acslogo.script.ExecutorException;
+import nl.edulogo.acslogo.script.commandos.ListObject;
 
 
 /**
@@ -27,7 +28,7 @@ public enum PieceType {
             return PieceType.NUMBER;
         } else if (value instanceof String) {
             return PieceType.STRING;
-        } else if (value instanceof ListPiece.ListObject) {
+        } else if (value instanceof ListObject) {
             return PieceType.LIST;
         } else {
             throw new ExecutorException(String.format("Got a %s returned but this can't happen.", value.getClass()));

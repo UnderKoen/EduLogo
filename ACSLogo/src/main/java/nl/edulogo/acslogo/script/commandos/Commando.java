@@ -29,6 +29,16 @@ public class Commando {
         this.aliases = Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
     }
 
+    public Commando(String name, RunnableEmpty runnable) {
+        this(name, 0);
+        this.runnable = ignored -> runnable.run();
+    }
+
+    public Commando(String name, RunnableEmpty runnable, String... aliases) {
+        this(name, runnable);
+        this.aliases = Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
+    }
+
     public String getName() {
         return name;
     }

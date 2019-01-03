@@ -1,7 +1,7 @@
 package nl.edulogo.acslogo.utils;
 
+import nl.edulogo.acslogo.script.commandos.ListObject;
 import nl.edulogo.acslogo.script.commandos.Value;
-import nl.edulogo.acslogo.script.parser.pieces.ListPiece;
 import nl.edulogo.core.Font;
 import nl.edulogo.core.Position;
 
@@ -22,8 +22,7 @@ public class ValueUtil {
     }
 
     public static boolean isList(String string) {
-        if (string.length() >= 2)
-            if (string.charAt(0) != '[' || string.charAt(string.length() - 1) != ']') return false;
+        if (string.length() < 2 || string.charAt(0) != '[' || string.charAt(string.length() - 1) != ']') return false;
         long open = string.chars().filter(ch -> ch == '[').count();
         long close = string.chars().filter(ch -> ch == ']').count();
         return open == close;
@@ -63,21 +62,24 @@ public class ValueUtil {
 
             if (index != 0) {
                 listTest.append(item);
+                listTest.append(" ");
             }
         }
 
-        return new Value(new ListPiece.ListObject(returnList));
+        return new Value(new ListObject(returnList));
     }
 
     public static Value fontToValue(String font) {
-        return new Value(new ListPiece.ListObject((Object[]) font.split(" ")));
+        return new Value(new ListObject((Object[]) font.split(" ")));
     }
 
     public static Value fontToValue(Font font) {
         return fontToValue(font.getName());
     }
 
-    public static Value positionToValue(Position position) {
-        return new Value(new ListPiece.ListObject(position.getX(), position.getY()));
+    public static Value positionToValue(Position position, Position relative) {
+        position = position.clone();
+        position.addPosition(relative.inverted());
+        return new Value(new ListObject(position.getX(), position.getY()));
     }
 }

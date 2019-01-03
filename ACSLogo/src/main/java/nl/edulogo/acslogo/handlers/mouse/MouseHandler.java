@@ -10,6 +10,7 @@ public class MouseHandler {
     private FXCanvas canvas;
     private boolean left = false;
     private boolean right = false;
+    private Position mouse = new Position(0, 0);
     private Waitable<Position> leftMouseClick = new Waitable<>();
     private Waitable<Position> rightMouseClick = new Waitable<>();
     private Waitable<Position> mouseMove = new Waitable<>();
@@ -48,6 +49,7 @@ public class MouseHandler {
             }
         } else if (type == MouseEvent.MOUSE_MOVED) {
             mouseMove.setDone(new Position(event.getX(), event.getY()));
+            mouse = new Position(event.getX(), event.getY());
         }
     }
 
@@ -69,5 +71,9 @@ public class MouseHandler {
 
     public Waitable<Position> getMouseMove() {
         return mouseMove;
+    }
+
+    public Position getMouse() {
+        return mouse;
     }
 }

@@ -28,6 +28,9 @@ public class Parser {
             return parse(code);
         } catch (ParsingException ex) {
             consoleHandler.error(ex);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            //TODO handle this...
         }
         return null;
     }

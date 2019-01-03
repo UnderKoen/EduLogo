@@ -3,7 +3,7 @@ package nl.edulogo.acslogo.script.executor;
 import nl.edulogo.acslogo.Catch;
 import nl.edulogo.acslogo.handlers.CommandoHandler;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
-import nl.edulogo.acslogo.handlers.VariableHandler;
+import nl.edulogo.acslogo.handlers.Variable.VariableHandler;
 import nl.edulogo.acslogo.script.ExecutorException;
 import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
@@ -21,9 +21,13 @@ public class Executor {
     private VariableHandler variableHandler;
 
     public Executor(ConsoleHandler consoleHandler, CommandoHandler commandoHandler) {
+        this(consoleHandler, commandoHandler, new VariableHandler());
+    }
+
+    public Executor(ConsoleHandler consoleHandler, CommandoHandler commandoHandler, VariableHandler variableHandler) {
         this.consoleHandler = consoleHandler;
         this.commandoHandler = commandoHandler;
-        this.variableHandler = new VariableHandler();
+        this.variableHandler = variableHandler;
     }
 
     public Value execute(Script script) throws ExecutorException, ParsingException {
@@ -49,6 +53,10 @@ public class Executor {
             ex.printStackTrace();
             //TODO handle this
         }
+    }
+
+    public ConsoleHandler getConsoleHandler() {
+        return consoleHandler;
     }
 
     public CommandoHandler getCommandoHandler() {

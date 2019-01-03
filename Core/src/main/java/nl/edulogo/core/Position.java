@@ -45,6 +45,10 @@ public class Position {
         addY(position.getY());
     }
 
+    public Position inverted() {
+        return new Position(-x, -y);
+    }
+
     @Override
     public Position clone() {
         return new Position(this);
