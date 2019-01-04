@@ -37,5 +37,9 @@ public interface Canvas {
 
     void translate(Position position);
 
+    void setLineCap(LineCap cap);
+
+    void setLineDash(double offset, double... dashes);
+
     void clear();
 }

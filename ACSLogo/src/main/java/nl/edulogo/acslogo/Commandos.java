@@ -1,8 +1,10 @@
 package nl.edulogo.acslogo;
 
+import javafx.application.Platform;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
 import nl.edulogo.acslogo.handlers.Waitable;
 import nl.edulogo.acslogo.handlers.procedures.Procedure;
@@ -17,10 +19,7 @@ import nl.edulogo.acslogo.script.commandos.ListObject;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.utils.ValueUtil;
 import nl.edulogo.acslogo.utils.WaitableUtil;
-import nl.edulogo.core.Color;
-import nl.edulogo.core.Font;
-import nl.edulogo.core.Position;
-import nl.edulogo.core.Size;
+import nl.edulogo.core.*;
 import nl.edulogo.display.fx.FXCanvas;
 import nl.edulogo.logo.Path;
 import nl.edulogo.logo.Turtle;
@@ -67,7 +66,7 @@ public class Commandos {
          * -Pwd
          */
 
-        /*TODO export
+        /*TODO export:
          * -ExportEPS
          * -ExportPDF
          * -ExportTiff
@@ -77,6 +76,7 @@ public class Commandos {
          * -Instruments
          * -Play
          * -Say
+         * -SetClipPath
          * -Infinite length functions (for those that can have a list as a input will have that instead like: difference, sum, ...)
          */
 
@@ -231,6 +231,21 @@ public class Commandos {
         commandos.add(new Commando("run", Commandos::run, 1));
 
         commandos.add(new Commando("sentence", Commandos::sentence, 2));
+
+        commandos.add(new Commando("setBackground", Commandos::setBackground, 1, "setBG"));
+
+        commandos.add(new Commando("setCanvasSize", Commandos::setCanvasSize, 1));
+
+        commandos.add(new Commando("setFontFace", Commandos::setFontFace, 1));
+        commandos.add(new Commando("setFontFamily", Commandos::setFontFamily, 1));
+        commandos.add(new Commando("setFontTraits", Commandos::setFontTraits, 1));
+
+        commandos.add(new Commando("setFullScreen", Commandos::setFullScreen, 1));
+
+        commandos.add(new Commando("setHeading", Commandos::setHeading, 1));
+
+        commandos.add(new Commando("setLineCap", Commandos::setLineCap, 1));
+        commandos.add(new Commando("setLineDash", Commandos::setLineDash, 1));
 
         return commandos.toArray(new Commando[0]);
     }
@@ -636,7 +651,7 @@ public class Commandos {
     }
 
     private static Value heading() {
-        return new Value(logo.getTurtle().getRotation());
+        return new Value((360.0 - logo.getTurtle().getRotation()) % 360);
     }
 
     private static Value hideTurtle() {
@@ -647,9 +662,9 @@ public class Commandos {
     private static Value home(Value... arguments) {
         Size s = logo.getCanvas().getSize();
         Position newp = new Position(s.getWidth() / 2.0, s.getHeight() / 2.0);
+        logo.setStart(newp);
         logo.getTurtle().setPosition(newp);
         logo.getTurtle().setRotation(0);
-        logo.setStart(newp);
         return null;
     }
 
@@ -700,6 +715,12 @@ public class Commandos {
         } else {
             return new Value(to.toString() + add.toString());
         }
+    }
+
+    private static Value left(Value... arguments) {
+        double amount = (Double) arguments[0].getValue();
+        logo.left(amount);
+        return null;
     }
 
     private static Value list(Value... arguments) {
@@ -1022,9 +1043,111 @@ public class Commandos {
         return new Value(new ListObject(list));
     }
 
-    private static Value left(Value... arguments) {
-        double amount = (Double) arguments[0].getValue();
-        logo.left(amount);
+    private static Value setBackground(Value... arguments) throws ExecutorException {
+        int color = (int) arguments[0].getAsNumber();
+        logo.colorHandler.setBackground(color);
         return null;
+    }
+
+    private static Value setCanvasSize(Value... arguments) throws ExecutorException {
+        List<Value> list = arguments[0].getAsList().getList();
+        int width = (int) list.get(0).getAsNumber();
+        int height = (int) list.get(1).getAsNumber();
+        logo.getCanvas().setSize(new Size(width, height));
+        clearScreen();
+        return null;
+    }
+
+    private static Value setFontFace(Value... arguments) throws ExecutorException {
+        String fontFace = arguments[0].getAsList().getInner();
+        checkFont(fontFace);
+
+        Font old = logo.getTurtle().getFont();
+        logo.getTurtle().setFont(new Font(fontFace, old.getSize(), old.getColor()));
+        return null;
+    }
+
+    private static Value setFontFamily(Value... arguments) throws ExecutorException {
+        String fontFamily = arguments[0].getAsList().getInner();
+        checkFont(fontFamily);
+
+        Font old = logo.getTurtle().getFont();
+        String style = new javafx.scene.text.Font(old.getName(), old.getSize()).getStyle();
+
+        String name = String.format("%s %s", fontFamily, style);
+        String s = new javafx.scene.text.Font(name, old.getSize()).getName();
+        if (!s.equalsIgnoreCase(name)) name = fontFamily;
+
+        logo.getTurtle().setFont(new Font(name, old.getSize(), old.getColor()));
+        return null;
+    }
+
+    private static Value setFontTraits(Value... arguments) throws ExecutorException {
+        Font old = logo.getTurtle().getFont();
+        String s = new javafx.scene.text.Font(old.getName(), old.getSize()).getFamily();
+
+        String style = arguments[0].getAsList().getInner();
+        String name = String.format(String.format("%s %s", s, style).trim());
+        checkFont(name);
+
+        logo.getTurtle().setFont(new Font(name, old.getSize(), old.getColor()));
+        return null;
+    }
+
+    private static Value setFullScreen(Value... arguments) throws ExecutorException {
+        boolean b = arguments[0].getAsBoolean();
+        Platform.runLater(() -> ((Stage) ((FXCanvas) logo.getCanvas()).getCanvas().getScene().getWindow()).setFullScreen(b));
+        return null;
+    }
+
+    private static Value setHeading(Value... arguments) throws ExecutorException {
+        double d = arguments[0].getAsNumber();
+        logo.getTurtle().setRotation(360.0 - d);
+        return null;
+    }
+
+    private static Value setLineCap(Value... arguments) throws ExecutorException {
+        String s = arguments[0].getAsString();
+        LineCap lineCap;
+        switch (s.toLowerCase()) {
+            case "butt":
+                lineCap = LineCap.BUTT;
+                break;
+            case "round":
+                lineCap = LineCap.ROUND;
+                break;
+            case "square":
+                lineCap = LineCap.SQUARE;
+                break;
+            default:
+                throw new ExecutorException(String.format("LineCap should be one of these: butt, round or square."));
+        }
+        logo.getCanvas().setLineCap(lineCap);
+        return null;
+    }
+
+    private static Value setLineDash(Value... arguments) throws ExecutorException {
+        List<Value> list = arguments[0].getAsList().getList();
+        if (list.isEmpty()) {
+            logo.getCanvas().setLineDash(0);
+            return null;
+        }
+
+        double offset = list.remove(0).getAsNumber();
+        double[] dashes = new double[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            double d = list.get(i).getAsNumber();
+            dashes[i] = d;
+        }
+
+        logo.getCanvas().setLineDash(offset, dashes);
+        return null;
+    }
+
+    private static void checkFont(String font) throws ExecutorException {
+        Font old = logo.getTurtle().getFont();
+        String s = new javafx.scene.text.Font(font, 12).getName();
+        if (!s.equalsIgnoreCase(font.trim()))
+            throw new ExecutorException(String.format("Font %s doesn't exist.", font));
     }
 }

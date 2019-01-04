@@ -1,25 +1,34 @@
 package nl.edulogo.display.fx;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.ArcType;
+import javafx.scene.shape.StrokeLineCap;
 import nl.edulogo.core.*;
 
 /**
  * Created by Under_Koen on 20/09/2018.
  */
 public class FXCanvas implements Canvas, FXView {
+    private ScrollPane node;
     private javafx.scene.canvas.Canvas canvas;
     private GraphicsContext graphics;
     private Size size;
 
     public FXCanvas(Size size) {
-        this.size = size;
         canvas = new javafx.scene.canvas.Canvas(size.getWidth(), size.getHeight());
         graphics = canvas.getGraphicsContext2D();
+        setSize(size);
+        StackPane.setAlignment(canvas, Pos.CENTER);
+        node = new ScrollPane(new StackPane(canvas));
+        node.setFitToHeight(true);
+        node.setFitToWidth(true);
     }
 
-    protected javafx.scene.canvas.Canvas getCanvas() {
+    public javafx.scene.canvas.Canvas getCanvas() {
         return canvas;
     }
 
@@ -143,12 +152,23 @@ public class FXCanvas implements Canvas, FXView {
     }
 
     @Override
+    public void setLineCap(LineCap cap) {
+        graphics.setLineCap(StrokeLineCap.valueOf(cap.name()));
+    }
+
+    @Override
+    public void setLineDash(double offset, double... dashes) {
+        graphics.setLineDashes(dashes);
+        graphics.setLineDashOffset(offset);
+    }
+
+    @Override
     public void clear() {
         graphics.clearRect(0, 0, size.getWidth(), size.getHeight());
     }
 
     @Override
     public Node getNode() {
-        return canvas;
+        return node;
     }
 }

@@ -61,7 +61,7 @@ public class FXTurtleGraphics implements TurtleGraphics<FXCanvas> {
 
     @Override
     public void addToCanvas(FXCanvas canvas) {
-        StackPane parent = (StackPane) canvas.getNode().getParent();
+        StackPane parent = (StackPane) canvas.getCanvas().getParent();
         parent.getChildren().add(node);
         node.addEventHandler(MouseEvent.ANY, canvas.getNode()::fireEvent);
     }

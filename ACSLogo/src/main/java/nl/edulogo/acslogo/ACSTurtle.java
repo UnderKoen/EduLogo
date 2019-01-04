@@ -7,12 +7,12 @@ import nl.edulogo.logo.Turtle;
 
 public class ACSTurtle extends Turtle {
     private TurtleGraphics turtleGraphics;
-    private Position start;
+    private ACSLogo logo;
 
-    public ACSTurtle(Position position, double rotation, TurtleGraphics turtleGraphics) {
+    public ACSTurtle(Position position, double rotation, ACSLogo acsLogo) {
         super(position, rotation);
-        start = position.clone();
-        this.turtleGraphics = turtleGraphics;
+        this.logo = acsLogo;
+        this.turtleGraphics = logo.getTurtleGraphics();
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ACSTurtle extends Turtle {
     public void setPosition(Position position) {
         super.setPosition(position);
         position = position.clone();
-        position.addPosition(start.inverted());
+        position.addPosition(logo.getStart().inverted());
         turtleGraphics.setPosition(position);
     }
 
@@ -41,6 +41,5 @@ public class ACSTurtle extends Turtle {
     @Override
     public void setPenWidth(double penWidth) {
         super.setPenWidth(penWidth);
-
     }
 }
