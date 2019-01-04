@@ -24,7 +24,12 @@ public class Test extends Application {
         FXDisplay<FXEditor> display = new FXDisplay<>(new Size(350, 500), editor);
         display.show();
 
+        editor.getConsole().setOnKey(key -> {
+            editor.getConsole().println(key.toString());
+        });
+
         new Thread(() -> {
+            editor.getConsole().enableInput();
             for (int i = 0; i < 100; i++) {
                 final int t = i;
                 Platform.runLater(() -> editor.getConsole().println(t + "lolololooloollolololoololloolololololol"));
@@ -34,6 +39,7 @@ public class Test extends Application {
                     e.printStackTrace();
                 }
             }
+            //editor.getConsole().disableInput();
         }).start();
     }
 }

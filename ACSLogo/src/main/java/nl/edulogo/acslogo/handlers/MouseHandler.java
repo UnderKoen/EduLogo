@@ -1,4 +1,4 @@
-package nl.edulogo.acslogo.handlers.mouse;
+package nl.edulogo.acslogo.handlers;
 
 import javafx.event.EventType;
 import javafx.scene.Node;

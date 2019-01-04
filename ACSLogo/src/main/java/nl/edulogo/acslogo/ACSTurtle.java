@@ -37,4 +37,10 @@ public class ACSTurtle extends Turtle {
         super.setRotation(rotation);
         turtleGraphics.setRotation(-rotation);
     }
+
+    @Override
+    public void setPenWidth(double penWidth) {
+        super.setPenWidth(penWidth);
+
+    }
 }

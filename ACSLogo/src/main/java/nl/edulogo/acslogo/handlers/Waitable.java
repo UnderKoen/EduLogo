@@ -1,4 +1,4 @@
-package nl.edulogo.acslogo.handlers.mouse;
+package nl.edulogo.acslogo.handlers;
 
 public class Waitable<T> {
     private T value;

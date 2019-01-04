@@ -1,11 +1,12 @@
 package nl.edulogo.editor.fx;
 
-import javafx.beans.binding.DoubleExpression;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import nl.edulogo.core.Size;
@@ -25,7 +26,8 @@ public class FXConsole implements Console, FXView {
     private VBox lines;
     private List<Label> textLines;
     private boolean error = false;
-    private DoubleExpression size;
+    private TextField input;
+    private KeyListener listener;
 
     public FXConsole() {
         pane = new StackPane();
@@ -33,16 +35,26 @@ public class FXConsole implements Console, FXView {
         lines = new VBox();
         scroll = new ScrollPane(lines);
         textLines = new ArrayList<>();
+        input = new TextField();
 
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scroll.maxHeightProperty().bind(pane.heightProperty());
+        scroll.maxHeightProperty().bind(pane.heightProperty().subtract(input.heightProperty()));
 
         lines.setAlignment(Pos.TOP_LEFT);
 
         lines.heightProperty().addListener((observable, oldValue, newValue) -> scroll.setVvalue(scroll.getVmax()));
 
-        pane.getChildren().add(scroll);
+        StackPane.setAlignment(input, Pos.BOTTOM_LEFT);
+        input.setMinHeight(0);
+        input.setPrefHeight(0);
+        input.setOnKeyPressed(event -> {
+            if (listener != null) listener.run(event.getCode());
+        });
+
+        StackPane.setAlignment(scroll, Pos.TOP_LEFT);
+
+        pane.getChildren().addAll(scroll, input);
     }
 
     @Override
@@ -80,6 +92,34 @@ public class FXConsole implements Console, FXView {
         line.setTextFill(Color.RED);
         line.setBackground(background(Color.rgb(255, 0, 0, 0.1 + (textLines.size() % 2) / 20.0)));
         error = true;
+    }
+
+    @Override
+    public void enableInput() {
+        input.setEditable(true);
+        input.setPrefHeight(24);
+        Platform.runLater(() -> input.requestFocus());
+    }
+
+    @Override
+    public void disableInput() {
+        input.setEditable(false);
+        input.setPrefHeight(0);
+    }
+
+    @Override
+    public String getInputText() {
+        return input.getText();
+    }
+
+    @Override
+    public void clearInput() {
+        input.setText("");
+    }
+
+    @Override
+    public void setOnKey(KeyListener listener) {
+        this.listener = listener;
     }
 
     private Background background(Color color) {

@@ -1,9 +1,10 @@
 package nl.edulogo.acslogo.script.executor;
 
 import nl.edulogo.acslogo.Catch;
+import nl.edulogo.acslogo.Output;
 import nl.edulogo.acslogo.handlers.CommandoHandler;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
-import nl.edulogo.acslogo.handlers.Variable.VariableHandler;
+import nl.edulogo.acslogo.handlers.variable.VariableHandler;
 import nl.edulogo.acslogo.script.ExecutorException;
 import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
@@ -33,12 +34,16 @@ public class Executor {
     public Value execute(Script script) throws ExecutorException, ParsingException {
         List<Piece> pieces = script.getPieces();
 
-        Value last = new Value(null);
-        for (Piece piece : pieces) {
-            last = piece.getValueSafe();
-        }
+        try {
+            Value last = new Value(null);
+            for (Piece piece : pieces) {
+                last = piece.getValueSafe();
+            }
 
-        return last;
+            return last;
+        } catch (Output output) {
+            return output.getOutput();
+        }
     }
 
     public void executeSafe(Script script) {

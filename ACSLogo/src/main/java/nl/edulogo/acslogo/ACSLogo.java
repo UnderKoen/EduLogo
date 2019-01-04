@@ -13,9 +13,9 @@ import nl.edulogo.acslogo.display.fx.FXTurtleGraphics;
 import nl.edulogo.acslogo.handlers.ColorHandler;
 import nl.edulogo.acslogo.handlers.CommandoHandler;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
-import nl.edulogo.acslogo.handlers.Variable.PropertyHandler;
-import nl.edulogo.acslogo.handlers.mouse.MouseHandler;
+import nl.edulogo.acslogo.handlers.MouseHandler;
 import nl.edulogo.acslogo.handlers.procedures.ProcedureHandler;
+import nl.edulogo.acslogo.handlers.variable.PropertyHandler;
 import nl.edulogo.acslogo.script.ExecutorException;
 import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
@@ -79,7 +79,7 @@ public class ACSLogo extends AdvancedLogo {
 
         commandoHandler = new CommandoHandler();
         consoleHandler = new ConsoleHandler(editor.getConsole());
-        colorHandler = new ColorHandler(Color.WHITE, Color.BLACK, Color.RED, Color.BLUE, Color.YELLOW, new Color(177, 121, 51),
+        colorHandler = new ColorHandler(turtle, Color.WHITE, Color.BLACK, Color.RED, Color.BLUE, Color.YELLOW, new Color(177, 121, 51),
                 Color.CYAN, new Color(146, 146, 146), Color.MAGENTA, new Color(255, 144, 0), new Color(161, 0, 149),
                 new Color(190, 0, 242), new Color(194, 171, 0), new Color(217, 192, 166),
                 new Color(238, 214, 188), new Color(0, 238, 217));

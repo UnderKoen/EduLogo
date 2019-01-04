@@ -133,6 +133,11 @@ public class FXCanvas implements Canvas, FXView {
     }
 
     @Override
+    public void setPenWidth(double width) {
+        graphics.setLineWidth(width);
+    }
+
+    @Override
     public void translate(Position position) {
         graphics.translate(position.getX(), position.getY());
     }

@@ -39,6 +39,7 @@ public abstract class BasicLogo implements Logo {
         Turtle turtle = getTurtle();
         Position newPos = MathUtil.getRelativePosition(turtle.getRotation(), -amount);
         newPos.addPosition(turtle.getPosition());
+        getCanvas().setPenWidth(turtle.getPenWidth());
         if (turtle.isPenDown()) getCanvas().drawLine(turtle.getPosition(), newPos);
         turtle.setPosition(newPos);
     }

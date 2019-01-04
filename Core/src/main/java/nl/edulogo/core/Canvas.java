@@ -33,6 +33,8 @@ public interface Canvas {
 
     void rotate(double degrees);
 
+    void setPenWidth(double width);
+
     void translate(Position position);
 
     void clear();

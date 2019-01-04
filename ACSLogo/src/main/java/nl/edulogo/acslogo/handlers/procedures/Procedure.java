@@ -2,7 +2,7 @@ package nl.edulogo.acslogo.handlers.procedures;
 
 import nl.edulogo.acslogo.ACSLogo;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
-import nl.edulogo.acslogo.handlers.Variable.LocalVariableHandler;
+import nl.edulogo.acslogo.handlers.variable.LocalVariableHandler;
 import nl.edulogo.acslogo.script.ExecutorException;
 import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;

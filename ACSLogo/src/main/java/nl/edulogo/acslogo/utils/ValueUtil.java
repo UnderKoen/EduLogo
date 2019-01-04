@@ -80,6 +80,9 @@ public class ValueUtil {
     public static Value positionToValue(Position position, Position relative) {
         position = position.clone();
         position.addPosition(relative.inverted());
-        return new Value(new ListObject(position.getX(), position.getY()));
+        double x = position.getX();
+        double y = position.getY();
+        if (y != 0) y = -y;
+        return new Value(new ListObject(x, y));
     }
 }

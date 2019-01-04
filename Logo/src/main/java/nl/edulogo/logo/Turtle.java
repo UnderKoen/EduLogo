@@ -19,16 +19,17 @@ public class Turtle {
     private Font font;
 
     private boolean penDown;
+    private double penWidth;
 
     public Turtle(Turtle turtle) {
-        this(turtle.getPosition(), turtle.getRotation(), turtle.path, turtle.color, turtle.fillColor, turtle.font, turtle.penDown);
+        this(turtle.getPosition(), turtle.getRotation(), turtle.path, turtle.color, turtle.fillColor, turtle.font, turtle.penDown, turtle.penWidth);
     }
 
     public Turtle(Position position, double rotation) {
-        this(position, rotation, new Path(), Color.BLACK, null, Font.SYSTEM_REGULAR, true);
+        this(position, rotation, new Path(position), Color.BLACK, null, Font.SYSTEM_REGULAR, true, 1);
     }
 
-    public Turtle(Position position, double rotation, Path path, Color color, Color fillColor, Font font, boolean penDown) {
+    public Turtle(Position position, double rotation, Path path, Color color, Color fillColor, Font font, boolean penDown, double penWidth) {
         this.position = position;
         this.rotation = rotation;
         this.path = path;
@@ -36,6 +37,7 @@ public class Turtle {
         this.fillColor = fillColor;
         this.font = font;
         this.penDown = penDown;
+        this.penWidth = penWidth;
     }
 
     public Position getPosition() {
@@ -93,6 +95,14 @@ public class Turtle {
 
     public void setPenDown(boolean penDown) {
         this.penDown = penDown;
+    }
+
+    public double getPenWidth() {
+        return penWidth;
+    }
+
+    public void setPenWidth(double penWidth) {
+        this.penWidth = penWidth;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package nl.edulogo.acslogo.utils;
 
-import nl.edulogo.acslogo.handlers.mouse.Waitable;
+import nl.edulogo.acslogo.handlers.Waitable;
 
 import java.util.ArrayList;
 import java.util.Arrays;

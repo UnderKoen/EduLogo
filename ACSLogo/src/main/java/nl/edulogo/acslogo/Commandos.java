@@ -2,11 +2,13 @@ package nl.edulogo.acslogo;
 
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
-import javafx.scene.paint.Color;
-import nl.edulogo.acslogo.handlers.Variable.LocalVariableHandler;
-import nl.edulogo.acslogo.handlers.Variable.VariableHandler;
-import nl.edulogo.acslogo.handlers.mouse.Waitable;
+import javafx.scene.input.KeyCode;
+import nl.edulogo.acslogo.handlers.ConsoleHandler;
+import nl.edulogo.acslogo.handlers.Waitable;
 import nl.edulogo.acslogo.handlers.procedures.Procedure;
+import nl.edulogo.acslogo.handlers.variable.LocalVariableHandler;
+import nl.edulogo.acslogo.handlers.variable.PropertyHandler;
+import nl.edulogo.acslogo.handlers.variable.VariableHandler;
 import nl.edulogo.acslogo.script.ExecutorException;
 import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
@@ -15,22 +17,24 @@ import nl.edulogo.acslogo.script.commandos.ListObject;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.utils.ValueUtil;
 import nl.edulogo.acslogo.utils.WaitableUtil;
+import nl.edulogo.core.Color;
 import nl.edulogo.core.Font;
 import nl.edulogo.core.Position;
 import nl.edulogo.core.Size;
 import nl.edulogo.display.fx.FXCanvas;
 import nl.edulogo.logo.Path;
+import nl.edulogo.logo.Turtle;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Created by Under_Koen on 08/11/2018.
  */
 public class Commandos {
+    private static Random random = new Random();
     private static ACSLogo logo;
 
     private Commandos() {
@@ -54,6 +58,13 @@ public class Commandos {
          * -FReadWord
          * -FShow
          * -FType
+         * -OpenAppend
+         * -OpenRead
+         * -OpenTextAppend
+         * -OpenTextRead
+         * -OpenTextWrite
+         * -OpenWrite
+         * -Pwd
          */
 
         /*TODO export
@@ -64,6 +75,8 @@ public class Commandos {
 
         /*NOT GONE IMPLEMENT
          * -Instruments
+         * -Play
+         * -Say
          * -Infinite length functions (for those that can have a list as a input will have that instead like: difference, sum, ...)
          */
 
@@ -179,6 +192,45 @@ public class Commandos {
         commandos.add(new Commando("memberP", Commandos::memberP, 2, "member?"));
 
         commandos.add(new Commando("mouse", Commandos::mouse));
+
+        commandos.add(new Commando("nameP", Commandos::nameP, 1, "name?"));
+        commandos.add(new Commando("not", Commandos::not, 1));
+        commandos.add(new Commando("numberP", Commandos::numberP, 1, "number?"));
+        commandos.add(new Commando("or", Commandos::or, 2));
+        commandos.add(new Commando("output", Commandos::output, 1, "op"));
+        commandos.add(new Commando("pathBounds", Commandos::pathBounds, 1));
+        commandos.add(new Commando("pathLength", Commandos::pathLength, 1));
+        commandos.add(new Commando("pen", Commandos::pen));
+        commandos.add(new Commando("penColor", Commandos::penColor, "penColour", "pc"));
+        commandos.add(new Commando("penDown", Commandos::penDown, "pd"));
+        commandos.add(new Commando("penUp", Commandos::penUp, "pu"));
+        commandos.add(new Commando("penWidth", Commandos::penWidth));
+        commandos.add(new Commando("pi", Commandos::pi));
+        commandos.add(new Commando("position", Commandos::position, "pos"));
+        commandos.add(new Commando("power", Commandos::power, 2));
+        commandos.add(new Commando("print", Commandos::print, 1));
+        commandos.add(new Commando("product", Commandos::product, 1));
+
+        commandos.add(new Commando("propList", Commandos::propList, 1, "pList"));
+        commandos.add(new Commando("putProp", Commandos::putProp, 3, "pProp"));
+
+        commandos.add(new Commando("quotient", Commandos::quotient, 1));
+        commandos.add(new Commando("random", Commandos::random, 1));
+
+        commandos.add(new Commando("readChar", Commandos::readChar));
+        commandos.add(new Commando("readChars", Commandos::readChars, 1));
+        commandos.add(new Commando("readList", Commandos::readList));
+        commandos.add(new Commando("readWord", Commandos::readWord));
+
+        commandos.add(new Commando("remainder", Commandos::remainder, 2));
+        commandos.add(new Commando("remProp", Commandos::remProp, 2));
+        commandos.add(new Commando("reverseList", Commandos::reverseList, 1, "reverse", "reversePath"));
+        commandos.add(new Commando("rgb", Commandos::rgb, 1));
+
+        commandos.add(new Commando("round", Commandos::round, 1));
+        commandos.add(new Commando("run", Commandos::run, 1));
+
+        commandos.add(new Commando("sentence", Commandos::sentence, 2));
 
         return commandos.toArray(new Commando[0]);
     }
@@ -325,7 +377,7 @@ public class Commandos {
     }
 
     private static Value colorAtPoint(Value... arguments) throws ExecutorException {
-        //TODO fix bigger than canvas
+        //TODO fix bigger than canvas and wrong thread
         List<Value> l = ((ListObject) arguments[0].getValue()).getList();
         if (l.size() != 2) throw new ExecutorException("Color at point needs a list with two numbers");
         Position relative = logo.getStart();
@@ -334,7 +386,7 @@ public class Commandos {
 
         FXCanvas fxCanvas = (FXCanvas) logo.getCanvas();
         WritableImage img = fxCanvas.getNode().snapshot(new SnapshotParameters(), null);
-        Color color = img.getPixelReader().getColor(x, y);
+        javafx.scene.paint.Color color = img.getPixelReader().getColor(x, y);
 
         List<Object> r = new ArrayList<>();
         r.add((int) (color.getRed() * 255));
@@ -461,11 +513,12 @@ public class Commandos {
         List<Value> list = ((ListObject) arguments[0].getValue()).getList();
         Path path = new Path();
 
+        Position start = logo.getStart();
         for (Value value : list) {
             if (value.getType() != Value.ValueType.LIST) throw new ExecutorException("Path is not correct");
             List<Value> location = ((ListObject) value.getValue()).getList();
-            double x = (double) location.get(0).getValue();
-            double y = (double) location.get(1).getValue();
+            double x = location.get(0).getAsNumber() + start.getX();
+            double y = -location.get(1).getAsNumber() + start.getY();
             path.addPoint(new Position(x, y));
         }
         logo.fillPath(path);
@@ -528,7 +581,7 @@ public class Commandos {
 
     private static Value forward(Value... arguments) {
         double amount = (Double) arguments[0].getValue();
-        logo.forward(amount / 2.0);
+        logo.forward(amount);
         return null;
     }
 
@@ -709,6 +762,212 @@ public class Commandos {
         return ValueUtil.positionToValue(logo.mouseHandler.getMouse(), logo.getStart());
     }
 
+    private static Value nameP(Value... arguments) throws ExecutorException {
+        VariableHandler variableHandler = Procedure.current;
+        if (variableHandler == null) variableHandler = logo.getExecutor().getVariableHandler();
+
+        String name = arguments[0].getAsString();
+        return new Value(variableHandler.contains(name));
+    }
+
+    private static Value not(Value... arguments) throws ExecutorException {
+        return new Value(!arguments[0].getAsBoolean());
+    }
+
+    private static Value numberP(Value... arguments) {
+        return new Value(ValueUtil.stringToValue(arguments[0].toString()).getType() == Value.ValueType.NUMBER);
+    }
+
+    private static Value or(Value... arguments) throws ExecutorException {
+        return new Value(arguments[0].getAsBoolean() || arguments[1].getAsBoolean());
+    }
+
+    private static Value output(Value... arguments) {
+        throw new Output(arguments[0]);
+    }
+
+    private static Value pathBounds(Value... arguments) throws ExecutorException {
+        double minX = 0;
+        double minY = 0;
+        double maxX = 0;
+        double maxY = 0;
+
+        for (Value value : arguments[0].getAsList().getList()) {
+            List<Value> pos = value.getAsList().getList();
+            double x = pos.get(0).getAsNumber();
+            double y = pos.get(1).getAsNumber();
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+        }
+
+        double widht = Math.abs(maxX - minX);
+        double height = Math.abs(maxY - minY);
+
+        return new Value(new ListObject(minX, minY, Math.abs(maxX - minX), Math.abs(maxY - minY)));
+    }
+
+    private static Value pathLength(Value... arguments) throws ExecutorException {
+        return new Value(arguments[0].getAsList().getList().size());
+    }
+
+    private static Value pen() {
+        Turtle turtle = logo.getTurtle();
+        int color = logo.colorHandler.getPen();
+        return new Value(new ListObject(turtle.isPenDown(), color));
+    }
+
+    private static Value penColor() {
+        int color = logo.colorHandler.getPen();
+        return new Value(color);
+    }
+
+    private static Value penUp() {
+        logo.getTurtle().setPenDown(false);
+        return null;
+    }
+
+    private static Value penDown() {
+        logo.getTurtle().setPenDown(true);
+        return null;
+    }
+
+    private static Value penWidth() {
+        return new Value(logo.getTurtle().getPenWidth());
+    }
+
+    private static Value pi() {
+        return new Value(Math.PI);
+    }
+
+    private static Value position() {
+        return ValueUtil.positionToValue(logo.getTurtle().getPosition(), logo.getStart());
+    }
+
+    private static Value power(Value... arguments) throws ExecutorException {
+        return new Value(Math.pow(arguments[0].getAsNumber(), arguments[1].getAsNumber()));
+    }
+
+    private static Value print(Value... arguments) throws ExecutorException {
+        Value v = arguments[0];
+        ConsoleHandler console = logo.getExecutor().getConsoleHandler();
+        if (v.getType() == Value.ValueType.LIST) {
+            ListObject list = arguments[0].getAsList();
+            console.output(list.getInner());
+        } else {
+            console.output(arguments[0]);
+        }
+        return null;
+    }
+
+    private static Value product(Value... arguments) throws ExecutorException {
+        List<Value> list = arguments[0].getAsList().getList();
+        Double r = null;
+        for (Value value : list) {
+            if (r == null) {
+                r = value.getAsNumber();
+            } else {
+                r = r * value.getAsNumber();
+            }
+        }
+        return new Value(r);
+    }
+
+    private static Value propList(Value... arguments) throws ExecutorException {
+        String name = arguments[0].getAsString();
+        PropertyHandler propertyHandler = logo.propertyHandler;
+
+        Map<String, Value> prop = propertyHandler.getProperties(name);
+        if (prop == null) throw new ExecutorException("This property doesn't exist.");
+
+        List<Value> list = new ArrayList<>();
+        for (Map.Entry<String, Value> entry : prop.entrySet()) {
+            list.add(new Value(entry.getKey()));
+            list.add(entry.getValue());
+        }
+
+        return new Value(new ListObject(list));
+    }
+
+    private static Value putProp(Value... arguments) throws ExecutorException {
+        String name = arguments[0].getAsString();
+        String property = arguments[1].getAsString();
+        Value value = arguments[2];
+        logo.propertyHandler.setProperty(name, property, value);
+        return null;
+    }
+
+    private static Value quotient(Value... arguments) throws ExecutorException {
+        List<Value> list = arguments[0].getAsList().getList();
+        Double r = null;
+        for (Value value : list) {
+            if (r == null) {
+                r = value.getAsNumber();
+            } else {
+                r = r / value.getAsNumber();
+            }
+        }
+        return new Value(r);
+    }
+
+    private static Value random(Value... arguments) throws ExecutorException {
+        int max = (int) arguments[0].getAsNumber();
+        double r = random.nextInt(Math.max(max, 1));
+        return new Value(r);
+    }
+
+    private static Value readChar() {
+        ConsoleHandler console = logo.getExecutor().getConsoleHandler();
+        console.waitFor((text, key) -> text.length() >= 1);
+        console.enableInput();
+        String s = String.valueOf(WaitableUtil.waitFor(console.getInput()).charAt(0));
+        console.disableInput();
+        return ValueUtil.stringToValue(s);
+    }
+
+    private static Value readChars(Value... arguments) throws ExecutorException {
+        int count = (int) arguments[0].getAsNumber();
+        if (count < 1) throw new ExecutorException("Input for readChars should be bigger or equals to 1.");
+        ConsoleHandler console = logo.getExecutor().getConsoleHandler();
+        console.waitFor((text, key) -> text.length() >= count);
+        console.enableInput();
+        String s = WaitableUtil.waitFor(console.getInput()).substring(0, count);
+        console.disableInput();
+        return ValueUtil.stringToValue(s);
+    }
+
+    private static Value readList() {
+        ConsoleHandler console = logo.getExecutor().getConsoleHandler();
+        console.waitFor((text, key) -> key == KeyCode.ENTER);
+        console.enableInput();
+        String s = String.format("[%s]", WaitableUtil.waitFor(console.getInput()));
+        console.disableInput();
+        return ValueUtil.stringToListValue(s);
+    }
+
+    private static Value readWord() {
+        ConsoleHandler console = logo.getExecutor().getConsoleHandler();
+        console.waitFor((text, key) -> key == KeyCode.ENTER);
+        console.enableInput();
+        String s = WaitableUtil.waitFor(console.getInput());
+        console.disableInput();
+        return ValueUtil.stringToValue(s);
+    }
+
+    private static Value remainder(Value... arguments) throws ExecutorException {
+        double first = arguments[0].getAsNumber();
+        double second = arguments[1].getAsNumber();
+        return new Value(first % second);
+    }
+
+    private static Value remProp(Value... arguments) throws ExecutorException {
+        String name = arguments[0].getAsString();
+        String property = arguments[1].getAsString();
+        logo.propertyHandler.removeProperty(name, property);
+        return null;
+    }
+
     private static Value repeat(Value... arguments) throws ParsingException, ExecutorException {
         int t = ((Double) arguments[0].getValue()).intValue();
         ListObject l = (ListObject) arguments[1].getValue();
@@ -718,10 +977,49 @@ public class Commandos {
         return null;
     }
 
+    private static Value reverseList(Value... arguments) throws ExecutorException {
+        List<Value> list = arguments[0].getAsList().getList();
+        Collections.reverse(list);
+        return new Value(new ListObject(list));
+    }
+
+    private static Value rgb(Value... arguments) throws ExecutorException {
+        int c = (int) arguments[0].getAsNumber();
+        Color color = logo.colorHandler.getColor(c);
+        return new Value(new ListObject(color.getRed(), color.getGreen(), color.getBlue()));
+    }
+
     private static Value right(Value... arguments) {
         double amount = (Double) arguments[0].getValue();
         logo.right(amount);
         return null;
+    }
+
+    private static Value round(Value... arguments) throws ExecutorException {
+        double d = arguments[0].getAsNumber();
+        return new Value(Math.round(d));
+    }
+
+    private static Value run(Value... arguments) throws ExecutorException, ParsingException {
+        ListObject list = arguments[0].getAsList();
+        return logo.runRaw(list.getInner());
+    }
+
+    private static Value sentence(Value... arguments) throws ExecutorException {
+        Value first = arguments[0];
+        Value second = arguments[1];
+        List<Value> list = new ArrayList<>();
+
+        Value[] check = {first, second};
+        for (Value value : check) {
+            if (value.getType() == Value.ValueType.LIST) {
+                list.addAll(value.getAsList().getList());
+            } else {
+                list.add(value);
+            }
+        }
+
+        return new Value(new ListObject(list));
     }
 
     private static Value left(Value... arguments) {
