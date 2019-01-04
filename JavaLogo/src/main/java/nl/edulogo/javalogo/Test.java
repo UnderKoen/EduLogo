@@ -9,12 +9,19 @@ public class Test extends TekenApplet {
 
     public void initialiseer() {
         achtergrondkleur("rood");
-        maakAnimatieMogelijk();
+        //maakAnimatieMogelijk();
+        maakTraceMogelijk();
     }
 
     public void tekenprogramma() {
-        rechts(rot);
-        stap(100, 100);
+        vulAan("wit");
+        for (int i = 0; i < 360; i++) {
+            rechts(1);
+            vooruit(1);
+        }
+        rechts(180);
+        vulUit();
+        test();
     }
 
     public void animatie() {

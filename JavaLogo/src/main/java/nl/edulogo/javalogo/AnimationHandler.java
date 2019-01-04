@@ -32,7 +32,7 @@ public class AnimationHandler {
         animation = true;
     }
 
-    public void stopAnimatie() {
+    public void stopAnimation() {
         if (!animation || !isMogelijk()) return;
         animationThread.interrupt();
         animation = false;

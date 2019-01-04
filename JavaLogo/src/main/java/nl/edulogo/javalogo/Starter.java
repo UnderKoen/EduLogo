@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import nl.edulogo.display.fx.FXCanvas;
 import nl.edulogo.display.fx.FXDisplay;
-import nl.edulogo.javalogo.fx.FXVariables;
 
 import java.lang.reflect.Constructor;
 
@@ -38,7 +37,5 @@ public class Starter extends Application {
         applet.start();
         FXDisplay<FXCanvas> display = new FXDisplay<>((FXCanvas) applet.getCanvas());
         display.show();
-        FXDisplay<FXVariables> vardisplay = new FXDisplay<>(new FXVariables(applet));
-        vardisplay.show();
     }
 }

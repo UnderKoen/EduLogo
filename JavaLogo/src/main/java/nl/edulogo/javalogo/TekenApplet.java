@@ -2,6 +2,7 @@ package nl.edulogo.javalogo;
 
 import nl.edulogo.core.*;
 import nl.edulogo.display.fx.FXCanvas;
+import nl.edulogo.javalogo.fx.FXVariables;
 import nl.edulogo.javalogo.utils.ColorUtil;
 import nl.edulogo.javalogo.variabele.InvoerVariabele;
 import nl.edulogo.logo.Turtle;
@@ -9,6 +10,7 @@ import nl.edulogo.logo.Turtle;
 public abstract class TekenApplet extends JavaLogo {
     private Canvas canvas;
     private Turtle turtle;
+    private FXVariables fxVariables;
     private TraceHandler traceHandler;
     private AnimationHandler animationHandler;
     private MouseHandler mouseHandler;
@@ -32,6 +34,7 @@ public abstract class TekenApplet extends JavaLogo {
     @Override
     public void maakAnimatieMogelijk() {
         animationHandler.maakMogelijk();
+        fxVariables.start();
     }
 
     @Override
@@ -54,11 +57,15 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void onderbreekAnimatie() {
-        animationHandler.stopAnimatie();
+        animationHandler.stopAnimation();
     }
 
     public boolean isAnimatieMogelijk() {
         return animationHandler.isMogelijk();
+    }
+
+    public boolean isTraceMogelijk() {
+        return traceHandler.isMogelijk();
     }
 
     @Override
@@ -114,8 +121,9 @@ public abstract class TekenApplet extends JavaLogo {
     public void start() {
         turtle = new Turtle(new Position(250, 250), 0);
         canvas = new FXCanvas(new Size(500, 500));
-        traceHandler = new TraceHandler();
+        traceHandler = new TraceHandler(this);
         animationHandler = new AnimationHandler(this);
+        fxVariables = new FXVariables(animationHandler, traceHandler);
         achtergrondkleur("wit");
         initialiseer();
 
@@ -140,7 +148,6 @@ public abstract class TekenApplet extends JavaLogo {
             return;
         }
         super.vooruit(dy);
-        newLocation();
         traceHandler.addTrace(new Trace(Trace.TraceSoort.VOORUIT, dy));
     }
 
@@ -151,10 +158,6 @@ public abstract class TekenApplet extends JavaLogo {
         }
         step(dx, dy);
         traceHandler.addTrace(new Trace(Trace.TraceSoort.STAP, (int) Math.rint(dx), (int) Math.rint(dy)));
-    }
-
-    private void newLocation() {
-        if (vulAan) vlak.addPosition(turtle.getPosition());
     }
 
     @Override
@@ -191,7 +194,7 @@ public abstract class TekenApplet extends JavaLogo {
             return;
         }
         write(s);
-        traceHandler.addTrace(new Trace(Trace.TraceSoort.SCHRIJF));
+        traceHandler.addTrace(new Trace(Trace.TraceSoort.SCHRIJF, s));
     }
 
     @Override
@@ -202,7 +205,8 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void maakTraceMogelijk() {
-
+        traceHandler.maakMogelijk();
+        fxVariables.start();
     }
 
     @Override
@@ -259,9 +263,15 @@ public abstract class TekenApplet extends JavaLogo {
         if (!canDraw) {
             return;
         }
+        resetPath();
         turtle.setFillColor(color);
         vulAan = true;
-        vlak = new Polygon();
+        //traceHandler.addTrace(new Trace(Trace.TraceSoort.VULAAN, color.getRed(), color.getGreen(), color.getBlue()));
+    }
+
+    //TODO: remove
+    public void test() {
+        traceHandler.handleAllTracesTest();
     }
 
     @Override
@@ -275,7 +285,6 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void tekenErbij() {
-
     }
 
     @Override
