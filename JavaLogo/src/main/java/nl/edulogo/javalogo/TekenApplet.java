@@ -10,7 +10,7 @@ import nl.edulogo.logo.Turtle;
 public abstract class TekenApplet extends JavaLogo {
     private Canvas canvas;
     private Turtle turtle;
-    private TraceHandler traceHandler;
+    public TraceHandler traceHandler;
 
     public static void main(String[] args) {
         Starter.start();
@@ -40,7 +40,7 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public boolean animatieLopend() {
-        return false;
+        return traceHandler.animation;
     }
 
     @Override

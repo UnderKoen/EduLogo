@@ -9,6 +9,7 @@ public class Test extends TekenApplet {
     double zijde, beginX, beginY;
     Polygon vlak;
     boolean raak;
+    double rot = 0;
 
     public void initialiseer() {
         maakMuisActieMogelijk();
@@ -26,30 +27,27 @@ public class Test extends TekenApplet {
     }
 
     void vierkant(double z) {
-        vulAan("rood");
-        vooruit(100);
-        rechts(50);
-        vooruit(100);
-        rechts(120);
-        vooruit(110);
-        rechts(90);
-        vooruit(50);
-        rechts(-50);
-        vooruit(200);
-        vulUit();
+        rechts(rot);
+        for (int i2 = 0; i2 < 10; i2++) {
+            for (int i = 0; i < 90; i++) {
+                rechts(1 + i2 * 2 * 0.05);
+                vooruit(1 * i2 * 2 * 0.2);
+            }
+            rechts(3);
+        }
+        schrijf("hallo");
     }
 
-    public void muisDrukActie() {
-        int x = geefDrukx();
-        int y = geefDruky();
-        raak = vlak.contains(x, y);
-    }
-
-    public void muisSleepActie() {
-        if (raak) {
-            beginX = beginX + geefSleepdx();
-            beginY = beginY + geefSleepdy();
+    public void animatie() {
+        while (animatieLopend()) {
+            rot += 0.1;
             tekenOpnieuw();
+            if (rot % 500 == 0) System.out.println(rot);
+            //woops I did it again 0.o
+            try {
+                Thread.sleep(10);
+            } catch (Exception e) {
+            }
         }
     }
 }

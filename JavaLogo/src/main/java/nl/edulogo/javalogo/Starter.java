@@ -12,6 +12,7 @@ import java.lang.reflect.Constructor;
  * Created by Under_Koen on 20/09/2018.
  */
 public class Starter extends Application {
+    //TODO: idk actually lol
     private static TekenApplet applet;
 
     static void start() {
@@ -37,7 +38,7 @@ public class Starter extends Application {
         applet.start();
         FXDisplay<FXCanvas> display = new FXDisplay<>((FXCanvas) applet.getCanvas());
         display.show();
-        FXDisplay<FXVariables> vardisplay = new FXDisplay<>(new FXVariables());
+        FXDisplay<FXVariables> vardisplay = new FXDisplay<>(new FXVariables(applet));
         vardisplay.show();
     }
 }
