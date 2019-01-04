@@ -24,7 +24,7 @@ public class FXVariables implements FXView {
                     aButton.setText("stoppen");
                 } else {
                     applet.onderbreekAnimatie();
-                    aButton.setText("animation");
+                    aButton.setText("animatie");
                 }
             });
             pane.getChildren().addAll(aButton);

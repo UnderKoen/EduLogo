@@ -1,21 +1,19 @@
 package nl.edulogo.javalogo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TraceHandler {
-    private String[] trace;
+    private List<Trace> traces;
     private int index;
 
     public TraceHandler() {
-        trace = new String[100];
+        traces = new ArrayList<Trace>();
         index = 0;
     }
 
-    public void addTrace(String totrace) {
-        /*
-        //TODO: gwn echt werkend maken, nu slaat het alleen nog maar op
-        System.out.println(totrace);
-        trace[index] = totrace;
-        System.out.println("lenght of thingie: " + index + " en daarbij hoort: " + trace[index]);
-        index++;
-        */
+    public void addTrace(Trace trace) {
+        traces.add(trace);
+        System.out.println(trace.toString());
     }
 }

@@ -53,6 +53,15 @@ public abstract class BasicLogo implements Logo {
         turtle.setRotation(cRotation);
     }
 
+    public void step(double dx, double dy) {
+        Turtle turtle = getTurtle();
+        Position newPos = MathUtil.getRelativePosition(turtle.getRotation(), -dy);
+        newPos.addPosition(MathUtil.getRelativePosition(turtle.getRotation() + 90, dx));
+        newPos.addPosition(turtle.getPosition());
+        if (turtle.isPenDown()) getCanvas().drawLine(turtle.getPosition(), newPos);
+        turtle.setPosition(newPos);
+    }
+
     public void left(double rotation) {
         right(-rotation);
     }

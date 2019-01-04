@@ -4,16 +4,17 @@ package nl.edulogo.javalogo;
  * Created by Under_Koen on 20/09/2018.
  */
 public class Test extends TekenApplet {
+
     double rot = 0;
 
     public void initialiseer() {
         achtergrondkleur("rood");
-        //maakAnimatieMogelijk();
+        maakAnimatieMogelijk();
     }
 
     public void tekenprogramma() {
         rechts(rot);
-        vooruit(100);
+        stap(100, 100);
     }
 
     public void animatie() {
