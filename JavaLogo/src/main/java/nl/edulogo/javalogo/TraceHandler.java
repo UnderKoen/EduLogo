@@ -8,7 +8,7 @@ public class TraceHandler {
     private int index;
 
     public TraceHandler() {
-        traces = new ArrayList<Trace>();
+        traces = new ArrayList<>();
         index = 0;
     }
 

@@ -13,10 +13,6 @@ public abstract class TekenApplet extends JavaLogo {
     private AnimationHandler animationHandler;
     private MouseHandler mouseHandler;
 
-    public TraceHandler getTraceHandler() {
-        return traceHandler;
-    }
-
     public static void main(String[] args) {
         Starter.start();
     }
@@ -42,7 +38,7 @@ public abstract class TekenApplet extends JavaLogo {
     public void pauze(int millisec) {
         try {
             Thread.sleep(millisec);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
     }
 
@@ -120,11 +116,11 @@ public abstract class TekenApplet extends JavaLogo {
         canvas = new FXCanvas(new Size(500, 500));
         traceHandler = new TraceHandler();
         animationHandler = new AnimationHandler(this);
+        achtergrondkleur("wit");
         initialiseer();
 
         //TODO CAN DRAW
         canDraw = true;
-        achtergrondkleur("wit");
         tekenprogramma();
     }
 

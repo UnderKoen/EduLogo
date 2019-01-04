@@ -2,7 +2,6 @@ package nl.edulogo.javalogo.fx;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import nl.edulogo.core.Size;
 import nl.edulogo.display.fx.FXView;
@@ -28,12 +27,7 @@ public class FXVariables implements FXView {
                 }
             });
             pane.getChildren().addAll(aButton);
-        } else {
-            Label replaceme = new Label();
-            replaceme.setText("Animatie is niet mogelijk :3");
-            pane.getChildren().add(replaceme);
         }
-
     }
 
     @Override
