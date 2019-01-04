@@ -7,7 +7,8 @@ public class Test extends TekenApplet {
     double rot = 0;
 
     public void initialiseer() {
-        maakAnimatieMogelijk();
+        achtergrondkleur("rood");
+        //maakAnimatieMogelijk();
     }
 
     public void tekenprogramma() {
@@ -16,11 +17,9 @@ public class Test extends TekenApplet {
     }
 
     public void animatie() {
-        System.out.println("doet dit iets 2");
         while (animatieLopend()) {
             rot += 0.1;
             tekenOpnieuw();
-            System.out.println("doet dit iets");
             //woops I did it again 0.o
             pauze(10);
         }

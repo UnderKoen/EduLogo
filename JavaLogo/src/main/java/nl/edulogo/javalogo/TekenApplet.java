@@ -32,9 +32,11 @@ public abstract class TekenApplet extends JavaLogo {
         return canvas;
     }
 
+    private Color achtergrond;
+
     @Override
     public void maakAnimatieMogelijk() {
-
+        animationHandler.maakMogelijk();
     }
 
     @Override
@@ -60,14 +62,15 @@ public abstract class TekenApplet extends JavaLogo {
         animationHandler.stopAnimatie();
     }
 
-    @Override
-    public void stop() {
-
+    public boolean isAnimatieMogelijk() {
+        return animationHandler.isMogelijk();
     }
 
     @Override
-    public void achtergrondkleur(String kl) {
-        canvas.fillScreen(ColorUtil.fromString(kl));
+    public void stop() {
+        if (this.animatieLopend()) {
+            this.onderbreekAnimatie();
+        }
     }
 
     @Override
@@ -102,6 +105,12 @@ public abstract class TekenApplet extends JavaLogo {
     }
 
     private Polygon vlak;
+
+    @Override
+    public void achtergrondkleur(String kl) {
+        if (!kl.equals("default")) achtergrond = ColorUtil.fromString(kl);
+        canvas.fillScreen(achtergrond);
+    }
     private boolean vulAan = false;
     private boolean canDraw = false;
 
@@ -110,6 +119,7 @@ public abstract class TekenApplet extends JavaLogo {
         canvas = new FXCanvas(new Size(500, 500));
         traceHandler = new TraceHandler();
         animationHandler = new AnimationHandler(this);
+        achtergrondkleur("wit");
         initialiseer();
 
         //TODO CAN DRAW
@@ -270,7 +280,7 @@ public abstract class TekenApplet extends JavaLogo {
         if (!canDraw) {
             return;
         }
-        achtergrondkleur("wit");
+        achtergrondkleur("default");
         turtle = new Turtle(new Position(250, 250), 0);
         tekenprogramma();
     }
