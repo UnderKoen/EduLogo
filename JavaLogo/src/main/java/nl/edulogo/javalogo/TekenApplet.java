@@ -11,6 +11,7 @@ public abstract class TekenApplet extends JavaLogo {
     private Canvas canvas;
     private Turtle turtle;
     private TraceHandler traceHandler;
+    private AnimationHandler animationHandler;
     private MouseHandler mouseHandler;
 
     public TraceHandler getTraceHandler() {
@@ -46,17 +47,17 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public boolean animatieLopend() {
-        return traceHandler.isAnimation();
+        return animationHandler.isAnimation();
     }
 
     @Override
     public void beginAnimatie() {
-
+        animationHandler.startAnimation();
     }
 
     @Override
     public void onderbreekAnimatie() {
-
+        animationHandler.stopAnimatie();
     }
 
     @Override
@@ -108,6 +109,7 @@ public abstract class TekenApplet extends JavaLogo {
         turtle = new Turtle(new Position(250, 250), 0);
         canvas = new FXCanvas(new Size(500, 500));
         traceHandler = new TraceHandler();
+        animationHandler = new AnimationHandler(this);
         initialiseer();
 
         //TODO CAN DRAW

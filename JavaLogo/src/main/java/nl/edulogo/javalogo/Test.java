@@ -16,10 +16,11 @@ public class Test extends TekenApplet {
     }
 
     public void animatie() {
+        System.out.println("doet dit iets 2");
         while (animatieLopend()) {
             rot += 0.1;
             tekenOpnieuw();
-            if (rot % 500 == 0) System.out.println(rot);
+            System.out.println("doet dit iets");
             //woops I did it again 0.o
             pauze(10);
         }

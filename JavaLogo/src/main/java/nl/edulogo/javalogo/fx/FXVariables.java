@@ -9,7 +9,6 @@ import nl.edulogo.javalogo.TekenApplet;
 
 public class FXVariables implements FXView {
     private StackPane pane;
-    private Thread animation;
 
     public FXVariables(TekenApplet applet) {
         pane = new StackPane();
@@ -18,12 +17,10 @@ public class FXVariables implements FXView {
         aButton.setText("Animatie");
         aButton.setOnAction(event -> {
             if (!applet.animatieLopend()) {
-                animation = new Thread(applet::animatie);
-                animation.start();
-
+                applet.beginAnimatie();
                 aButton.setText("stoppen");
             } else {
-                animation.interrupt();
+                applet.onderbreekAnimatie();
                 aButton.setText("animation");
             }
         });
