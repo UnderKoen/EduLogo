@@ -18,6 +18,7 @@ public class AnimationHandler {
     public void startAnimation() {
         if (animation) return;
         animationThread = new Thread(applet::animatie);
+        animationThread.start();
         animation = true;
     }
 
