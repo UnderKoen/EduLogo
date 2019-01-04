@@ -1,9 +1,8 @@
 package nl.edulogo.javalogo;
 
 public class TraceHandler {
-
-    private String trace[];
-    public boolean animation;
+    private String[] trace;
+    private boolean animation;
     private int index;
 
     public TraceHandler() {
@@ -21,4 +20,11 @@ public class TraceHandler {
         */
     }
 
+    public boolean isAnimation() {
+        return animation;
+    }
+
+    public void setAnimation(boolean animation) {
+        this.animation = animation;
+    }
 }

@@ -1,7 +1,5 @@
 package nl.edulogo.javalogo.fx;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -10,34 +8,26 @@ import nl.edulogo.display.fx.FXView;
 import nl.edulogo.javalogo.TekenApplet;
 
 public class FXVariables implements FXView {
-
     private StackPane pane;
+    private Thread animation;
 
     public FXVariables(TekenApplet applet) {
         pane = new StackPane();
         pane.setPrefSize(300, 300);
-        Button abutton = new Button();
-        abutton.setText("animatie");
-        abutton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                applet.traceHandler.animation = !applet.traceHandler.animation; //Kom op Daan je kunt het.
-                if (applet.traceHandler.animation) {
-                    new Thread(new Runnable() {
-                        public void run() {
-                            applet.animatie();
-                        }
-                    }).start();
+        Button aButton = new Button();
+        aButton.setText("Animatie");
+        aButton.setOnAction(event -> {
+            if (!applet.animatieLopend()) {
+                animation = new Thread(applet::animatie);
+                animation.start();
 
-                    abutton.setText("stoppen");
-                } else {
-                    abutton.setText("animatie");
-                }
-
+                aButton.setText("stoppen");
+            } else {
+                animation.interrupt();
+                aButton.setText("animation");
             }
         });
-        pane.getChildren().addAll(abutton);
-
+        pane.getChildren().addAll(aButton);
     }
 
     @Override
@@ -49,6 +39,4 @@ public class FXVariables implements FXView {
     public Size getSize() {
         return new Size(pane.getWidth(), pane.getHeight());
     }
-
-
 }

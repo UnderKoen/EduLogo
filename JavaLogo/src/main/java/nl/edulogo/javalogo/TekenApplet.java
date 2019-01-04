@@ -10,13 +10,16 @@ import nl.edulogo.logo.Turtle;
 public abstract class TekenApplet extends JavaLogo {
     private Canvas canvas;
     private Turtle turtle;
-    public TraceHandler traceHandler;
+    private TraceHandler traceHandler;
+    private MouseHandler mouseHandler;
+
+    public TraceHandler getTraceHandler() {
+        return traceHandler;
+    }
 
     public static void main(String[] args) {
         Starter.start();
     }
-
-    private MouseHandler mouseHandler;
 
     @Override
     public Turtle getTurtle() {
@@ -35,12 +38,15 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void pauze(int millisec) {
-
+        try {
+            Thread.sleep(millisec);
+        } catch (InterruptedException e) {
+        }
     }
 
     @Override
     public boolean animatieLopend() {
-        return traceHandler.animation;
+        return traceHandler.isAnimation();
     }
 
     @Override
@@ -91,7 +97,7 @@ public abstract class TekenApplet extends JavaLogo {
     public void penAan(int r, int g, int b) {
         turtle.setColor(new Color(r, g, b));
         turtle.setPenDown(true);
-        traceHandler.addTrace("penAan(" + Integer.toString(r) + Integer.toString(g) + Integer.toString(b) + ")");
+        traceHandler.addTrace("penAan(" + r + g + b + ")");
     }
 
     private Polygon vlak;
@@ -112,13 +118,13 @@ public abstract class TekenApplet extends JavaLogo {
     @Override
     public void stapx(double dx) {
         stap(dx, 0);
-        traceHandler.addTrace("stapx(" + Integer.toString((int) Math.rint(dx)) + ")");
+        traceHandler.addTrace("stapx(" + (int) Math.rint(dx) + ")");
     }
 
     @Override
     public void stapy(double dy) {
         stap(0, dy);
-        traceHandler.addTrace("stapy(" + Integer.toString((int) Math.rint(dy)) + ")");
+        traceHandler.addTrace("stapy(" + (int) Math.rint(dy) + ")");
     }
 
     @Override
@@ -142,7 +148,7 @@ public abstract class TekenApplet extends JavaLogo {
         if (turtle.isPenDown()) canvas.drawLine(turtle.getPosition(), newPos);
         newLocation();
         turtle.setPosition(newPos);
-        traceHandler.addTrace("stap(" + Integer.toString((int) Math.rint(dx)) + "," + Integer.toString((int) Math.rint(dy)) + ")");
+        traceHandler.addTrace("stap(" + (int) Math.rint(dx) + "," + (int) Math.rint(dy) + ")");
     }
 
     private void newLocation() {
@@ -233,7 +239,7 @@ public abstract class TekenApplet extends JavaLogo {
     @Override
     public void vulAan(int r, int g, int b) {
         vulAan(new Color(r, g, b));
-        traceHandler.addTrace("vulAan(" + Integer.toString(r) + Integer.toString(g) + Integer.toString(b) + ")");
+        traceHandler.addTrace("vulAan(" + r + g + b + ")");
     }
 
     public void vulAan(Color color) {
