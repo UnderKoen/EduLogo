@@ -47,6 +47,10 @@ public class ProcedureHandler {
         }
     }
 
+    public Procedure getProcedure(String name) {
+        return procedures.get(name);
+    }
+
     public ACSLogo getLogo() {
         return logo;
     }

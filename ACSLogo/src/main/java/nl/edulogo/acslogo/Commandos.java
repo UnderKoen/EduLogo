@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
 import nl.edulogo.acslogo.handlers.Waitable;
@@ -20,10 +21,12 @@ import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.utils.ValueUtil;
 import nl.edulogo.acslogo.utils.WaitableUtil;
 import nl.edulogo.core.*;
+import nl.edulogo.core.utils.MathUtil;
 import nl.edulogo.display.fx.FXCanvas;
 import nl.edulogo.logo.Path;
 import nl.edulogo.logo.Turtle;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -34,6 +37,7 @@ import java.util.stream.Collectors;
  */
 public class Commandos {
     private static Random random = new Random();
+    private static SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss:SSS");
     private static ACSLogo logo;
 
     private Commandos() {
@@ -77,6 +81,14 @@ public class Commandos {
          * -Play
          * -Say
          * -SetClipPath
+         * -SetShadow
+         * -SetVoice
+         * -SetWrap
+         * -Snap
+         * -Voice
+         * -Voices
+         * -WaitForSpeech
+         * -Wrap
          * -Infinite length functions (for those that can have a list as a input will have that instead like: difference, sum, ...)
          */
 
@@ -246,6 +258,44 @@ public class Commandos {
 
         commandos.add(new Commando("setLineCap", Commandos::setLineCap, 1));
         commandos.add(new Commando("setLineDash", Commandos::setLineDash, 1));
+
+        commandos.add(new Commando("setPen", Commandos::setPen, 1));
+        commandos.add(new Commando("setPenColor", Commandos::setPenColor, 1, "setPenColour", "setPC"));
+        commandos.add(new Commando("setPenWidth", Commandos::setPenWidth, 1));
+        commandos.add(new Commando("setPosition", Commandos::setPosition, 1, "setPos"));
+        commandos.add(new Commando("setRGB", Commandos::setRGB, 2));
+        commandos.add(new Commando("setTypeSize", Commandos::setTypeSize, 1));
+        commandos.add(new Commando("setX", Commandos::setX, 1));
+        commandos.add(new Commando("setY", Commandos::setY, 1));
+        commandos.add(new Commando("show", Commandos::show, 1));
+        commandos.add(new Commando("shownP", Commandos::shownP, "shown?"));
+        commandos.add(new Commando("showTurtle", Commandos::showTurtle, "st"));
+        commandos.add(new Commando("sin", Commandos::sin, 1, "sine"));
+        commandos.add(new Commando("sinh", Commandos::sinh, 1));
+        commandos.add(new Commando("sqrt", Commandos::sqrt, 1));
+        commandos.add(new Commando("stop", Commandos::stop));
+        commandos.add(new Commando("strokeCurrentPath", Commandos::strokeCurrentPath));
+        commandos.add(new Commando("strokePath", Commandos::strokePath, 1));
+        commandos.add(new Commando("sum", Commandos::sum, 1));
+
+        commandos.add(new Commando("tan", Commandos::tan, 1, "tangent"));
+        commandos.add(new Commando("tanh", Commandos::tanh, 1));
+        commandos.add(new Commando("text", Commandos::text, 1));
+        commandos.add(new Commando("textBox", Commandos::textBox, 1));
+        commandos.add(new Commando("throw", Commandos::throwM, 1));
+        commandos.add(new Commando("thing", Commandos::thing, 1));
+        commandos.add(new Commando("time", Commandos::time));
+        commandos.add(new Commando("towards", Commandos::towards, 1));
+        commandos.add(new Commando("type", Commandos::type, 1));
+
+        commandos.add(new Commando("upperCase", Commandos::upperCase, 1));
+
+        commandos.add(new Commando("wait", Commandos::wait, 1));
+        commandos.add(new Commando("word", Commandos::word, 2));
+        commandos.add(new Commando("wordP", Commandos::wordP, 1, "word?"));
+
+        commandos.add(new Commando("xPos", Commandos::xPos));
+        commandos.add(new Commando("yPos", Commandos::yPos));
 
         return commandos.toArray(new Commando[0]);
     }
@@ -1142,6 +1192,241 @@ public class Commandos {
 
         logo.getCanvas().setLineDash(offset, dashes);
         return null;
+    }
+
+    private static Value setPen(Value... arguments) throws ExecutorException {
+        List<Value> list = arguments[0].getAsList().getList();
+        boolean pen = list.get(0).getAsBoolean();
+        int color = (int) list.get(1).getAsNumber();
+        logo.colorHandler.setPenColor(color);
+        logo.getTurtle().setPenDown(pen);
+        return null;
+    }
+
+    private static Value setPenColor(Value... arguments) throws ExecutorException {
+        int color = (int) arguments[0].getAsNumber();
+        logo.colorHandler.setPenColor(color);
+        return null;
+    }
+
+    private static Value setPenWidth(Value... arguments) throws ExecutorException {
+        double width = arguments[0].getAsNumber();
+        logo.getTurtle().setPenWidth(width);
+        return null;
+    }
+
+    private static Value setPosition(Value... arguments) throws ExecutorException {
+        Position position = ValueUtil.valueToPosition(arguments[0], logo.getStart());
+        logo.drawToPosition(position);
+        return null;
+    }
+
+    private static Value setRGB(Value... arguments) throws ExecutorException {
+        int i = (int) arguments[0].getAsNumber();
+        List<Value> list = arguments[1].getAsList().getList();
+        int r = (int) list.get(0).getAsNumber();
+        int g = (int) list.get(1).getAsNumber();
+        int b = (int) list.get(2).getAsNumber();
+        double a = 1.0;
+        if (list.size() >= 4) a = list.get(3).getAsNumber();
+        Color color = new Color(r, g, b, a);
+        logo.colorHandler.setColor(i, color);
+        return null;
+    }
+
+    private static Value setTypeSize(Value... arguments) throws ExecutorException {
+        double size = arguments[0].getAsNumber();
+        Font old = logo.getTurtle().getFont();
+        logo.getTurtle().setFont(new Font(old.getName(), size, old.getColor()));
+        return null;
+    }
+
+    private static Value setX(Value... arguments) throws ExecutorException {
+        double x = arguments[0].getAsNumber();
+        Position position = new Position(x, logo.getTurtle().getPosition().getY());
+        position.addX(logo.getStart().getX());
+        logo.drawToPosition(position);
+        return null;
+    }
+
+    private static Value setY(Value... arguments) throws ExecutorException {
+        double y = arguments[0].getAsNumber();
+        Position position = new Position(logo.getTurtle().getPosition().getX(), -y);
+        position.addY(logo.getStart().getY());
+        logo.drawToPosition(position);
+        return null;
+    }
+
+    private static Value show(Value... arguments) {
+        Value v = arguments[0];
+        logo.getExecutor().getConsoleHandler().output(v);
+        return null;
+    }
+
+    private static Value shownP() {
+        return new Value(logo.getTurtleGraphics().isVisible());
+    }
+
+    private static Value showTurtle() {
+        logo.getTurtleGraphics().show();
+        return null;
+    }
+
+    private static Value sin(Value... arguments) throws ExecutorException {
+        double d = arguments[0].getAsNumber();
+        return new Value(Math.sin(Math.toRadians(d)));
+    }
+
+    private static Value sinh(Value... arguments) throws ExecutorException {
+        double d = arguments[0].getAsNumber();
+        return new Value(Math.sinh(Math.toRadians(d)));
+    }
+
+    private static Value sqrt(Value... arguments) throws ExecutorException {
+        double d = arguments[0].getAsNumber();
+        return new Value(Math.sqrt(d));
+    }
+
+    private static Value stop() {
+        throw new Output(null);
+    }
+
+    private static Value strokeCurrentPath() throws ExecutorException {
+        strokePath(currentPath());
+        return null;
+    }
+
+    private static Value strokePath(Value... arguments) throws ExecutorException {
+        List<Value> path = arguments[0].getAsList().getList();
+        Position old = logo.getTurtle().getPosition();
+        Position start = logo.getStart();
+
+        Position from = null;
+        for (Value value : path) {
+            Position position = ValueUtil.valueToPosition(value, start);
+
+            if (from == null) {
+                from = position;
+                logo.getTurtle().setPosition(from);
+            } else {
+                logo.drawToPosition(position);
+                from = position;
+            }
+        }
+
+        logo.getTurtle().setPosition(old);
+        return null;
+    }
+
+    private static Value sum(Value... arguments) throws ExecutorException {
+        List<Value> list = arguments[0].getAsList().getList();
+        Double r = null;
+        for (Value value : list) {
+            if (r == null) {
+                r = value.getAsNumber();
+            } else {
+                r = r + value.getAsNumber();
+            }
+        }
+        return new Value(r);
+    }
+
+    private static Value tan(Value... arguments) throws ExecutorException {
+        double d = arguments[0].getAsNumber();
+        return new Value(Math.tan(Math.toRadians(d)));
+    }
+
+    private static Value tanh(Value... arguments) throws ExecutorException {
+        double d = arguments[0].getAsNumber();
+        return new Value(Math.tanh(Math.toRadians(d)));
+    }
+
+    private static Value text(Value... arguments) throws ExecutorException {
+        String s = arguments[0].getAsString();
+        Procedure procedure = logo.procedureHandler.getProcedure(s);
+        ListObject pare = new ListObject(procedure.getParameters().toArray());
+        String code = logo.getParser().makeReady(procedure.getCode());
+        code = code.replace('\n', ' ');
+        Value codeV = ValueUtil.stringToListValue(String.format("[%s]", code));
+        return new Value(new ListObject(new Value(pare), codeV));
+    }
+
+    private static Value textBox(Value... arguments) throws ExecutorException {
+        String s = arguments[0].getAsString();
+        Text text = new Text(s);
+        Font font = logo.getTurtle().getFont();
+        text.setFont(new javafx.scene.text.Font(font.getName(), font.getSize()));
+        double w = text.getLayoutBounds().getWidth();
+        double h = text.getLayoutBounds().getHeight();
+        Position pos = logo.getTurtle().getPosition();
+        pos.addPosition(logo.getStart().inverted());
+        if (pos.getY() != 0) pos.setY(-pos.getY());
+        return new Value(new ListObject(pos.getX(), pos.getY(), w, h));
+    }
+
+    private static Value thing(Value... arguments) throws ExecutorException {
+        String s = arguments[0].getAsString();
+        return logo.getExecutor().getVariableHandler().getVariable(s);
+    }
+
+    private static Value throwM(Value... arguments) throws ExecutorException {
+        String s = arguments[0].getAsString();
+        throw new Catch(s);
+    }
+
+    private static Value time() {
+        return new Value(timeFormat.format(new Date()));
+    }
+
+    private static Value towards(Value... arguments) throws ExecutorException {
+        Position position = ValueUtil.valueToPosition(arguments[0], new Position(0, 0));
+        System.out.println(position);
+        return new Value(MathUtil.getRotationTowardsRelative(position));
+    }
+
+    private static Value type(Value... arguments) throws ExecutorException {
+        Value v = arguments[0];
+        ConsoleHandler console = logo.getExecutor().getConsoleHandler();
+        if (v.getType() == Value.ValueType.LIST) {
+            ListObject list = arguments[0].getAsList();
+            console.type(list.getInner());
+        } else {
+            console.type(arguments[0]);
+        }
+        return null;
+    }
+
+    private static Value upperCase(Value... arguments) {
+        return ValueUtil.stringToValue(arguments[0].toString().toUpperCase());
+    }
+
+    private static Value wait(Value... arguments) throws ExecutorException {
+        int i = (int) arguments[0].getAsNumber();
+        try {
+            Thread.sleep(i);
+        } catch (InterruptedException ignored) {
+        }
+        return null;
+    }
+
+    private static Value word(Value... arguments) throws ExecutorException {
+        String s1 = arguments[0].getAsString();
+        String s2 = arguments[1].getAsString();
+        return new Value(s1 + s2);
+    }
+
+    private static Value wordP(Value... arguments) {
+        return new Value(arguments[0].getType() != Value.ValueType.LIST);
+    }
+
+    private static Value xPos() {
+        return new Value(logo.getTurtle().getPosition().getX() - logo.getStart().getX());
+    }
+
+    private static Value yPos() {
+        double y = logo.getTurtle().getPosition().getY() - logo.getStart().getY();
+        if (y != 0) y = -y;
+        return new Value(y);
     }
 
     private static void checkFont(String font) throws ExecutorException {

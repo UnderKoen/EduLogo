@@ -92,6 +92,7 @@ public class ACSLogo extends AdvancedLogo {
         proceduresDisplay = new FXDisplay<>(new Size(700, 500), new FXProcedures(procedureHandler));
         proceduresDisplay.setTitle("Procedures");
 
+
         executor = new Executor(consoleHandler, commandoHandler);
         parser = new Parser(consoleHandler, executor);
     }
@@ -118,6 +119,8 @@ public class ACSLogo extends AdvancedLogo {
         turtleGraphics.addToCanvas((FXCanvas) canvas);
         turtleGraphics.setImage(new Image(new File("C:\\Users\\koenv\\Desktop\\img.png")));
         turtleGraphics.setAlpha(TURTLE_ALPHA);
+
+        canvas.setLineCap(LineCap.BUTT);
 
         canvasD.show();
         editorD.show();

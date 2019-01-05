@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.utils;
 
+import nl.edulogo.acslogo.script.ExecutorException;
 import nl.edulogo.acslogo.script.commandos.ListObject;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.core.Font;
@@ -84,5 +85,12 @@ public class ValueUtil {
         double y = position.getY();
         if (y != 0) y = -y;
         return new Value(new ListObject(x, y));
+    }
+
+    public static Position valueToPosition(Value value, Position relative) throws ExecutorException {
+        List<Value> pos = value.getAsList().getList();
+        Position position = new Position(pos.get(0).getAsNumber(), -pos.get(1).getAsNumber());
+        position.addPosition(relative);
+        return position;
     }
 }

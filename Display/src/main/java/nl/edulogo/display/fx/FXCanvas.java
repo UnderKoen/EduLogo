@@ -33,7 +33,7 @@ public class FXCanvas implements Canvas, FXView {
     }
 
     private void setColor(Color color) {
-        javafx.scene.paint.Color fxColor = javafx.scene.paint.Color.color(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0);
+        javafx.scene.paint.Color fxColor = javafx.scene.paint.Color.color(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0, color.getAlpha());
         graphics.setStroke(fxColor);
         graphics.setFill(fxColor);
     }

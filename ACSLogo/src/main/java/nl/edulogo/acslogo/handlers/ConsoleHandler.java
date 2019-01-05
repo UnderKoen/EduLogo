@@ -22,6 +22,10 @@ public class ConsoleHandler {
         });
     }
 
+    public void type(Object obj) {
+        Platform.runLater(() -> console.print(obj.toString()));
+    }
+
     public void output(Object obj) {
         Platform.runLater(() -> console.println(obj.toString()));
     }

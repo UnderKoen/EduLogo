@@ -53,6 +53,5 @@ public class ColorHandler {
 
     public void setPenColor(int penColor) {
         this.penColor = penColor;
-        turtle.setColor(getPenColor());
     }
 }

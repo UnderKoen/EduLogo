@@ -23,14 +23,21 @@ public class Color {
     private int r;
     private int g;
     private int b;
+    private double a;
 
     public Color(int r, int g, int b) {
+        this(r, g, b, 1.0);
+    }
+
+    public Color(int r, int g, int b, double a) {
         if (0 > r || r > 255 || 0 > g || g > 255 || 0 > b || b > 255)
             throw new IllegalArgumentException("RGB should be between 0 and 255.");
+        if (0.0 > a || a > 1.0) throw new IllegalArgumentException("Alpha should be between zero and one.");
 
         this.r = r;
         this.g = g;
         this.b = b;
+        this.a = a;
     }
 
     public int getRed() {
@@ -45,12 +52,17 @@ public class Color {
         return b;
     }
 
+    public double getAlpha() {
+        return a;
+    }
+
     @Override
     public String toString() {
         return "Color{" +
                 "r=" + r +
                 ", g=" + g +
                 ", b=" + b +
+                ", a=" + a +
                 '}';
     }
 }

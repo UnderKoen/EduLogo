@@ -16,14 +16,14 @@ public class VariableHandler {
     }
 
     public Value getVariable(String name) {
-        return vars.get(name);
+        return vars.get(name.toLowerCase());
     }
 
     public void setVariable(String name, Value value) {
-        vars.put(name, value);
+        vars.put(name.toLowerCase(), value);
     }
 
     public boolean contains(String name) {
-        return vars.containsKey(name);
+        return vars.containsKey(name.toLowerCase());
     }
 }

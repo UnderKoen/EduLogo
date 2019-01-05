@@ -60,6 +60,11 @@ public class FXTurtleGraphics implements TurtleGraphics<FXCanvas> {
     }
 
     @Override
+    public boolean isVisible() {
+        return image.isVisible();
+    }
+
+    @Override
     public void addToCanvas(FXCanvas canvas) {
         StackPane parent = (StackPane) canvas.getCanvas().getParent();
         parent.getChildren().add(node);
