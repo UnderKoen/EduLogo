@@ -8,20 +8,21 @@ public class Test extends TekenApplet {
     double rot = 0;
 
     public void initialiseer() {
-        achtergrondkleur("rood");
-        //maakAnimatieMogelijk();
+        achtergrondkleur("wit");
+        maakAnimatieMogelijk();
         maakTraceMogelijk();
     }
 
+    @Override
     public void tekenprogramma() {
-        vulAan("wit");
-        for (int i = 0; i < 360; i++) {
-            rechts(1);
-            vooruit(1);
+        rechts(rot);
+        vulAan("zwart");
+        for (int i = 0; i < 9; i++) {
+            vooruit(100);
+            rechts(360 / 9);
         }
-        rechts(180);
         vulUit();
-        test();
+        schrijf("dood aan koen");
     }
 
     public void animatie() {

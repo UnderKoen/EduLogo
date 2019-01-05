@@ -24,18 +24,25 @@ public class FXVariables implements FXView {
     }
 
     public void start() {
-        if (started) return;
-        FXDisplay<FXVariables> vardisplay = new FXDisplay<>(this);
-        vardisplay.show();
+        if (!started) {
+            FXDisplay<FXVariables> vardisplay = new FXDisplay<>(this);
+            vardisplay.show();
+            started = true;
+        }
+        clearscreen();
         draw();
-        started = true;
     }
 
-    public void draw() {
+    private void clearscreen() {
+        pane.getChildren().clear();
+    }
+
+    private void draw() {
         if (animationHandler.isMogelijk()) {
             Button animationButton = new Button();
 
             animationButton.setText("Animatie");
+            animationButton.setTranslateY(-130);
             animationButton.setOnAction(event -> {
                 if (!animationHandler.isAnimation()) {
                     animationHandler.startAnimation();
@@ -50,21 +57,28 @@ public class FXVariables implements FXView {
         if (traceHandler.isMogelijk()) {
             Button traceButton = new Button();
             traceButton.setText("trace aanschakelen");
+            traceButton.setTranslateY(-100);
 
             Button beginButton = new Button();
             beginButton.setText("begin");
+            beginButton.setTranslateY(-50);
             beginButton.setOnAction(event -> {
                 traceHandler.handleAllTracesTest();
             });
 
             Button stepButton = new Button();
             stepButton.setText("stap");
+            stepButton.setTranslateX(-25);
+            stepButton.setTranslateY(-20);
 
             Button backButton = new Button();
             backButton.setText("terug");
+            backButton.setTranslateX(25);
+            backButton.setTranslateY(-20);
 
             Label traceLabel = new Label();
             traceLabel.setText("¯\\_(ツ)_/¯");
+            traceLabel.setTranslateY(20);
 
             Button loopButton = new Button();
             loopButton.setText("loop");
@@ -73,9 +87,11 @@ public class FXVariables implements FXView {
                 if (!traceHandler.isBezig()) {
                     traceHandler.setBezig(true);
                     traceButton.setText("trace uitschakelen");
+                    pane.getChildren().addAll(beginButton, stepButton, traceLabel, backButton);
                 } else {
                     traceHandler.setBezig(false);
                     traceButton.setText("trace aanschakelen");
+                    pane.getChildren().removeAll(beginButton, stepButton, traceLabel, backButton);
                 }
             });
             pane.getChildren().addAll(traceButton);
