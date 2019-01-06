@@ -17,5 +17,7 @@ public interface TurtleGraphics<T extends Canvas> {
 
     void hide();
 
+    boolean isVisible();
+
     void addToCanvas(T canvas);
 }

@@ -46,11 +46,17 @@ public class Parser {
         return new Script(pieces);
     }
 
-    private String makeReady(String string) {
+    public String makeReady(String string) {
         //remove all comments
-        string = string.replaceAll("(?<!\\\\)//.*", "");
+        String[] lines = string.split("\n");
+        StringBuffer r = new StringBuffer();
+        for (String line : lines) {
+            line = line.replaceAll("(?<!\\\\)//.*", "");
+            r.append(line);
+            r.append('\n');
+        }
 
-        return string;
+        return r.toString();
     }
 
     public List<Piece> toPieces(String string) throws ParsingException {

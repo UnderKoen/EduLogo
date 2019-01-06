@@ -44,6 +44,10 @@ public class MathUtil {
         return new Position(x, y);
     }
 
+    public static double getRotationTowardsRelative(Position relative) {
+        return (Math.toDegrees(Math.atan2(relative.getY(), relative.getX())) + 450) % 360;
+    }
+
     public static double round(double number, double decimals) {
         if (decimals < 0)
             throw new IllegalArgumentException("Can't round on negative decimals");

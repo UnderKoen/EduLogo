@@ -13,14 +13,16 @@ public class PropertyHandler {
     }
 
     public Value getProperty(String name, String property) {
-        return properties.get(name).get(property);
+        return properties.get(name.toLowerCase()).get(property.toLowerCase());
     }
 
     public Map<String, Value> getProperties(String name) {
-        return new HashMap<>(properties.get(name));
+        return new HashMap<>(properties.get(name.toLowerCase()));
     }
 
     public void setProperty(String name, String property, Value value) {
+        name = name.toLowerCase();
+        property = property.toLowerCase();
         Map<String, Value> prop;
         if (properties.containsKey(name)) {
             prop = properties.get(name);
@@ -33,6 +35,8 @@ public class PropertyHandler {
     }
 
     public void removeProperty(String name, String property) {
+        name = name.toLowerCase();
+        property = property.toLowerCase();
         if (!properties.containsKey(name)) return;
         Map<String, Value> prop = properties.get(name);
         if (!properties.containsKey(property)) return;

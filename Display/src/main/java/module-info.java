@@ -5,6 +5,7 @@ module edulogo.display {
     requires edulogo.core;
     requires javafx.base;
     requires javafx.graphics;
+    requires javafx.controls;
 
     exports nl.edulogo.display;
     exports nl.edulogo.display.fx;

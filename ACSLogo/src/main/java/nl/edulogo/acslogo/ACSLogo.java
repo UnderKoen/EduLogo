@@ -82,7 +82,7 @@ public class ACSLogo extends AdvancedLogo {
         colorHandler = new ColorHandler(turtle, Color.WHITE, Color.BLACK, Color.RED, Color.BLUE, Color.YELLOW, new Color(177, 121, 51),
                 Color.CYAN, new Color(146, 146, 146), Color.MAGENTA, new Color(255, 144, 0), new Color(161, 0, 149),
                 new Color(190, 0, 242), new Color(194, 171, 0), new Color(217, 192, 166),
-                new Color(238, 214, 188), new Color(0, 238, 217));
+                new Color(238, 214, 188), new Color(0, 238, 217), Color.GREEN);
         mouseHandler = new MouseHandler((FXCanvas) canvas);
         propertyHandler = new PropertyHandler();
 
@@ -91,6 +91,7 @@ public class ACSLogo extends AdvancedLogo {
         procedureHandler = new ProcedureHandler(this, commandoHandler);
         proceduresDisplay = new FXDisplay<>(new Size(700, 500), new FXProcedures(procedureHandler));
         proceduresDisplay.setTitle("Procedures");
+
 
         executor = new Executor(consoleHandler, commandoHandler);
         parser = new Parser(consoleHandler, executor);
@@ -104,7 +105,7 @@ public class ACSLogo extends AdvancedLogo {
         canvas = new FXCanvas(size);
         turtleGraphics = new FXTurtleGraphics(TURTLE_SIZE);
         start = new Position(size.getWidth() / 2.0, size.getHeight() / 2.0);
-        turtle = new ACSTurtle(start, 0, turtleGraphics);
+        turtle = new ACSTurtle(start, 0, this);
         canvas.fillScreen(Color.WHITE);
 
         editor = new FXEditor();
@@ -118,6 +119,8 @@ public class ACSLogo extends AdvancedLogo {
         turtleGraphics.addToCanvas((FXCanvas) canvas);
         turtleGraphics.setImage(new Image(new File("C:\\Users\\koenv\\Desktop\\img.png")));
         turtleGraphics.setAlpha(TURTLE_ALPHA);
+
+        canvas.setLineCap(LineCap.BUTT);
 
         canvasD.show();
         editorD.show();
@@ -207,11 +210,11 @@ public class ACSLogo extends AdvancedLogo {
         return executor;
     }
 
-    public TurtleGraphics getTurtleGraphics() {
+    TurtleGraphics getTurtleGraphics() {
         return turtleGraphics;
     }
 
-    public Position getStart() {
+    Position getStart() {
         return start;
     }
 
