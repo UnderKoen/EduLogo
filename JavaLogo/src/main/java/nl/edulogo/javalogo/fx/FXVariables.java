@@ -59,39 +59,54 @@ public class FXVariables implements FXView {
             traceButton.setText("trace aanschakelen");
             traceButton.setTranslateY(-100);
 
+            Label traceLabel = new Label();
+            traceLabel.setText("");
+            traceLabel.setTranslateY(20);
+
             Button beginButton = new Button();
             beginButton.setText("begin");
             beginButton.setTranslateY(-50);
             beginButton.setOnAction(event -> {
-                traceHandler.handleAllTracesTest();
+                traceLabel.setText(traceHandler.getCurrentTraceString());
+                traceHandler.begin();
             });
 
             Button stepButton = new Button();
             stepButton.setText("stap");
             stepButton.setTranslateX(-25);
             stepButton.setTranslateY(-20);
+            stepButton.setOnAction(event -> {
+                traceLabel.setText(traceHandler.getCurrentTraceString());
+                traceHandler.next();
+            });
 
             Button backButton = new Button();
             backButton.setText("terug");
             backButton.setTranslateX(25);
             backButton.setTranslateY(-20);
-
-            Label traceLabel = new Label();
-            traceLabel.setText("¯\\_(ツ)_/¯");
-            traceLabel.setTranslateY(20);
+            backButton.setOnAction(event -> {
+                traceLabel.setText(traceHandler.getCurrentTraceString());
+                traceHandler.back();
+            });
 
             Button loopButton = new Button();
             loopButton.setText("loop");
+            loopButton.setTranslateY(50);
+            loopButton.setOnAction(event -> {
+                traceHandler.loop();
+            });
 
             traceButton.setOnAction(event -> {
                 if (!traceHandler.isBezig()) {
                     traceHandler.setBezig(true);
+                    traceHandler.begin();
                     traceButton.setText("trace uitschakelen");
-                    pane.getChildren().addAll(beginButton, stepButton, traceLabel, backButton);
+                    pane.getChildren().addAll(beginButton, stepButton, traceLabel, backButton, loopButton);
                 } else {
                     traceHandler.setBezig(false);
                     traceButton.setText("trace aanschakelen");
-                    pane.getChildren().removeAll(beginButton, stepButton, traceLabel, backButton);
+                    traceHandler.done();
+                    pane.getChildren().removeAll(beginButton, stepButton, traceLabel, backButton, loopButton);
                 }
             });
             pane.getChildren().addAll(traceButton);

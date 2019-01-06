@@ -1,6 +1,7 @@
 package nl.edulogo.javalogo;
 
 import nl.edulogo.core.Color;
+import nl.edulogo.core.Position;
 import nl.edulogo.javalogo.utils.ColorUtil;
 
 import java.util.ArrayList;
@@ -37,15 +38,86 @@ public class TraceHandler {
         mogelijk = true;
     }
 
-    public void addTrace(Trace trace) {
-        traces.add(trace);
-        System.out.println(trace.toString());
-    }
+    private boolean loopBusy = false;
 
     public void handleAllTracesTest() {
         for (Trace t : traces) {
             handleTrace(t);
         }
+    }
+
+    public void addTrace(Trace trace) {
+        traces.add(trace);
+    }
+
+    public String getCurrentTraceString() {
+        return traces.get(index).toString();
+    }
+
+    public void done() {
+        resetScreen();
+        applet.tekenOpnieuw();
+        index = 0;
+    }
+
+    public void begin() {
+        resetScreen();
+        index = 0;
+    }
+
+    public void next() {
+        if (index >= traces.size() - 1) return;
+        resetScreen();
+        for (int i = 0; i < index; i++) {
+            handleTrace(traces.get(i + 1));
+        }
+        index++;
+        drawArrow();
+    }
+
+    public void back() {
+        if (index <= 0) return;
+        index--;
+        resetScreen();
+        for (int i = 0; i < index; i++) {
+            handleTrace(traces.get(i));
+        }
+        drawArrow();
+    }
+
+    public void loop() {
+        if (loopBusy) return;
+        loopBusy = true;
+        resetScreen();
+        index = 0;
+        Thread loopThread = new Thread(() -> {
+            while (true) {
+                next();
+                applet.pauze(400);
+                if (index >= traces.size() - 1) {
+                    loopBusy = false;
+                    break;
+                }
+            }
+        });
+        loopThread.start();
+    }
+
+    private void resetScreen() {
+        applet.getTurtle().setPosition(new Position(250, 250));
+        applet.getTurtle().setRotation(0);
+        applet.resetPath();
+        applet.fillScreen(Color.WHITE);
+    }
+
+    private void drawArrow() {
+        applet.resetPath();
+        applet.step(-8, 0);
+        applet.step(8, 5);
+        applet.step(8, -5);
+        applet.step(-8, 0);
+        applet.getTurtle().setFillColor(Color.YELLOW);
+        applet.fillPath();
     }
 
     private void handleTrace(Trace trace) {

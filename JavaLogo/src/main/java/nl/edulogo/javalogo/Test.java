@@ -9,7 +9,7 @@ public class Test extends TekenApplet {
 
     public void initialiseer() {
         achtergrondkleur("wit");
-        maakAnimatieMogelijk();
+        //maakAnimatieMogelijk();
         maakTraceMogelijk();
     }
 

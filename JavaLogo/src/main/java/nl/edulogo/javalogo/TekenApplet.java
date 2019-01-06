@@ -268,12 +268,6 @@ public abstract class TekenApplet extends JavaLogo {
         vulAan = true;
         //traceHandler.addTrace(new Trace(Trace.TraceSoort.VULAAN, color.getRed(), color.getGreen(), color.getBlue()));
     }
-
-    //TODO: remove
-    public void test() {
-        traceHandler.handleAllTracesTest();
-    }
-
     @Override
     public void vulUit() {
         if (!vulAan) return;
