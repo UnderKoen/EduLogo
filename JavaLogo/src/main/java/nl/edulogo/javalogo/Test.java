@@ -16,12 +16,12 @@ public class Test extends TekenApplet {
     @Override
     public void tekenprogramma() {
         rechts(rot);
-        vulAan("zwart");
+        //vulAan("zwart");
         for (int i = 0; i < 9; i++) {
             vooruit(100);
             rechts(360 / 9);
         }
-        vulUit();
+        //vulUit();
         schrijf("dood aan koen");
     }
 

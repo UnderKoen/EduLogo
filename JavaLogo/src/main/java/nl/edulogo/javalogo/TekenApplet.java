@@ -279,6 +279,11 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void tekenErbij() {
+        if (!canDraw) {
+            return;
+        }
+        turtle = new Turtle(new Position(250, 250), 0);
+        tekenprogramma();
     }
 
     @Override

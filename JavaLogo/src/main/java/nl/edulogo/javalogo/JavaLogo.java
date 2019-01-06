@@ -1,6 +1,5 @@
 package nl.edulogo.javalogo;
 
-import nl.edulogo.core.Font;
 import nl.edulogo.core.Polygon;
 import nl.edulogo.javalogo.variabele.InvoerVariabele;
 import nl.edulogo.javalogo.variabele.SchuifInvoerVariabele;
