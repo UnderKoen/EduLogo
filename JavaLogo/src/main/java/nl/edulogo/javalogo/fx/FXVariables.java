@@ -8,19 +8,46 @@ import nl.edulogo.core.Size;
 import nl.edulogo.display.fx.FXDisplay;
 import nl.edulogo.display.fx.FXView;
 import nl.edulogo.javalogo.AnimationHandler;
+import nl.edulogo.javalogo.TekenApplet;
 import nl.edulogo.javalogo.TraceHandler;
+import nl.edulogo.javalogo.variabele.InvoerVariabele;
+import nl.edulogo.javalogo.variabele.SchuifInvoerVariabele;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FXVariables implements FXView {
     private StackPane pane;
+    private TekenApplet applet;
     private boolean started = false;
     private AnimationHandler animationHandler;
     private TraceHandler traceHandler;
+    private List<StackPane> invoerVars;
+    private int varHeight = -240;
 
-    public FXVariables(AnimationHandler animationHandler, TraceHandler traceHandler) {
+    public FXVariables(TekenApplet applet, AnimationHandler animationHandler, TraceHandler traceHandler) {
         pane = new StackPane();
-        pane.setPrefSize(300, 300);
+        pane.setPrefSize(300, 700);
+        this.invoerVars = new ArrayList<StackPane>();
+        this.applet = applet;
         this.animationHandler = animationHandler;
         this.traceHandler = traceHandler;
+    }
+
+    public void makeVisible(InvoerVariabele iv) {
+        if (iv instanceof SchuifInvoerVariabele) {
+            SchuifInvoerVariabele.SchuifInvoerVariabeleNode var = new SchuifInvoerVariabele.SchuifInvoerVariabeleNode(applet, (SchuifInvoerVariabele) iv);
+            var.setTranslateY(varHeight);
+            pane.getChildren().add(var);
+            invoerVars.add(var);
+        } else {
+            InvoerVariabele.InvoerVariabeleNode var = new InvoerVariabele.InvoerVariabeleNode(applet, iv);
+            var.setTranslateY(varHeight);
+            pane.getChildren().add(var);
+            invoerVars.add(var);
+        }
+        varHeight += 70;
+
     }
 
     public void start() {
@@ -38,11 +65,17 @@ public class FXVariables implements FXView {
     }
 
     private void draw() {
+
+        SchuifInvoerVariabele.SchuifInvoerVariabeleNode test = new SchuifInvoerVariabele.SchuifInvoerVariabeleNode(applet, new SchuifInvoerVariabele("Testing xd", 0, 10, 3));
+        InvoerVariabele.InvoerVariabeleNode test2 = new InvoerVariabele.InvoerVariabeleNode(applet, new InvoerVariabele("Cool en Goed", 0, 10, 3));
+        SchuifInvoerVariabele.SchuifInvoerVariabeleNode test3 = new SchuifInvoerVariabele.SchuifInvoerVariabeleNode(applet, new SchuifInvoerVariabele("Testing xd", 0, 10, 3));
+
+
         if (animationHandler.isMogelijk()) {
             Button animationButton = new Button();
 
-            animationButton.setText("Animatie");
-            animationButton.setTranslateY(-130);
+            animationButton.setText("animatie");
+            animationButton.setTranslateY(-330);
             animationButton.setOnAction(event -> {
                 if (!animationHandler.isAnimation()) {
                     animationHandler.startAnimation();
@@ -57,8 +90,7 @@ public class FXVariables implements FXView {
         if (traceHandler.isMogelijk()) {
             Button traceButton = new Button();
             traceButton.setText("trace aanschakelen");
-            traceButton.setTranslateY(-100);
-
+            traceButton.setTranslateY(-300);
             Label traceLabel = new Label();
             traceLabel.setText("");
             traceLabel.setTranslateY(20);
@@ -101,11 +133,13 @@ public class FXVariables implements FXView {
                     traceHandler.setBezig(true);
                     traceHandler.begin();
                     traceButton.setText("trace uitschakelen");
+                    pane.getChildren().removeAll(invoerVars);
                     pane.getChildren().addAll(beginButton, stepButton, traceLabel, backButton, loopButton);
                 } else {
                     traceHandler.setBezig(false);
                     traceButton.setText("trace aanschakelen");
                     traceHandler.done();
+                    pane.getChildren().addAll(invoerVars);
                     pane.getChildren().removeAll(beginButton, stepButton, traceLabel, backButton, loopButton);
                 }
             });

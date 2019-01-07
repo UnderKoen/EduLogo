@@ -51,11 +51,14 @@ public class TraceHandler {
     }
 
     public String getCurrentTraceString() {
+        if (index >= traces.size()) return "";
         return traces.get(index).toString();
     }
 
     public void done() {
         resetScreen();
+        loopBusy = false;
+        traces.clear();
         applet.tekenOpnieuw();
         index = 0;
     }
@@ -66,10 +69,10 @@ public class TraceHandler {
     }
 
     public void next() {
-        if (index >= traces.size() - 1) return;
+        if (index >= traces.size()) return;
         resetScreen();
-        for (int i = 0; i < index; i++) {
-            handleTrace(traces.get(i + 1));
+        for (int i = 0; i <= index; i++) {
+            handleTrace(traces.get(i));
         }
         index++;
         drawArrow();
@@ -91,20 +94,20 @@ public class TraceHandler {
         resetScreen();
         index = 0;
         Thread loopThread = new Thread(() -> {
-            while (true) {
+            while (loopBusy) {
                 next();
-                applet.pauze(400);
-                if (index >= traces.size() - 1) {
+                //System.out.println("nu stoppen: index=" + index + ", traces.size()=" + traces.size());
+                if (index >= traces.size()) {
                     loopBusy = false;
-                    break;
                 }
+                applet.pauze(400);
             }
         });
         loopThread.start();
     }
 
     private void resetScreen() {
-        applet.getTurtle().setPosition(new Position(250, 250));
+        applet.getTurtle().setPosition(new Position(applet.getCanvas().getSize().getWidth() / 2, applet.getCanvas().getSize().getHeight() / 2));
         applet.getTurtle().setRotation(0);
         applet.resetPath();
         applet.fillScreen(Color.WHITE);

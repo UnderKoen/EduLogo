@@ -9,6 +9,10 @@ import nl.edulogo.logo.BasicLogo;
  * Created by Under_Koen on 25/09/2018.
  */
 abstract class JavaLogo extends BasicLogo {
+
+    //Initialisatie
+    public abstract void setSize(double width, double height);
+
     //Animatie
     public abstract void maakAnimatieMogelijk();
 
@@ -96,10 +100,10 @@ abstract class JavaLogo extends BasicLogo {
     //Invoer Variabele
     public abstract void maakZichtbaar(InvoerVariabele iv);
 
-    void invoerVarActie(InvoerVariabele iv) {
+    public void invoerVarActie(InvoerVariabele iv) {
     }
 
-    void schuifInvoerVarActie(SchuifInvoerVariabele iv) {
+    public void schuifInvoerVarActie(SchuifInvoerVariabele iv) {
     }
 
     //Vullen

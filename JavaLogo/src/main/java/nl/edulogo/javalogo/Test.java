@@ -1,36 +1,47 @@
 package nl.edulogo.javalogo;
 
+import nl.edulogo.javalogo.variabele.InvoerVariabele;
+import nl.edulogo.javalogo.variabele.SchuifInvoerVariabele;
+
 /**
  * Created by Under_Koen on 20/09/2018.
  */
 public class Test extends TekenApplet {
 
     double rot = 0;
+    InvoerVariabele rood = new InvoerVariabele("rood", 0, 255, 255);
+    SchuifInvoerVariabele groen = new SchuifInvoerVariabele("groen", 0, 255, 255);
+    InvoerVariabele blauw = new InvoerVariabele("blauw", 0, 255, 255);
 
     public void initialiseer() {
+        setSize(800, 800);
         achtergrondkleur("wit");
-        //maakAnimatieMogelijk();
+        maakAnimatieMogelijk();
         maakTraceMogelijk();
+        maakZichtbaar(rood);
+        maakZichtbaar(groen);
+        maakZichtbaar(blauw);
     }
 
     @Override
     public void tekenprogramma() {
         rechts(rot);
-        //vulAan("zwart");
-        for (int i = 0; i < 9; i++) {
+        vulAan(rood.geefWaarde(), groen.geefWaarde(), blauw.geefWaarde());
+        for (int i = 0; i < 4; i++) {
             vooruit(100);
-            rechts(360 / 9);
+            rechts(90);
         }
-        //vulUit();
-        schrijf("dood aan koen");
+        vulUit();
     }
 
-    public void animatie() {
-        while (animatieLopend()) {
-            rot += 0.1;
-            tekenOpnieuw();
-            //woops I did it again 0.o
-            pauze(10);
-        }
+    @Override
+    public void invoerVarActie(InvoerVariabele iv) {
+        tekenOpnieuw();
+    }
+
+
+    @Override
+    public void schuifInvoerVarActie(SchuifInvoerVariabele iv) {
+        tekenOpnieuw();
     }
 }

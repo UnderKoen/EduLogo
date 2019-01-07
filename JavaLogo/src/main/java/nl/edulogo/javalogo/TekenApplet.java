@@ -32,6 +32,11 @@ public abstract class TekenApplet extends JavaLogo {
     private Color achtergrond;
 
     @Override
+    public void setSize(double width, double height) {
+        canvas.setSize(new Size(width, height));
+    }
+
+    @Override
     public void maakAnimatieMogelijk() {
         animationHandler.maakMogelijk();
         fxVariables.start();
@@ -119,13 +124,13 @@ public abstract class TekenApplet extends JavaLogo {
     private boolean canDraw = false;
 
     public void start() {
-        turtle = new Turtle(new Position(250, 250), 0);
         canvas = new FXCanvas(new Size(500, 500));
         traceHandler = new TraceHandler(this);
         animationHandler = new AnimationHandler(this);
-        fxVariables = new FXVariables(animationHandler, traceHandler);
+        fxVariables = new FXVariables(this, animationHandler, traceHandler);
         achtergrondkleur("wit");
         initialiseer();
+        turtle = new Turtle(new Position(getCanvas().getSize().getWidth() / 2, getCanvas().getSize().getHeight() / 2), 0);
 
         //TODO CAN DRAW
         canDraw = true;
@@ -211,7 +216,7 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void maakZichtbaar(InvoerVariabele iv) {
-
+        fxVariables.makeVisible(iv);
     }
 
     @Override
@@ -282,7 +287,7 @@ public abstract class TekenApplet extends JavaLogo {
         if (!canDraw) {
             return;
         }
-        turtle = new Turtle(new Position(250, 250), 0);
+        turtle = new Turtle(new Position(getCanvas().getSize().getWidth() / 2, getCanvas().getSize().getHeight() / 2), 0);
         tekenprogramma();
     }
 
@@ -292,7 +297,7 @@ public abstract class TekenApplet extends JavaLogo {
             return;
         }
         achtergrondkleur("default");
-        turtle = new Turtle(new Position(250, 250), 0);
+        turtle = new Turtle(new Position(getCanvas().getSize().getWidth() / 2, getCanvas().getSize().getHeight() / 2), 0);
         tekenprogramma();
     }
 
@@ -300,4 +305,5 @@ public abstract class TekenApplet extends JavaLogo {
     public void schaal(double s) {
 
     }
+
 }
