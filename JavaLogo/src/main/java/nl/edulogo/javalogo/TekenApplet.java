@@ -216,7 +216,9 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void maakZichtbaar(InvoerVariabele iv) {
+        fxVariables.start();
         fxVariables.makeVisible(iv);
+
     }
 
     @Override

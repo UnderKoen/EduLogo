@@ -66,11 +66,6 @@ public class FXVariables implements FXView {
 
     private void draw() {
 
-        SchuifInvoerVariabele.SchuifInvoerVariabeleNode test = new SchuifInvoerVariabele.SchuifInvoerVariabeleNode(applet, new SchuifInvoerVariabele("Testing xd", 0, 10, 3));
-        InvoerVariabele.InvoerVariabeleNode test2 = new InvoerVariabele.InvoerVariabeleNode(applet, new InvoerVariabele("Cool en Goed", 0, 10, 3));
-        SchuifInvoerVariabele.SchuifInvoerVariabeleNode test3 = new SchuifInvoerVariabele.SchuifInvoerVariabeleNode(applet, new SchuifInvoerVariabele("Testing xd", 0, 10, 3));
-
-
         if (animationHandler.isMogelijk()) {
             Button animationButton = new Button();
 

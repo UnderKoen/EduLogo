@@ -1,47 +1,80 @@
 package nl.edulogo.javalogo;
 
 import nl.edulogo.javalogo.variabele.InvoerVariabele;
-import nl.edulogo.javalogo.variabele.SchuifInvoerVariabele;
 
 /**
  * Created by Under_Koen on 20/09/2018.
  */
 public class Test extends TekenApplet {
 
-    double rot = 0;
-    InvoerVariabele rood = new InvoerVariabele("rood", 0, 255, 255);
-    SchuifInvoerVariabele groen = new SchuifInvoerVariabele("groen", 0, 255, 255);
-    InvoerVariabele blauw = new InvoerVariabele("blauw", 0, 255, 255);
+    public InvoerVariabele zijde;
+    public InvoerVariabele hoeken;
+    double i = 0;
 
+    @Override
     public void initialiseer() {
-        setSize(800, 800);
-        achtergrondkleur("wit");
-        maakAnimatieMogelijk();
-        maakTraceMogelijk();
-        maakZichtbaar(rood);
-        maakZichtbaar(groen);
-        maakZichtbaar(blauw);
+        setSize(500, 500);
+        zijde = new InvoerVariabele("zijde", 1, 10000, 50);
+        hoeken = new InvoerVariabele("hoeken", 1, 10000, 4);
+        ///*
+        maakZichtbaar(hoeken);
+        maakZichtbaar(zijde);
+        //*/
+        //maakAnimatieMogelijk();
+    }
+
+    @Override
+    public void animatie() {
+        //while(true) {
+        //	tekenOpnieuw();
+        //	pauze(1);
+        //}
     }
 
     @Override
     public void tekenprogramma() {
-        rechts(rot);
-        vulAan(rood.geefWaarde(), groen.geefWaarde(), blauw.geefWaarde());
-        for (int i = 0; i < 4; i++) {
-            vooruit(100);
-            rechts(90);
+//		if (i == 360) i =0;
+        //rechts(i);
+        //i+=2;
+        //figur(zijde.geefWaarde(), hoeken.geefWaarde(), null);
+        andere();
+    }
+
+    public void andere() {
+        stap((double) zijde.geefWaarde() / -8, (double) zijde.geefWaarde() / hoeken.geefWaarde() / 2);
+        for (int i = 0; i < 1; i++) {
+            figur((double) zijde.geefWaarde() / hoeken.geefWaarde(), hoeken.geefWaarde(), null);
+            rechts(360.0 / hoeken.geefWaarde());
+        }
+    }
+
+    public void opdracht2() {
+        links(90);
+        for (int i = 0; i < 3; i++) {
+            rechts(120);
+            vooruit(70);
+            rechts(120);
+            figur(70, 3, "blauw");
+            links(180);
+            figur(210, 3, "geel");
+            rechts(60);
+            vooruit(70);
+        }
+        figur(140, 3, "groen");
+    }
+
+    public void figur(double zijde, int hoeken, String kleur) {
+        if (kleur != null) vulAan(kleur);
+        for (int i = 0; i < hoeken; i++) {
+            rechts(360.0 / hoeken);
+            vooruit(zijde);
         }
         vulUit();
     }
 
     @Override
     public void invoerVarActie(InvoerVariabele iv) {
-        tekenOpnieuw();
+        this.tekenOpnieuw();
     }
 
-
-    @Override
-    public void schuifInvoerVarActie(SchuifInvoerVariabele iv) {
-        tekenOpnieuw();
-    }
 }
