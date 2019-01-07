@@ -129,10 +129,9 @@ public abstract class TekenApplet extends JavaLogo {
         animationHandler = new AnimationHandler(this);
         fxVariables = new FXVariables(this, animationHandler, traceHandler);
         achtergrondkleur("wit");
+        fxVariables.start();
         initialiseer();
         turtle = new Turtle(new Position(getCanvas().getSize().getWidth() / 2, getCanvas().getSize().getHeight() / 2), 0);
-
-        //TODO CAN DRAW
         canDraw = true;
         tekenprogramma();
     }
@@ -216,7 +215,6 @@ public abstract class TekenApplet extends JavaLogo {
 
     @Override
     public void maakZichtbaar(InvoerVariabele iv) {
-        fxVariables.start();
         fxVariables.makeVisible(iv);
 
     }

@@ -139,6 +139,8 @@ public class FXVariables implements FXView {
                 }
             });
             pane.getChildren().addAll(traceButton);
+
+            //TODO: Hier sluiten als geen Children.
         }
     }
 

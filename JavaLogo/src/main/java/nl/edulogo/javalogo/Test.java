@@ -17,8 +17,8 @@ public class Test extends TekenApplet {
         zijde = new InvoerVariabele("zijde", 1, 10000, 50);
         hoeken = new InvoerVariabele("hoeken", 1, 10000, 4);
         ///*
-        maakZichtbaar(hoeken);
-        maakZichtbaar(zijde);
+        //maakZichtbaar(hoeken);
+        //maakZichtbaar(zijde);
         //*/
         //maakAnimatieMogelijk();
     }
