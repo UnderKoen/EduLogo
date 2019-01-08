@@ -107,6 +107,7 @@ public class TraceHandler {
     }
 
     private void resetScreen() {
+        applet.getTurtle().setColor(Color.BLACK);
         applet.getTurtle().setPosition(new Position(applet.getCanvas().getSize().getWidth() / 2, applet.getCanvas().getSize().getHeight() / 2));
         applet.getTurtle().setRotation(0);
         applet.resetPath();
@@ -114,6 +115,8 @@ public class TraceHandler {
     }
 
     private void drawArrow() {
+        applet.getTurtle().setPenDown(true);
+        applet.getTurtle().setColor(Color.BLACK);
         applet.resetPath();
         applet.step(-8, 0);
         applet.step(8, 5);
@@ -139,6 +142,13 @@ public class TraceHandler {
             }
             case PENAAN: {
                 applet.getTurtle().setPenDown(true);
+                if (trace.getValues().length == 0) {
+                    applet.getTurtle().setColor(Color.BLACK);
+                } else if (trace.getValues().length == 1) {
+                    applet.getTurtle().setColor(ColorUtil.fromString((String) trace.getValues()[0]));
+                } else if (trace.getValues().length == 3) {
+                    applet.getTurtle().setColor(new Color((int) trace.getValues()[0], (int) trace.getValues()[1], (int) trace.getValues()[2]));
+                }
                 break;
             }
             case PENUIT: {
