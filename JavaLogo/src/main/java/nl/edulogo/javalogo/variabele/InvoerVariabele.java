@@ -1,5 +1,6 @@
 package nl.edulogo.javalogo.variabele;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -90,7 +91,8 @@ public class InvoerVariabele {
                 }
             });
 
-            Button upValue = new Button();
+            Button upValue = new Button("+");
+            upValue.setPadding(Insets.EMPTY);
             upValue.setMaxSize(50, 13);
             upValue.setMinSize(50, 13);
             upValue.setOnAction(event -> {
@@ -100,7 +102,8 @@ public class InvoerVariabele {
                 applet.invoerVarActie(var);
             });
 
-            Button downValue = new Button();
+            Button downValue = new Button("-");
+            downValue.setPadding(Insets.EMPTY);
             downValue.setMaxSize(50, 13);
             downValue.setMinSize(50, 13);
             downValue.setOnAction(event -> {

@@ -1,5 +1,7 @@
 package nl.edulogo.javalogo;
 
+import nl.edulogo.javalogo.variabele.InvoerVariabele;
+
 /**
  * Created by Under_Koen on 20/09/2018.
  */
@@ -9,6 +11,7 @@ public class Test extends TekenApplet {
     public void initialiseer() {
         setSize(500, 500);
         maakTraceMogelijk();
+        maakZichtbaar(new InvoerVariabele("t", 0, 10, -10));
     }
 
     @Override
