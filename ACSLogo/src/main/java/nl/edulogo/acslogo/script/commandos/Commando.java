@@ -3,16 +3,17 @@ package nl.edulogo.acslogo.script.commandos;
 import nl.edulogo.acslogo.script.ExecutorException;
 import nl.edulogo.acslogo.script.ParsingException;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * Created by Under_Koen on 15/10/2018.
  */
-public class Commando {
+public class Commando implements Serializable {
     protected String name;
-    private int arguments;
-    private Runnable runnable;
-    private String[] aliases;
+    private transient int arguments;
+    private transient Runnable runnable;
+    private transient String[] aliases;
 
     public Commando(String name, int arguments) {
         this.name = name.toLowerCase();

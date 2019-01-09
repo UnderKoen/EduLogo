@@ -11,7 +11,6 @@ import java.lang.reflect.Constructor;
  * Created by Under_Koen on 20/09/2018.
  */
 public class Starter extends Application {
-
     private static TekenApplet applet;
 
     static void start() {

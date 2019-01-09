@@ -38,13 +38,13 @@ import java.util.stream.Collectors;
 public class Commandos {
     private static Random random = new Random();
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm:ss:SSS");
-    private static ACSLogo logo;
+    private ACSLogo logo;
 
-    private Commandos() {
+    public Commandos(ACSLogo logo) {
+        this.logo = logo;
     }
 
-    public static Commando[] getCommandos(ACSLogo logo) {
-        Commandos.logo = logo;
+    public Commando[] getCommandos() {
         List<Commando> commandos = new ArrayList<>();
 
         /*TODO FILE STUFF:
@@ -78,6 +78,8 @@ public class Commandos {
 
         /*NOT GONE IMPLEMENT
          * -Instruments
+         * -Fill
+         * -FillIn
          * -Play
          * -Say
          * -SetClipPath
@@ -92,284 +94,283 @@ public class Commandos {
          * -Infinite length functions (for those that can have a list as a input will have that instead like: difference, sum, ...)
          */
 
-        commandos.add(new Commando("forward", Commandos::forward, 1, "fd"));
-        commandos.add(new Commando("back", Commandos::back, 1));
-        commandos.add(new Commando("right", Commandos::right, 1, "rt"));
-        commandos.add(new Commando("left", Commandos::left, 1, "lt"));
+        commandos.add(new Commando("forward", this::forward, 1, "fd"));
+        commandos.add(new Commando("back", this::back, 1));
+        commandos.add(new Commando("right", this::right, 1, "rt"));
+        commandos.add(new Commando("left", this::left, 1, "lt"));
 
-        commandos.add(new Commando("repeat", Commandos::repeat, 2));
+        commandos.add(new Commando("repeat", this::repeat, 2));
 
-        commandos.add(new Commando("abs", Commandos::abs, 1));
-        commandos.add(new Commando("and", Commandos::and, 2));
-        commandos.add(new Commando("arc", Commandos::arc, 2));
+        commandos.add(new Commando("abs", this::abs, 1));
+        commandos.add(new Commando("and", this::and, 2));
+        commandos.add(new Commando("arc", this::arc, 2));
 
-        commandos.add(new Commando("arcCos", Commandos::arcCos, 1, "arcCosine"));
-        commandos.add(new Commando("arCosh", Commandos::arCosh, 1));
-        commandos.add(new Commando("arcSin", Commandos::arcSin, 1, "arcSine"));
-        commandos.add(new Commando("arSinh", Commandos::arSinh, 1));
-        commandos.add(new Commando("arcTan", Commandos::arcTan, 1, "arcTangent"));
-        commandos.add(new Commando("arTanh", Commandos::arTanh, 1));
-        commandos.add(new Commando("aTan2", Commandos::aTan2, 2));
+        commandos.add(new Commando("arcCos", this::arcCos, 1, "arcCosine"));
+        commandos.add(new Commando("arCosh", this::arCosh, 1));
+        commandos.add(new Commando("arcSin", this::arcSin, 1, "arcSine"));
+        commandos.add(new Commando("arSinh", this::arSinh, 1));
+        commandos.add(new Commando("arcTan", this::arcTan, 1, "arcTangent"));
+        commandos.add(new Commando("arTanh", this::arTanh, 1));
+        commandos.add(new Commando("aTan2", this::aTan2, 2));
 
-        commandos.add(new Commando("ascii", Commandos::ascii, 1));
+        commandos.add(new Commando("ascii", this::ascii, 1));
 
-        commandos.add(new Commando("background", Commandos::background, "bg"));
+        commandos.add(new Commando("background", this::background, "bg"));
 
-        commandos.add(new Commando("butFirst", Commandos::butFirst, 1));
-        commandos.add(new Commando("butLast", Commandos::butLast, 1));
+        commandos.add(new Commando("butFirst", this::butFirst, 1));
+        commandos.add(new Commando("butLast", this::butLast, 1));
 
-        commandos.add(new Commando("buttonP", Commandos::buttonP, "button?"));
+        commandos.add(new Commando("buttonP", this::buttonP, "button?"));
         //Zelfde als buttonP maar dan over je rechter muis, heeft geen iplementatie van acslogo
-        commandos.add(new Commando("buttonS", Commandos::buttonS));
+        commandos.add(new Commando("buttonS", this::buttonS));
 
-        commandos.add(new Commando("canvasSize", Commandos::canvasSize));
+        commandos.add(new Commando("canvasSize", this::canvasSize));
 
-        commandos.add(new Commando("catch", Commandos::catchM, 2));
+        commandos.add(new Commando("catch", this::catchM, 2));
 
-        commandos.add(new Commando("char", Commandos::charM, 1));
+        commandos.add(new Commando("char", this::charM, 1));
 
-        commandos.add(new Commando("clean", Commandos::clean));
-        commandos.add(new Commando("clearScreen", Commandos::clearScreen, "cs"));
+        commandos.add(new Commando("clean", this::clean));
+        commandos.add(new Commando("clearScreen", this::clearScreen, "cs"));
 
-        commandos.add(new Commando("colorAtPoint", Commandos::colorAtPoint, 1, "colourAtPoint"));
+        commandos.add(new Commando("colorAtPoint", this::colorAtPoint, 1, "colourAtPoint"));
 
-        commandos.add(new Commando("cos", Commandos::cos, 1, "cosine"));
-        commandos.add(new Commando("cosh", Commandos::cosh, 1));
+        commandos.add(new Commando("cos", this::cos, 1, "cosine"));
+        commandos.add(new Commando("cosh", this::cosh, 1));
 
-        commandos.add(new Commando("count", Commandos::count, 1));
+        commandos.add(new Commando("count", this::count, 1));
 
-        commandos.add(new Commando("currentPath", Commandos::currentPath));
+        commandos.add(new Commando("currentPath", this::currentPath));
 
-        commandos.add(new Commando("date", Commandos::date));
+        commandos.add(new Commando("date", this::date));
 
-        commandos.add(new Commando("define", Commandos::define, 2));
-        commandos.add(new Commando("defineP", Commandos::defineP, 1, "define?"));
+        commandos.add(new Commando("define", this::define, 2));
+        commandos.add(new Commando("defineP", this::defineP, 1, "define?"));
 
-        commandos.add(new Commando("difference", Commandos::difference, 1));
+        commandos.add(new Commando("difference", this::difference, 1));
 
-        commandos.add(new Commando("dot", Commandos::dot, 1));
+        commandos.add(new Commando("dot", this::dot, 1));
 
-        commandos.add(new Commando("emptyP", Commandos::emptyP, 1, "empty?"));
-        commandos.add(new Commando("equalP", Commandos::equalP, 2, "equal?"));
+        commandos.add(new Commando("emptyP", this::emptyP, 1, "empty?"));
+        commandos.add(new Commando("equalP", this::equalP, 2, "equal?"));
 
-        commandos.add(new Commando("exp", Commandos::exp, 1));
+        commandos.add(new Commando("exp", this::exp, 1));
 
-        commandos.add(new Commando("fill", Commandos::fill));
-        commandos.add(new Commando("fillIn", Commandos::fillIn));
-        commandos.add(new Commando("fillCurrentPath", Commandos::fillCurrentPath));
-        commandos.add(new Commando("fillPath", Commandos::fillPath, 1));
+        commandos.add(new Commando("fillCurrentPath", this::fillCurrentPath));
+        commandos.add(new Commando("fillPath", this::fillPath, 1));
 
-        commandos.add(new Commando("first", Commandos::first, 1));
-        commandos.add(new Commando("firstPut", Commandos::firstPut, 2));
+        commandos.add(new Commando("first", this::first, 1));
+        commandos.add(new Commando("firstPut", this::firstPut, 2));
 
-        commandos.add(new Commando("fontFace", Commandos::fontFace, "font"));
-        commandos.add(new Commando("fontFaces", Commandos::fontFaces, "fonts"));
-        commandos.add(new Commando("fontFamilies", Commandos::fontFamilies));
-        commandos.add(new Commando("fontFamily", Commandos::fontFamily));
-        commandos.add(new Commando("fontTraits", Commandos::fontTraits));
+        commandos.add(new Commando("fontFace", this::fontFace, "font"));
+        commandos.add(new Commando("fontFaces", this::fontFaces, "fonts"));
+        commandos.add(new Commando("fontFamilies", this::fontFamilies));
+        commandos.add(new Commando("fontFamily", this::fontFamily));
+        commandos.add(new Commando("fontTraits", this::fontTraits));
 
-        commandos.add(new Commando("getMouseChange", Commandos::getMouseChange));
-        commandos.add(new Commando("getLeftMouseClick", Commandos::getLeftMouseClick, "getMouseClick"));
-        commandos.add(new Commando("getRightMouseClick", Commandos::getRightMouseClick));
-        commandos.add(new Commando("getMouseMoved", Commandos::getMouseMoved));
+        commandos.add(new Commando("getMouseChange", this::getMouseChange));
+        commandos.add(new Commando("getMouseClick", this::getMouseClick));
+        commandos.add(new Commando("getLeftMouseClick", this::getLeftMouseClick));
+        commandos.add(new Commando("getRightMouseClick", this::getRightMouseClick));
+        commandos.add(new Commando("getMouseMoved", this::getMouseMoved));
 
-        commandos.add(new Commando("getProp", Commandos::getProp, 2, "gProp"));
+        commandos.add(new Commando("getProp", this::getProp, 2, "gProp"));
 
-        commandos.add(new Commando("graphicsType", Commandos::graphicsType, 1, "grType"));
+        commandos.add(new Commando("graphicsType", this::graphicsType, 1, "grType"));
 
-        commandos.add(new Commando("heading", Commandos::heading));
+        commandos.add(new Commando("heading", this::heading));
 
-        commandos.add(new Commando("hideTurtle", Commandos::hideTurtle, "ht"));
+        commandos.add(new Commando("hideTurtle", this::hideTurtle, "ht"));
 
-        commandos.add(new Commando("home", Commandos::home));
+        commandos.add(new Commando("home", this::home));
 
-        commandos.add(new Commando("if", Commandos::ifM, 3));
+        commandos.add(new Commando("if", this::ifM, 3));
 
-        commandos.add(new Commando("integer", Commandos::integer, 1));
+        commandos.add(new Commando("integer", this::integer, 1));
 
-        commandos.add(new Commando("item", Commandos::item, 2));
-        commandos.add(new Commando("last", Commandos::last, 1));
-        commandos.add(new Commando("lastPut", Commandos::lastPut, 2));
-        commandos.add(new Commando("list", Commandos::list, 2));
-        commandos.add(new Commando("listP", Commandos::listP, 1, "list?"));
+        commandos.add(new Commando("item", this::item, 2));
+        commandos.add(new Commando("last", this::last, 1));
+        commandos.add(new Commando("lastPut", this::lastPut, 2));
+        commandos.add(new Commando("list", this::list, 2));
+        commandos.add(new Commando("listP", this::listP, 1, "list?"));
 
-        commandos.add(new Commando("local", Commandos::local, 1));
+        commandos.add(new Commando("local", this::local, 1));
 
-        commandos.add(new Commando("log", Commandos::log, 1));
-        commandos.add(new Commando("log10", Commandos::log10, 1));
-        commandos.add(new Commando("lowerCase", Commandos::lowerCase, 1));
+        commandos.add(new Commando("log", this::log, 1));
+        commandos.add(new Commando("log10", this::log10, 1));
+        commandos.add(new Commando("lowerCase", this::lowerCase, 1));
 
-        commandos.add(new Commando("make", Commandos::make, 2));
+        commandos.add(new Commando("make", this::make, 2));
 
-        commandos.add(new Commando("memberP", Commandos::memberP, 2, "member?"));
+        commandos.add(new Commando("memberP", this::memberP, 2, "member?"));
 
-        commandos.add(new Commando("mouse", Commandos::mouse));
+        commandos.add(new Commando("mouse", this::mouse));
 
-        commandos.add(new Commando("nameP", Commandos::nameP, 1, "name?"));
-        commandos.add(new Commando("not", Commandos::not, 1));
-        commandos.add(new Commando("numberP", Commandos::numberP, 1, "number?"));
-        commandos.add(new Commando("or", Commandos::or, 2));
-        commandos.add(new Commando("output", Commandos::output, 1, "op"));
-        commandos.add(new Commando("pathBounds", Commandos::pathBounds, 1));
-        commandos.add(new Commando("pathLength", Commandos::pathLength, 1));
-        commandos.add(new Commando("pen", Commandos::pen));
-        commandos.add(new Commando("penColor", Commandos::penColor, "penColour", "pc"));
-        commandos.add(new Commando("penDown", Commandos::penDown, "pd"));
-        commandos.add(new Commando("penUp", Commandos::penUp, "pu"));
-        commandos.add(new Commando("penWidth", Commandos::penWidth));
-        commandos.add(new Commando("pi", Commandos::pi));
-        commandos.add(new Commando("position", Commandos::position, "pos"));
-        commandos.add(new Commando("power", Commandos::power, 2));
-        commandos.add(new Commando("print", Commandos::print, 1));
-        commandos.add(new Commando("product", Commandos::product, 1));
+        commandos.add(new Commando("nameP", this::nameP, 1, "name?"));
+        commandos.add(new Commando("not", this::not, 1));
+        commandos.add(new Commando("numberP", this::numberP, 1, "number?"));
+        commandos.add(new Commando("or", this::or, 2));
+        commandos.add(new Commando("output", this::output, 1, "op"));
+        commandos.add(new Commando("pathBounds", this::pathBounds, 1));
+        commandos.add(new Commando("pathLength", this::pathLength, 1));
+        commandos.add(new Commando("pen", this::pen));
+        commandos.add(new Commando("penColor", this::penColor, "penColour", "pc"));
+        commandos.add(new Commando("penDown", this::penDown, "pd"));
+        commandos.add(new Commando("penUp", this::penUp, "pu"));
+        commandos.add(new Commando("penWidth", this::penWidth));
+        commandos.add(new Commando("pi", this::pi));
+        commandos.add(new Commando("position", this::position, "pos"));
+        commandos.add(new Commando("power", this::power, 2));
+        commandos.add(new Commando("print", this::print, 1));
+        commandos.add(new Commando("product", this::product, 1));
 
-        commandos.add(new Commando("propList", Commandos::propList, 1, "pList"));
-        commandos.add(new Commando("putProp", Commandos::putProp, 3, "pProp"));
+        commandos.add(new Commando("propList", this::propList, 1, "pList"));
+        commandos.add(new Commando("putProp", this::putProp, 3, "pProp"));
 
-        commandos.add(new Commando("quotient", Commandos::quotient, 1));
-        commandos.add(new Commando("random", Commandos::random, 1));
+        commandos.add(new Commando("quotient", this::quotient, 1));
+        commandos.add(new Commando("random", this::random, 1));
 
-        commandos.add(new Commando("readChar", Commandos::readChar));
-        commandos.add(new Commando("readChars", Commandos::readChars, 1));
-        commandos.add(new Commando("readList", Commandos::readList));
-        commandos.add(new Commando("readWord", Commandos::readWord));
+        commandos.add(new Commando("readChar", this::readChar));
+        commandos.add(new Commando("readChars", this::readChars, 1));
+        commandos.add(new Commando("readList", this::readList));
+        commandos.add(new Commando("readWord", this::readWord));
 
-        commandos.add(new Commando("remainder", Commandos::remainder, 2));
-        commandos.add(new Commando("remProp", Commandos::remProp, 2));
-        commandos.add(new Commando("reverseList", Commandos::reverseList, 1, "reverse", "reversePath"));
-        commandos.add(new Commando("rgb", Commandos::rgb, 1));
+        commandos.add(new Commando("remainder", this::remainder, 2));
+        commandos.add(new Commando("remProp", this::remProp, 2));
+        commandos.add(new Commando("reverseList", this::reverseList, 1, "reverse", "reversePath"));
+        commandos.add(new Commando("rgb", this::rgb, 1));
 
-        commandos.add(new Commando("round", Commandos::round, 1));
-        commandos.add(new Commando("run", Commandos::run, 1));
+        commandos.add(new Commando("round", this::round, 1));
+        commandos.add(new Commando("run", this::run, 1));
 
-        commandos.add(new Commando("sentence", Commandos::sentence, 2));
+        commandos.add(new Commando("sentence", this::sentence, 2));
 
-        commandos.add(new Commando("setBackground", Commandos::setBackground, 1, "setBG"));
+        commandos.add(new Commando("setBackground", this::setBackground, 1, "setBG"));
 
-        commandos.add(new Commando("setCanvasSize", Commandos::setCanvasSize, 1));
+        commandos.add(new Commando("setCanvasSize", this::setCanvasSize, 1));
 
-        commandos.add(new Commando("setFontFace", Commandos::setFontFace, 1));
-        commandos.add(new Commando("setFontFamily", Commandos::setFontFamily, 1));
-        commandos.add(new Commando("setFontTraits", Commandos::setFontTraits, 1));
+        commandos.add(new Commando("setFontFace", this::setFontFace, 1));
+        commandos.add(new Commando("setFontFamily", this::setFontFamily, 1));
+        commandos.add(new Commando("setFontTraits", this::setFontTraits, 1));
 
-        commandos.add(new Commando("setFullScreen", Commandos::setFullScreen, 1));
+        commandos.add(new Commando("setFullScreen", this::setFullScreen, 1));
 
-        commandos.add(new Commando("setHeading", Commandos::setHeading, 1));
+        commandos.add(new Commando("setHeading", this::setHeading, 1));
 
-        commandos.add(new Commando("setLineCap", Commandos::setLineCap, 1));
-        commandos.add(new Commando("setLineDash", Commandos::setLineDash, 1));
+        commandos.add(new Commando("setLineCap", this::setLineCap, 1));
+        commandos.add(new Commando("setLineDash", this::setLineDash, 1));
 
-        commandos.add(new Commando("setPen", Commandos::setPen, 1));
-        commandos.add(new Commando("setPenColor", Commandos::setPenColor, 1, "setPenColour", "setPC"));
-        commandos.add(new Commando("setPenWidth", Commandos::setPenWidth, 1));
-        commandos.add(new Commando("setPosition", Commandos::setPosition, 1, "setPos"));
-        commandos.add(new Commando("setRGB", Commandos::setRGB, 2));
-        commandos.add(new Commando("setTypeSize", Commandos::setTypeSize, 1));
-        commandos.add(new Commando("setX", Commandos::setX, 1));
-        commandos.add(new Commando("setY", Commandos::setY, 1));
-        commandos.add(new Commando("show", Commandos::show, 1));
-        commandos.add(new Commando("shownP", Commandos::shownP, "shown?"));
-        commandos.add(new Commando("showTurtle", Commandos::showTurtle, "st"));
-        commandos.add(new Commando("sin", Commandos::sin, 1, "sine"));
-        commandos.add(new Commando("sinh", Commandos::sinh, 1));
-        commandos.add(new Commando("sqrt", Commandos::sqrt, 1));
-        commandos.add(new Commando("stop", Commandos::stop));
-        commandos.add(new Commando("strokeCurrentPath", Commandos::strokeCurrentPath));
-        commandos.add(new Commando("strokePath", Commandos::strokePath, 1));
-        commandos.add(new Commando("sum", Commandos::sum, 1));
+        commandos.add(new Commando("setPen", this::setPen, 1));
+        commandos.add(new Commando("setPenColor", this::setPenColor, 1, "setPenColour", "setPC"));
+        commandos.add(new Commando("setPenWidth", this::setPenWidth, 1));
+        commandos.add(new Commando("setPosition", this::setPosition, 1, "setPos"));
+        commandos.add(new Commando("setRGB", this::setRGB, 2));
+        commandos.add(new Commando("setTypeSize", this::setTypeSize, 1));
+        commandos.add(new Commando("setX", this::setX, 1));
+        commandos.add(new Commando("setY", this::setY, 1));
+        commandos.add(new Commando("show", this::show, 1));
+        commandos.add(new Commando("shownP", this::shownP, "shown?"));
+        commandos.add(new Commando("showTurtle", this::showTurtle, "st"));
+        commandos.add(new Commando("sin", this::sin, 1, "sine"));
+        commandos.add(new Commando("sinh", this::sinh, 1));
+        commandos.add(new Commando("sqrt", this::sqrt, 1));
+        commandos.add(new Commando("stop", this::stop));
+        commandos.add(new Commando("strokeCurrentPath", this::strokeCurrentPath));
+        commandos.add(new Commando("strokePath", this::strokePath, 1));
+        commandos.add(new Commando("sum", this::sum, 1));
 
-        commandos.add(new Commando("tan", Commandos::tan, 1, "tangent"));
-        commandos.add(new Commando("tanh", Commandos::tanh, 1));
-        commandos.add(new Commando("text", Commandos::text, 1));
-        commandos.add(new Commando("textBox", Commandos::textBox, 1));
-        commandos.add(new Commando("throw", Commandos::throwM, 1));
-        commandos.add(new Commando("thing", Commandos::thing, 1));
-        commandos.add(new Commando("time", Commandos::time));
-        commandos.add(new Commando("towards", Commandos::towards, 1));
-        commandos.add(new Commando("type", Commandos::type, 1));
+        commandos.add(new Commando("tan", this::tan, 1, "tangent"));
+        commandos.add(new Commando("tanh", this::tanh, 1));
+        commandos.add(new Commando("text", this::text, 1));
+        commandos.add(new Commando("textBox", this::textBox, 1));
+        commandos.add(new Commando("throw", this::throwM, 1));
+        commandos.add(new Commando("thing", this::thing, 1));
+        commandos.add(new Commando("time", this::time));
+        commandos.add(new Commando("towards", this::towards, 1));
+        commandos.add(new Commando("type", this::type, 1));
 
-        commandos.add(new Commando("upperCase", Commandos::upperCase, 1));
+        commandos.add(new Commando("upperCase", this::upperCase, 1));
 
-        commandos.add(new Commando("wait", Commandos::wait, 1));
-        commandos.add(new Commando("word", Commandos::word, 2));
-        commandos.add(new Commando("wordP", Commandos::wordP, 1, "word?"));
+        commandos.add(new Commando("wait", this::wait, 1));
+        commandos.add(new Commando("word", this::word, 2));
+        commandos.add(new Commando("wordP", this::wordP, 1, "word?"));
 
-        commandos.add(new Commando("xPos", Commandos::xPos));
-        commandos.add(new Commando("yPos", Commandos::yPos));
+        commandos.add(new Commando("xPos", this::xPos));
+        commandos.add(new Commando("yPos", this::yPos));
 
         return commandos.toArray(new Commando[0]);
     }
 
-    private static Value abs(Value... arguments) {
+    private Value abs(Value... arguments) {
         double d = (Double) arguments[0].getValue();
         return new Value(Math.abs(d));
     }
 
-    private static Value and(Value... arguments) {
+    private Value and(Value... arguments) {
         Boolean l = (Boolean) arguments[0].getValue();
         Boolean r = (Boolean) arguments[1].getValue();
         return new Value(l && r);
     }
 
-    private static Value arc(Value... arguments) {
+    private Value arc(Value... arguments) {
         double d = (Double) arguments[0].getValue();
         double r = (Double) arguments[1].getValue();
         logo.arc(r, d);
         return null;
     }
 
-    private static Value arcCos(Value... arguments) {
+    private Value arcCos(Value... arguments) {
         double d = (Double) arguments[0].getValue();
         return new Value(Math.toDegrees(Math.acos(d)));
     }
 
-    private static Value arCosh(Value... arguments) {
+    private Value arCosh(Value... arguments) {
         double d = (Double) arguments[0].getValue();
         return new Value(Math.toDegrees(Math.log(d + Math.sqrt(d * d - 1.0))));
     }
 
-    private static Value arcSin(Value... arguments) {
+    private Value arcSin(Value... arguments) {
         double d = (Double) arguments[0].getValue();
         return new Value(Math.toDegrees(Math.asin(d)));
     }
 
-    private static Value arSinh(Value... arguments) {
+    private Value arSinh(Value... arguments) {
         double d = (Double) arguments[0].getValue();
         return new Value(Math.toDegrees(Math.log(d + Math.sqrt(d * d + 1.0))));
     }
 
-    private static Value arcTan(Value... arguments) {
+    private Value arcTan(Value... arguments) {
         double d = (Double) arguments[0].getValue();
         return new Value(Math.toDegrees(Math.atan(d)));
     }
 
-    private static Value arTanh(Value... arguments) {
+    private Value arTanh(Value... arguments) {
         double d = (Double) arguments[0].getValue();
         return new Value(0.5 * Math.log((d + 1.0) / (d - 1.0)));
     }
 
-    private static Value aTan2(Value... arguments) {
+    private Value aTan2(Value... arguments) {
         double d = (Double) arguments[0].getValue();
         double d2 = (Double) arguments[1].getValue();
         return new Value(Math.toDegrees(Math.atan2(d2, d)));
     }
 
-    private static Value ascii(Value... arguments) {
+    private Value ascii(Value... arguments) {
         char c = ((String) arguments[0].getValue()).charAt(0);
         return new Value(Character.hashCode(c));
     }
 
-    private static Value back(Value... arguments) {
+    private Value back(Value... arguments) {
         double amount = (Double) arguments[0].getValue();
         logo.forward(-amount);
         return null;
     }
 
-    private static Value background() {
+    private Value background() {
         return new Value(logo.colorHandler.getBackground());
     }
 
-    private static Value butFirst(Value... arguments) throws ExecutorException {
+    private Value butFirst(Value... arguments) throws ExecutorException {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
             List<Value> l = ((ListObject) v.getValue()).getList();
@@ -383,7 +384,7 @@ public class Commandos {
         }
     }
 
-    private static Value butLast(Value... arguments) throws ExecutorException {
+    private Value butLast(Value... arguments) throws ExecutorException {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
             List<Value> l = ((ListObject) v.getValue()).getList();
@@ -397,20 +398,20 @@ public class Commandos {
         }
     }
 
-    private static Value buttonP() {
+    private Value buttonP() {
         return new Value(logo.mouseHandler.isLeftMouseDown());
     }
 
-    private static Value buttonS() {
+    private Value buttonS() {
         return new Value(logo.mouseHandler.isRightMouseDown());
     }
 
-    private static Value canvasSize() {
+    private Value canvasSize() {
         Size s = logo.getCanvas().getSize();
         return new Value(new ListObject(s.getWidth(), s.getHeight()));
     }
 
-    private static Value catchM(Value... arguments) throws ParsingException, ExecutorException {
+    private Value catchM(Value... arguments) throws ParsingException, ExecutorException {
         String error = (String) arguments[0].getValue();
         ListObject l = (ListObject) arguments[1].getValue();
 
@@ -423,55 +424,50 @@ public class Commandos {
         return null;
     }
 
-    private static Value charM(Value... arguments) {
+    private Value charM(Value... arguments) {
         int i = ((Double) arguments[0].getValue()).intValue();
         return new Value((char) i + "");
     }
 
-    private static Value clean() {
+    private Value clean() {
         logo.getCanvas().fillScreen(logo.colorHandler.getBackgroundColor());
         logo.getTurtle().getPath().clear();
         return null;
     }
 
-    private static Value clearScreen() {
+    private Value clearScreen() {
         clean();
         home();
         logo.getTurtle().setPenDown(true);
         return null;
     }
 
-    private static Value colorAtPoint(Value... arguments) throws ExecutorException {
-        //TODO fix bigger than canvas and wrong thread
-        List<Value> l = ((ListObject) arguments[0].getValue()).getList();
-        if (l.size() != 2) throw new ExecutorException("Color at point needs a list with two numbers");
-        Position relative = logo.getStart();
-        int x = (int) (l.get(0).getAsNumber() - relative.getX());
-        int y = (int) (l.get(1).getAsNumber() - relative.getY());
+    private Value colorAtPoint(Value... arguments) throws ExecutorException {
+        Position pos = ValueUtil.valueToPosition(arguments[0], logo.getStart());
 
-        FXCanvas fxCanvas = (FXCanvas) logo.getCanvas();
-        WritableImage img = fxCanvas.getNode().snapshot(new SnapshotParameters(), null);
-        javafx.scene.paint.Color color = img.getPixelReader().getColor(x, y);
+        Waitable<javafx.scene.paint.Color> waitable = new Waitable<>();
+        Platform.runLater(() -> {
+            FXCanvas fxCanvas = (FXCanvas) logo.getCanvas();
+            WritableImage img = fxCanvas.getNode().snapshot(new SnapshotParameters(), null);
+            waitable.setDone(img.getPixelReader().getColor((int) pos.getX(), (int) pos.getY()));
+        });
 
-        List<Object> r = new ArrayList<>();
-        r.add((int) (color.getRed() * 255));
-        r.add((int) (color.getGreen() * 255));
-        r.add((int) (color.getBlue() * 255));
+        javafx.scene.paint.Color color = WaitableUtil.waitFor(waitable);
 
-        return new Value(new ListObject(r));
+        return new Value(new ListObject((int) (color.getRed() * 255), (int) (color.getGreen() * 255), (int) (color.getBlue() * 255)));
     }
 
-    private static Value cos(Value... arguments) {
+    private Value cos(Value... arguments) {
         double d = (Double) arguments[0].getValue();
         return new Value(Math.cos(Math.toRadians(d)));
     }
 
-    private static Value cosh(Value... arguments) {
+    private Value cosh(Value... arguments) {
         double d = (Double) arguments[0].getValue();
         return new Value(Math.cosh(Math.toRadians(d)));
     }
 
-    private static Value count(Value... arguments) {
+    private Value count(Value... arguments) {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
             List<Value> l = ((ListObject) v.getValue()).getList();
@@ -482,7 +478,7 @@ public class Commandos {
         }
     }
 
-    private static Value currentPath() {
+    private Value currentPath() {
         List<Value> l = new ArrayList<>();
         Position[] points = logo.getTurtle().getPath().getPoints();
         for (Position pos : points) {
@@ -491,12 +487,12 @@ public class Commandos {
         return new Value(new ListObject(l));
     }
 
-    private static Value date() {
+    private Value date() {
         String s = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         return new Value(s);
     }
 
-    private static Value define(Value... arguments) throws ExecutorException, ParsingException {
+    private Value define(Value... arguments) throws ExecutorException, ParsingException {
         String name = (String) arguments[0].getValue();
         ListObject l = (ListObject) arguments[1].getValue();
         Script script = logo.getParser().parse(l.getInner());
@@ -511,12 +507,12 @@ public class Commandos {
         return null;
     }
 
-    private static Value defineP(Value... arguments) {
+    private Value defineP(Value... arguments) {
         String name = (String) arguments[0].getValue();
         return new Value(logo.procedureHandler.getProcedures().keySet().contains(name));
     }
 
-    private static Value difference(Value... arguments) throws ExecutorException {
+    private Value difference(Value... arguments) throws ExecutorException {
         List<Value> list = arguments[0].getAsList().getList();
         Double r = null;
         for (Value value : list) {
@@ -529,15 +525,13 @@ public class Commandos {
         return new Value(r);
     }
 
-    private static Value dot(Value... arguments) {
-        List<Value> list = ((ListObject) arguments[0].getValue()).getList();
-        double x = (double) list.get(0).getValue();
-        double y = (double) list.get(1).getValue();
-        logo.getCanvas().drawDot(new Position(x, y));
+    private Value dot(Value... arguments) throws ExecutorException {
+        Position pos = ValueUtil.valueToPosition(arguments[0], logo.getStart());
+        logo.getCanvas().drawDot(pos);
         return null;
     }
 
-    private static Value emptyP(Value... arguments) {
+    private Value emptyP(Value... arguments) {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
             List<Value> l = ((ListObject) v.getValue()).getList();
@@ -548,33 +542,24 @@ public class Commandos {
         }
     }
 
-    private static Value equalP(Value... arguments) {
+    private Value equalP(Value... arguments) {
         String s1 = arguments[0].toString();
         String s2 = arguments[1].toString();
         return new Value(s1.equals(s2));
     }
 
-    private static Value exp(Value... arguments) {
+    private Value exp(Value... arguments) {
         Double d = (double) arguments[0].getValue();
         return new Value(Math.exp(d));
     }
 
-    private static Value fill() {
-        //TODO Paint bucket mode oposite until same color
-        return null;
-    }
-
-    private static Value fillIn() {
-        //TODO Paint bucket mode
-        return null;
-    }
-
-    private static Value fillCurrentPath() {
+    private Value fillCurrentPath() {
         logo.fillPath();
+        logo.getTurtle().getPath().clear();
         return null;
     }
 
-    private static Value fillPath(Value... arguments) throws ExecutorException {
+    private Value fillPath(Value... arguments) throws ExecutorException {
         List<Value> list = ((ListObject) arguments[0].getValue()).getList();
         Path path = new Path();
 
@@ -587,10 +572,11 @@ public class Commandos {
             path.addPoint(new Position(x, y));
         }
         logo.fillPath(path);
+        logo.getTurtle().getPath().clear();
         return null;
     }
 
-    private static Value first(Value... arguments) throws ExecutorException {
+    private Value first(Value... arguments) throws ExecutorException {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
             List<Value> l = ((ListObject) v.getValue()).getList();
@@ -603,7 +589,7 @@ public class Commandos {
         }
     }
 
-    private static Value firstPut(Value... arguments) {
+    private Value firstPut(Value... arguments) {
         Value add = arguments[0];
         Value to = arguments[1];
         if (to.getType() == Value.ValueType.LIST) {
@@ -615,42 +601,42 @@ public class Commandos {
         }
     }
 
-    private static Value fontFace() {
+    private Value fontFace() {
         Font font = logo.getTurtle().getFont();
         return ValueUtil.fontToValue(font);
     }
 
-    private static Value fontFaces() {
+    private Value fontFaces() {
         List<Value> fonts = javafx.scene.text.Font.getFontNames().stream()
                 .map(ValueUtil::fontToValue)
                 .collect(Collectors.toList());
         return new Value(new ListObject(fonts));
     }
 
-    private static Value fontFamilies() {
+    private Value fontFamilies() {
         List<Value> fonts = javafx.scene.text.Font.getFamilies().stream()
                 .map(ValueUtil::fontToValue)
                 .collect(Collectors.toList());
         return new Value(new ListObject(fonts));
     }
 
-    private static Value fontFamily() {
+    private Value fontFamily() {
         Font font = logo.getTurtle().getFont();
         return ValueUtil.fontToValue(new javafx.scene.text.Font(font.getName(), font.getSize()).getFamily());
     }
 
-    private static Value fontTraits() {
+    private Value fontTraits() {
         Font font = logo.getTurtle().getFont();
         return ValueUtil.fontToValue(new javafx.scene.text.Font(font.getName(), font.getSize()).getStyle());
     }
 
-    private static Value forward(Value... arguments) {
+    private Value forward(Value... arguments) {
         double amount = (Double) arguments[0].getValue();
         logo.forward(amount);
         return null;
     }
 
-    private static Value getMouseChange() {
+    private Value getMouseChange() throws ExecutorException {
         Waitable<Position> left = logo.mouseHandler.getLeftMouseClick();
         Waitable<Position> right = logo.mouseHandler.getRightMouseClick();
         Waitable<Position> moved = logo.mouseHandler.getMouseMove();
@@ -661,25 +647,35 @@ public class Commandos {
         return new Value(new ListObject(ValueUtil.positionToValue(pos, logo.getStart()), new Value(updated == left), new Value(updated == right)));
     }
 
-    private static Value getLeftMouseClick() {
+    private Value getMouseClick() throws ExecutorException {
+        Waitable<Position> left = logo.mouseHandler.getLeftMouseClick();
+        Waitable<Position> right = logo.mouseHandler.getRightMouseClick();
+
+        Waitable updated = WaitableUtil.waitFor(left, right);
+        Position pos = (Position) updated.reset();
+
+        return new Value(new ListObject(ValueUtil.positionToValue(pos, logo.getStart()), new Value(updated == left), new Value(updated == right)));
+    }
+
+    private Value getLeftMouseClick() throws ExecutorException {
         Waitable<Position> left = logo.mouseHandler.getLeftMouseClick();
         Position pos = WaitableUtil.waitFor(left);
         return ValueUtil.positionToValue(pos, logo.getStart());
     }
 
-    private static Value getRightMouseClick() {
+    private Value getRightMouseClick() throws ExecutorException {
         Waitable<Position> right = logo.mouseHandler.getRightMouseClick();
         Position pos = WaitableUtil.waitFor(right);
         return ValueUtil.positionToValue(pos, logo.getStart());
     }
 
-    private static Value getMouseMoved() {
+    private Value getMouseMoved() throws ExecutorException {
         Waitable<Position> moved = logo.mouseHandler.getMouseMove();
         Position pos = WaitableUtil.waitFor(moved);
         return ValueUtil.positionToValue(pos, logo.getStart());
     }
 
-    private static Value getProp(Value... arguments) throws ExecutorException {
+    private Value getProp(Value... arguments) throws ExecutorException {
         String name = arguments[0].getAsString();
         String property = arguments[1].getAsString();
         Value r = logo.propertyHandler.getProperty(name, property);
@@ -687,7 +683,7 @@ public class Commandos {
         return r;
     }
 
-    private static Value graphicsType(Value... arguments) throws ExecutorException {
+    private Value graphicsType(Value... arguments) throws ExecutorException {
         Value v = arguments[0];
         String text;
         if (v.getType() == Value.ValueType.LIST) {
@@ -700,16 +696,16 @@ public class Commandos {
         return null;
     }
 
-    private static Value heading() {
+    private Value heading() {
         return new Value((360.0 - logo.getTurtle().getRotation()) % 360);
     }
 
-    private static Value hideTurtle() {
+    private Value hideTurtle() {
         logo.getTurtleGraphics().hide();
         return null;
     }
 
-    private static Value home(Value... arguments) {
+    private Value home(Value... arguments) {
         Size s = logo.getCanvas().getSize();
         Position newp = new Position(s.getWidth() / 2.0, s.getHeight() / 2.0);
         logo.setStart(newp);
@@ -718,7 +714,7 @@ public class Commandos {
         return null;
     }
 
-    private static Value ifM(Value... arguments) throws ParsingException, ExecutorException {
+    private Value ifM(Value... arguments) throws ParsingException, ExecutorException {
         boolean b = arguments[0].getAsBoolean();
         ListObject trueL = arguments[1].getAsList();
         ListObject falseL = arguments[2].getAsList();
@@ -726,11 +722,11 @@ public class Commandos {
         return logo.runRaw((b) ? trueL.getInner() : falseL.getInner());
     }
 
-    private static Value integer(Value... arguments) throws ExecutorException {
+    private Value integer(Value... arguments) throws ExecutorException {
         return new Value((double) (int) arguments[0].getAsNumber());
     }
 
-    private static Value item(Value... arguments) throws ExecutorException {
+    private Value item(Value... arguments) throws ExecutorException {
         int item = (int) arguments[0].getAsNumber() - 1;
         Value v = arguments[1];
         if (v.getType() == Value.ValueType.LIST) {
@@ -742,7 +738,7 @@ public class Commandos {
         }
     }
 
-    private static Value last(Value... arguments) throws ExecutorException {
+    private Value last(Value... arguments) throws ExecutorException {
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
             List<Value> l = ((ListObject) v.getValue()).getList();
@@ -755,7 +751,7 @@ public class Commandos {
         }
     }
 
-    private static Value lastPut(Value... arguments) {
+    private Value lastPut(Value... arguments) {
         Value add = arguments[0];
         Value to = arguments[1];
         if (to.getType() == Value.ValueType.LIST) {
@@ -767,24 +763,24 @@ public class Commandos {
         }
     }
 
-    private static Value left(Value... arguments) {
+    private Value left(Value... arguments) {
         double amount = (Double) arguments[0].getValue();
         logo.left(amount);
         return null;
     }
 
-    private static Value list(Value... arguments) {
+    private Value list(Value... arguments) {
         Value first = arguments[0];
         Value second = arguments[1];
         return new Value(new ListObject(first, second));
     }
 
-    private static Value listP(Value... arguments) {
+    private Value listP(Value... arguments) {
         return new Value(arguments[0].getType() == Value.ValueType.LIST);
     }
 
-    private static Value local(Value... arguments) throws ExecutorException {
-        LocalVariableHandler variableHandler = Procedure.current;
+    private Value local(Value... arguments) throws ExecutorException {
+        LocalVariableHandler variableHandler = logo.getCurrent();
         if (variableHandler == null) throw new ExecutorException("This method can only be used in procedures.");
         Value v = arguments[0];
         if (v.getType() == Value.ValueType.LIST) {
@@ -797,20 +793,20 @@ public class Commandos {
         return null;
     }
 
-    private static Value log(Value... arguments) throws ExecutorException {
+    private Value log(Value... arguments) throws ExecutorException {
         return new Value(Math.log(arguments[0].getAsNumber()));
     }
 
-    private static Value log10(Value... arguments) throws ExecutorException {
+    private Value log10(Value... arguments) throws ExecutorException {
         return new Value(Math.log10(arguments[0].getAsNumber()));
     }
 
-    private static Value lowerCase(Value... arguments) {
+    private Value lowerCase(Value... arguments) {
         return ValueUtil.stringToValue(arguments[0].toString().toLowerCase());
     }
 
-    private static Value make(Value... arguments) throws ExecutorException {
-        VariableHandler variableHandler = Procedure.current;
+    private Value make(Value... arguments) throws ExecutorException {
+        VariableHandler variableHandler = logo.getCurrent();
         if (variableHandler == null) variableHandler = logo.getExecutor().getVariableHandler();
         String name = arguments[0].getAsString();
         Value value = arguments[1];
@@ -818,7 +814,7 @@ public class Commandos {
         return null;
     }
 
-    private static Value memberP(Value... arguments) throws ExecutorException {
+    private Value memberP(Value... arguments) throws ExecutorException {
         Value v = arguments[1];
         if (v.getType() == Value.ValueType.LIST) {
             List<Value> list = v.getAsList().getList();
@@ -829,35 +825,35 @@ public class Commandos {
         }
     }
 
-    private static Value mouse() {
+    private Value mouse() {
         return ValueUtil.positionToValue(logo.mouseHandler.getMouse(), logo.getStart());
     }
 
-    private static Value nameP(Value... arguments) throws ExecutorException {
-        VariableHandler variableHandler = Procedure.current;
+    private Value nameP(Value... arguments) throws ExecutorException {
+        VariableHandler variableHandler = logo.getCurrent();
         if (variableHandler == null) variableHandler = logo.getExecutor().getVariableHandler();
 
         String name = arguments[0].getAsString();
         return new Value(variableHandler.contains(name));
     }
 
-    private static Value not(Value... arguments) throws ExecutorException {
+    private Value not(Value... arguments) throws ExecutorException {
         return new Value(!arguments[0].getAsBoolean());
     }
 
-    private static Value numberP(Value... arguments) {
+    private Value numberP(Value... arguments) {
         return new Value(ValueUtil.stringToValue(arguments[0].toString()).getType() == Value.ValueType.NUMBER);
     }
 
-    private static Value or(Value... arguments) throws ExecutorException {
+    private Value or(Value... arguments) throws ExecutorException {
         return new Value(arguments[0].getAsBoolean() || arguments[1].getAsBoolean());
     }
 
-    private static Value output(Value... arguments) {
+    private Value output(Value... arguments) {
         throw new Output(arguments[0]);
     }
 
-    private static Value pathBounds(Value... arguments) throws ExecutorException {
+    private Value pathBounds(Value... arguments) throws ExecutorException {
         double minX = 0;
         double minY = 0;
         double maxX = 0;
@@ -879,48 +875,49 @@ public class Commandos {
         return new Value(new ListObject(minX, minY, Math.abs(maxX - minX), Math.abs(maxY - minY)));
     }
 
-    private static Value pathLength(Value... arguments) throws ExecutorException {
+    private Value pathLength(Value... arguments) throws ExecutorException {
         return new Value(arguments[0].getAsList().getList().size());
     }
 
-    private static Value pen() {
+    private Value pen() {
         Turtle turtle = logo.getTurtle();
         int color = logo.colorHandler.getPen();
         return new Value(new ListObject(turtle.isPenDown(), color));
     }
 
-    private static Value penColor() {
+    private Value penColor() {
         int color = logo.colorHandler.getPen();
         return new Value(color);
     }
 
-    private static Value penUp() {
+    private Value penUp() {
         logo.getTurtle().setPenDown(false);
+        logo.getTurtle().getPath().clear();
         return null;
     }
 
-    private static Value penDown() {
+    private Value penDown() {
         logo.getTurtle().setPenDown(true);
         return null;
     }
 
-    private static Value penWidth() {
+    private Value penWidth() {
         return new Value(logo.getTurtle().getPenWidth());
     }
 
-    private static Value pi() {
+    private Value pi() {
         return new Value(Math.PI);
     }
 
-    private static Value position() {
+    private Value position() {
         return ValueUtil.positionToValue(logo.getTurtle().getPosition(), logo.getStart());
     }
 
-    private static Value power(Value... arguments) throws ExecutorException {
+    private Value power(Value... arguments) throws ExecutorException {
         return new Value(Math.pow(arguments[0].getAsNumber(), arguments[1].getAsNumber()));
     }
 
-    private static Value print(Value... arguments) throws ExecutorException {
+    private Value print(Value... arguments) throws ExecutorException {
         Value v = arguments[0];
         ConsoleHandler console = logo.getExecutor().getConsoleHandler();
         if (v.getType() == Value.ValueType.LIST) {
@@ -932,7 +929,7 @@ public class Commandos {
         return null;
     }
 
-    private static Value product(Value... arguments) throws ExecutorException {
+    private Value product(Value... arguments) throws ExecutorException {
         List<Value> list = arguments[0].getAsList().getList();
         Double r = null;
         for (Value value : list) {
@@ -945,7 +942,7 @@ public class Commandos {
         return new Value(r);
     }
 
-    private static Value propList(Value... arguments) throws ExecutorException {
+    private Value propList(Value... arguments) throws ExecutorException {
         String name = arguments[0].getAsString();
         PropertyHandler propertyHandler = logo.propertyHandler;
 
@@ -961,7 +958,7 @@ public class Commandos {
         return new Value(new ListObject(list));
     }
 
-    private static Value putProp(Value... arguments) throws ExecutorException {
+    private Value putProp(Value... arguments) throws ExecutorException {
         String name = arguments[0].getAsString();
         String property = arguments[1].getAsString();
         Value value = arguments[2];
@@ -969,7 +966,7 @@ public class Commandos {
         return null;
     }
 
-    private static Value quotient(Value... arguments) throws ExecutorException {
+    private Value quotient(Value... arguments) throws ExecutorException {
         List<Value> list = arguments[0].getAsList().getList();
         Double r = null;
         for (Value value : list) {
@@ -982,13 +979,13 @@ public class Commandos {
         return new Value(r);
     }
 
-    private static Value random(Value... arguments) throws ExecutorException {
+    private Value random(Value... arguments) throws ExecutorException {
         int max = (int) arguments[0].getAsNumber();
         double r = random.nextInt(Math.max(max, 1));
         return new Value(r);
     }
 
-    private static Value readChar() {
+    private Value readChar() throws ExecutorException {
         ConsoleHandler console = logo.getExecutor().getConsoleHandler();
         console.waitFor((text, key) -> text.length() >= 1);
         console.enableInput();
@@ -997,7 +994,7 @@ public class Commandos {
         return ValueUtil.stringToValue(s);
     }
 
-    private static Value readChars(Value... arguments) throws ExecutorException {
+    private Value readChars(Value... arguments) throws ExecutorException {
         int count = (int) arguments[0].getAsNumber();
         if (count < 1) throw new ExecutorException("Input for readChars should be bigger or equals to 1.");
         ConsoleHandler console = logo.getExecutor().getConsoleHandler();
@@ -1008,7 +1005,7 @@ public class Commandos {
         return ValueUtil.stringToValue(s);
     }
 
-    private static Value readList() {
+    private Value readList() throws ExecutorException {
         ConsoleHandler console = logo.getExecutor().getConsoleHandler();
         console.waitFor((text, key) -> key == KeyCode.ENTER);
         console.enableInput();
@@ -1017,7 +1014,7 @@ public class Commandos {
         return ValueUtil.stringToListValue(s);
     }
 
-    private static Value readWord() {
+    private Value readWord() throws ExecutorException {
         ConsoleHandler console = logo.getExecutor().getConsoleHandler();
         console.waitFor((text, key) -> key == KeyCode.ENTER);
         console.enableInput();
@@ -1026,21 +1023,21 @@ public class Commandos {
         return ValueUtil.stringToValue(s);
     }
 
-    private static Value remainder(Value... arguments) throws ExecutorException {
+    private Value remainder(Value... arguments) throws ExecutorException {
         double first = arguments[0].getAsNumber();
         double second = arguments[1].getAsNumber();
         return new Value(first % second);
     }
 
-    private static Value remProp(Value... arguments) throws ExecutorException {
+    private Value remProp(Value... arguments) throws ExecutorException {
         String name = arguments[0].getAsString();
         String property = arguments[1].getAsString();
         logo.propertyHandler.removeProperty(name, property);
         return null;
     }
 
-    private static Value repeat(Value... arguments) throws ParsingException, ExecutorException {
-        int t = ((Double) arguments[0].getValue()).intValue();
+    private Value repeat(Value... arguments) throws ParsingException, ExecutorException {
+        int t = (int) arguments[0].getAsNumber();
         ListObject l = (ListObject) arguments[1].getValue();
         for (int i = 0; i < t; i++) {
             logo.runRaw(l.getInner());
@@ -1048,35 +1045,35 @@ public class Commandos {
         return null;
     }
 
-    private static Value reverseList(Value... arguments) throws ExecutorException {
+    private Value reverseList(Value... arguments) throws ExecutorException {
         List<Value> list = arguments[0].getAsList().getList();
         Collections.reverse(list);
         return new Value(new ListObject(list));
     }
 
-    private static Value rgb(Value... arguments) throws ExecutorException {
+    private Value rgb(Value... arguments) throws ExecutorException {
         int c = (int) arguments[0].getAsNumber();
         Color color = logo.colorHandler.getColor(c);
         return new Value(new ListObject(color.getRed(), color.getGreen(), color.getBlue()));
     }
 
-    private static Value right(Value... arguments) {
+    private Value right(Value... arguments) {
         double amount = (Double) arguments[0].getValue();
         logo.right(amount);
         return null;
     }
 
-    private static Value round(Value... arguments) throws ExecutorException {
+    private Value round(Value... arguments) throws ExecutorException {
         double d = arguments[0].getAsNumber();
         return new Value(Math.round(d));
     }
 
-    private static Value run(Value... arguments) throws ExecutorException, ParsingException {
+    private Value run(Value... arguments) throws ExecutorException, ParsingException {
         ListObject list = arguments[0].getAsList();
         return logo.runRaw(list.getInner());
     }
 
-    private static Value sentence(Value... arguments) throws ExecutorException {
+    private Value sentence(Value... arguments) throws ExecutorException {
         Value first = arguments[0];
         Value second = arguments[1];
         List<Value> list = new ArrayList<>();
@@ -1093,13 +1090,13 @@ public class Commandos {
         return new Value(new ListObject(list));
     }
 
-    private static Value setBackground(Value... arguments) throws ExecutorException {
+    private Value setBackground(Value... arguments) throws ExecutorException {
         int color = (int) arguments[0].getAsNumber();
         logo.colorHandler.setBackground(color);
         return null;
     }
 
-    private static Value setCanvasSize(Value... arguments) throws ExecutorException {
+    private Value setCanvasSize(Value... arguments) throws ExecutorException {
         List<Value> list = arguments[0].getAsList().getList();
         int width = (int) list.get(0).getAsNumber();
         int height = (int) list.get(1).getAsNumber();
@@ -1108,7 +1105,7 @@ public class Commandos {
         return null;
     }
 
-    private static Value setFontFace(Value... arguments) throws ExecutorException {
+    private Value setFontFace(Value... arguments) throws ExecutorException {
         String fontFace = arguments[0].getAsList().getInner();
         checkFont(fontFace);
 
@@ -1117,7 +1114,7 @@ public class Commandos {
         return null;
     }
 
-    private static Value setFontFamily(Value... arguments) throws ExecutorException {
+    private Value setFontFamily(Value... arguments) throws ExecutorException {
         String fontFamily = arguments[0].getAsList().getInner();
         checkFont(fontFamily);
 
@@ -1132,7 +1129,7 @@ public class Commandos {
         return null;
     }
 
-    private static Value setFontTraits(Value... arguments) throws ExecutorException {
+    private Value setFontTraits(Value... arguments) throws ExecutorException {
         Font old = logo.getTurtle().getFont();
         String s = new javafx.scene.text.Font(old.getName(), old.getSize()).getFamily();
 
@@ -1144,19 +1141,19 @@ public class Commandos {
         return null;
     }
 
-    private static Value setFullScreen(Value... arguments) throws ExecutorException {
+    private Value setFullScreen(Value... arguments) throws ExecutorException {
         boolean b = arguments[0].getAsBoolean();
         Platform.runLater(() -> ((Stage) ((FXCanvas) logo.getCanvas()).getCanvas().getScene().getWindow()).setFullScreen(b));
         return null;
     }
 
-    private static Value setHeading(Value... arguments) throws ExecutorException {
+    private Value setHeading(Value... arguments) throws ExecutorException {
         double d = arguments[0].getAsNumber();
         logo.getTurtle().setRotation(360.0 - d);
         return null;
     }
 
-    private static Value setLineCap(Value... arguments) throws ExecutorException {
+    private Value setLineCap(Value... arguments) throws ExecutorException {
         String s = arguments[0].getAsString();
         LineCap lineCap;
         switch (s.toLowerCase()) {
@@ -1176,7 +1173,7 @@ public class Commandos {
         return null;
     }
 
-    private static Value setLineDash(Value... arguments) throws ExecutorException {
+    private Value setLineDash(Value... arguments) throws ExecutorException {
         List<Value> list = arguments[0].getAsList().getList();
         if (list.isEmpty()) {
             logo.getCanvas().setLineDash(0);
@@ -1194,7 +1191,7 @@ public class Commandos {
         return null;
     }
 
-    private static Value setPen(Value... arguments) throws ExecutorException {
+    private Value setPen(Value... arguments) throws ExecutorException {
         List<Value> list = arguments[0].getAsList().getList();
         boolean pen = list.get(0).getAsBoolean();
         int color = (int) list.get(1).getAsNumber();
@@ -1203,25 +1200,25 @@ public class Commandos {
         return null;
     }
 
-    private static Value setPenColor(Value... arguments) throws ExecutorException {
+    private Value setPenColor(Value... arguments) throws ExecutorException {
         int color = (int) arguments[0].getAsNumber();
         logo.colorHandler.setPenColor(color);
         return null;
     }
 
-    private static Value setPenWidth(Value... arguments) throws ExecutorException {
+    private Value setPenWidth(Value... arguments) throws ExecutorException {
         double width = arguments[0].getAsNumber();
         logo.getTurtle().setPenWidth(width);
         return null;
     }
 
-    private static Value setPosition(Value... arguments) throws ExecutorException {
+    private Value setPosition(Value... arguments) throws ExecutorException {
         Position position = ValueUtil.valueToPosition(arguments[0], logo.getStart());
         logo.drawToPosition(position);
         return null;
     }
 
-    private static Value setRGB(Value... arguments) throws ExecutorException {
+    private Value setRGB(Value... arguments) throws ExecutorException {
         int i = (int) arguments[0].getAsNumber();
         List<Value> list = arguments[1].getAsList().getList();
         int r = (int) list.get(0).getAsNumber();
@@ -1234,14 +1231,14 @@ public class Commandos {
         return null;
     }
 
-    private static Value setTypeSize(Value... arguments) throws ExecutorException {
+    private Value setTypeSize(Value... arguments) throws ExecutorException {
         double size = arguments[0].getAsNumber();
         Font old = logo.getTurtle().getFont();
         logo.getTurtle().setFont(new Font(old.getName(), size, old.getColor()));
         return null;
     }
 
-    private static Value setX(Value... arguments) throws ExecutorException {
+    private Value setX(Value... arguments) throws ExecutorException {
         double x = arguments[0].getAsNumber();
         Position position = new Position(x, logo.getTurtle().getPosition().getY());
         position.addX(logo.getStart().getX());
@@ -1249,7 +1246,7 @@ public class Commandos {
         return null;
     }
 
-    private static Value setY(Value... arguments) throws ExecutorException {
+    private Value setY(Value... arguments) throws ExecutorException {
         double y = arguments[0].getAsNumber();
         Position position = new Position(logo.getTurtle().getPosition().getX(), -y);
         position.addY(logo.getStart().getY());
@@ -1257,46 +1254,46 @@ public class Commandos {
         return null;
     }
 
-    private static Value show(Value... arguments) {
+    private Value show(Value... arguments) {
         Value v = arguments[0];
         logo.getExecutor().getConsoleHandler().output(v);
         return null;
     }
 
-    private static Value shownP() {
+    private Value shownP() {
         return new Value(logo.getTurtleGraphics().isVisible());
     }
 
-    private static Value showTurtle() {
+    private Value showTurtle() {
         logo.getTurtleGraphics().show();
         return null;
     }
 
-    private static Value sin(Value... arguments) throws ExecutorException {
+    private Value sin(Value... arguments) throws ExecutorException {
         double d = arguments[0].getAsNumber();
         return new Value(Math.sin(Math.toRadians(d)));
     }
 
-    private static Value sinh(Value... arguments) throws ExecutorException {
+    private Value sinh(Value... arguments) throws ExecutorException {
         double d = arguments[0].getAsNumber();
         return new Value(Math.sinh(Math.toRadians(d)));
     }
 
-    private static Value sqrt(Value... arguments) throws ExecutorException {
+    private Value sqrt(Value... arguments) throws ExecutorException {
         double d = arguments[0].getAsNumber();
         return new Value(Math.sqrt(d));
     }
 
-    private static Value stop() {
+    private Value stop() {
         throw new Output(null);
     }
 
-    private static Value strokeCurrentPath() throws ExecutorException {
+    private Value strokeCurrentPath() throws ExecutorException {
         strokePath(currentPath());
         return null;
     }
 
-    private static Value strokePath(Value... arguments) throws ExecutorException {
+    private Value strokePath(Value... arguments) throws ExecutorException {
         List<Value> path = arguments[0].getAsList().getList();
         Position old = logo.getTurtle().getPosition();
         Position start = logo.getStart();
@@ -1318,7 +1315,7 @@ public class Commandos {
         return null;
     }
 
-    private static Value sum(Value... arguments) throws ExecutorException {
+    private Value sum(Value... arguments) throws ExecutorException {
         List<Value> list = arguments[0].getAsList().getList();
         Double r = null;
         for (Value value : list) {
@@ -1331,17 +1328,17 @@ public class Commandos {
         return new Value(r);
     }
 
-    private static Value tan(Value... arguments) throws ExecutorException {
+    private Value tan(Value... arguments) throws ExecutorException {
         double d = arguments[0].getAsNumber();
         return new Value(Math.tan(Math.toRadians(d)));
     }
 
-    private static Value tanh(Value... arguments) throws ExecutorException {
+    private Value tanh(Value... arguments) throws ExecutorException {
         double d = arguments[0].getAsNumber();
         return new Value(Math.tanh(Math.toRadians(d)));
     }
 
-    private static Value text(Value... arguments) throws ExecutorException {
+    private Value text(Value... arguments) throws ExecutorException {
         String s = arguments[0].getAsString();
         Procedure procedure = logo.procedureHandler.getProcedure(s);
         ListObject pare = new ListObject(procedure.getParameters().toArray());
@@ -1351,7 +1348,7 @@ public class Commandos {
         return new Value(new ListObject(new Value(pare), codeV));
     }
 
-    private static Value textBox(Value... arguments) throws ExecutorException {
+    private Value textBox(Value... arguments) throws ExecutorException {
         String s = arguments[0].getAsString();
         Text text = new Text(s);
         Font font = logo.getTurtle().getFont();
@@ -1364,27 +1361,27 @@ public class Commandos {
         return new Value(new ListObject(pos.getX(), pos.getY(), w, h));
     }
 
-    private static Value thing(Value... arguments) throws ExecutorException {
+    private Value thing(Value... arguments) throws ExecutorException {
         String s = arguments[0].getAsString();
         return logo.getExecutor().getVariableHandler().getVariable(s);
     }
 
-    private static Value throwM(Value... arguments) throws ExecutorException {
+    private Value throwM(Value... arguments) throws ExecutorException {
         String s = arguments[0].getAsString();
         throw new Catch(s);
     }
 
-    private static Value time() {
+    private Value time() {
         return new Value(timeFormat.format(new Date()));
     }
 
-    private static Value towards(Value... arguments) throws ExecutorException {
+    private Value towards(Value... arguments) throws ExecutorException {
         Position position = ValueUtil.valueToPosition(arguments[0], new Position(0, 0));
         System.out.println(position);
         return new Value(MathUtil.getRotationTowardsRelative(position));
     }
 
-    private static Value type(Value... arguments) throws ExecutorException {
+    private Value type(Value... arguments) throws ExecutorException {
         Value v = arguments[0];
         ConsoleHandler console = logo.getExecutor().getConsoleHandler();
         if (v.getType() == Value.ValueType.LIST) {
@@ -1396,11 +1393,11 @@ public class Commandos {
         return null;
     }
 
-    private static Value upperCase(Value... arguments) {
+    private Value upperCase(Value... arguments) {
         return ValueUtil.stringToValue(arguments[0].toString().toUpperCase());
     }
 
-    private static Value wait(Value... arguments) throws ExecutorException {
+    private Value wait(Value... arguments) throws ExecutorException {
         int i = (int) arguments[0].getAsNumber();
         try {
             Thread.sleep(i);
@@ -1409,27 +1406,27 @@ public class Commandos {
         return null;
     }
 
-    private static Value word(Value... arguments) throws ExecutorException {
+    private Value word(Value... arguments) throws ExecutorException {
         String s1 = arguments[0].getAsString();
         String s2 = arguments[1].getAsString();
         return new Value(s1 + s2);
     }
 
-    private static Value wordP(Value... arguments) {
+    private Value wordP(Value... arguments) {
         return new Value(arguments[0].getType() != Value.ValueType.LIST);
     }
 
-    private static Value xPos() {
+    private Value xPos() {
         return new Value(logo.getTurtle().getPosition().getX() - logo.getStart().getX());
     }
 
-    private static Value yPos() {
+    private Value yPos() {
         double y = logo.getTurtle().getPosition().getY() - logo.getStart().getY();
         if (y != 0) y = -y;
         return new Value(y);
     }
 
-    private static void checkFont(String font) throws ExecutorException {
+    private void checkFont(String font) throws ExecutorException {
         Font old = logo.getTurtle().getFont();
         String s = new javafx.scene.text.Font(font, 12).getName();
         if (!s.equalsIgnoreCase(font.trim()))

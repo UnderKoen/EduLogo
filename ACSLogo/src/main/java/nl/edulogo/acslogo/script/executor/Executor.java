@@ -34,16 +34,12 @@ public class Executor {
     public Value execute(Script script) throws ExecutorException, ParsingException {
         List<Piece> pieces = script.getPieces();
 
-        try {
-            Value last = new Value(null);
-            for (Piece piece : pieces) {
-                last = piece.getValueSafe();
-            }
-
-            return last;
-        } catch (Output output) {
-            return output.getOutput();
+        Value last = new Value(null);
+        for (Piece piece : pieces) {
+            last = piece.getValueSafe();
         }
+
+        return last;
     }
 
     public void executeSafe(Script script) {
@@ -54,6 +50,9 @@ public class Executor {
             consoleHandler.error(ex);
         } catch (Catch ex) {
             consoleHandler.error("No catch for: " + ex.getError());
+        } catch (Output output) {
+            Value v = output.getOutput();
+            if (v != null) consoleHandler.output(v);
         } catch (Exception ex) {
             ex.printStackTrace();
             //TODO handle this

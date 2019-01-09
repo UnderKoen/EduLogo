@@ -3,6 +3,7 @@ package nl.edulogo.acslogo.display.fx;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import nl.edulogo.acslogo.ACSLogo;
 import nl.edulogo.acslogo.display.TurtleGraphics;
 import nl.edulogo.core.Image;
 import nl.edulogo.core.Position;
@@ -41,12 +42,8 @@ public class FXTurtleGraphics implements TurtleGraphics<FXCanvas> {
     }
 
     @Override
-    public void setImage(Image image) {
-        try {
-            this.image.setImage(new javafx.scene.image.Image(new FileInputStream(image.getFile())));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void setImage(String file) {
+        this.image.setImage(new javafx.scene.image.Image(ACSLogo.class.getClassLoader().getResourceAsStream(file)));
     }
 
     @Override

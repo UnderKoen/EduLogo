@@ -1,0 +1,43 @@
+def jdk = System.getProperty("java.home")
+def moduleName = "edulogo.acslogo"
+def mainClass = 'nl.edulogo.acslogo.Test'
+
+
+// jar file task (we add the main class and classpath attributes to the manifest)
+jar {
+    manifest {
+        attributes(
+                'Main-Class': mainClass,
+        )
+    }
+}
+
+task copyDependencies(type: Copy) {
+    from configurations.runtime
+    into "${buildDir}/libraries"
+}
+
+// creates application bundle (executable + runtime)
+task javaPackager(type: Exec, dependsOn: [assemble, copyDependencies]) {
+    workingDir project.projectDir
+    commandLine = [
+            '/Library/Java/JavaVirtualMachines/jdk-10.jdk/Contents/Home/bin/javapackager',
+            '-deploy',
+            '-nosign',
+            '-v',
+            '-native', 'image',
+            '-outdir', "${buildDir}/distribution",
+            '-srcdir', "${buildDir}/../src/main/resources",
+            '-outfile', project.name,
+            '-name', project.name,
+            '-appclass', mainClass,
+            '-p', "${jdk}/jmods${File.pathSeparator}${buildDir}/libraries:${buildDir}/libs",
+            '--add-modules', moduleName,
+            '-m', "$moduleName/$mainClass"
+    ]
+}
+
+task copyResources(type: Copy, dependsOn:javaPackager) {
+    from "${buildDir}/Content"
+    into "${buildDir}/distribution/${project.name}.app/Contents"
+}

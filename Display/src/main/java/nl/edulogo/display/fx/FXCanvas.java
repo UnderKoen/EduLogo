@@ -57,7 +57,7 @@ public class FXCanvas implements Canvas, FXView {
     @Override
     public void drawDot(Position position, Color color) {
         setColor(color);
-        graphics.strokeLine(position.getX() + 0.5, position.getY() + 0.5, position.getX() + 0.5, position.getY() + 0.5);
+        graphics.fillRect(position.getX(), position.getY(), 1, 1);
     }
 
     private void drawImage(javafx.scene.image.Image image, Position position, Size size) {

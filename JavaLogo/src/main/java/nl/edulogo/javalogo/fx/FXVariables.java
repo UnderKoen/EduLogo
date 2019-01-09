@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import nl.edulogo.core.Size;
 import nl.edulogo.display.fx.FXDisplay;
 import nl.edulogo.display.fx.FXView;
@@ -140,7 +141,7 @@ public class FXVariables implements FXView {
             });
             pane.getChildren().addAll(traceButton);
 
-            //TODO: Hier sluiten als geen Children.
+            ((Stage) pane.getScene().getWindow()).close();
         }
     }
 

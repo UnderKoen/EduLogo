@@ -1,6 +1,7 @@
 package nl.edulogo.acslogo.handlers.procedures;
 
 import nl.edulogo.acslogo.ACSLogo;
+import nl.edulogo.acslogo.Output;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
 import nl.edulogo.acslogo.handlers.variable.LocalVariableHandler;
 import nl.edulogo.acslogo.script.ExecutorException;
@@ -11,13 +12,12 @@ import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.Executor;
 import nl.edulogo.acslogo.script.parser.Parser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Procedure extends Commando {
-    public static LocalVariableHandler current = null;
-
-    protected ACSLogo logo;
+    protected transient ACSLogo logo;
     protected String code;
     protected List<String> parameters;
 
@@ -43,19 +43,27 @@ public class Procedure extends Commando {
 
         ConsoleHandler consoleHandler = logo.getExecutor().getConsoleHandler();
         Executor executor = new Executor(consoleHandler, logo.getExecutor().getCommandoHandler(), variableHandler);
-        Parser parser = new Parser(consoleHandler, executor);
+        Parser parser = new Parser(consoleHandler, executor, logo);
 
-        LocalVariableHandler old = current;
-        current = variableHandler;
+        LocalVariableHandler old = logo.getCurrent();
+        logo.setCurrent(variableHandler);
         try {
             Script s = parser.parse(code);
             Value r = executor.execute(s);
-            current = old;
+            logo.setCurrent(old);
             return r;
         } catch (ParsingException e) {
-            current = null;
+            logo.setCurrent(null);
             throw new ExecutorException(e.getMessage());
+        } catch (Output output) {
+            Value v = output.getOutput();
+            if (v == null) v = new Value(null);
+            return v;
         }
+    }
+
+    public void setLogo(ACSLogo logo) {
+        this.logo = logo;
     }
 
     public String getCode() {

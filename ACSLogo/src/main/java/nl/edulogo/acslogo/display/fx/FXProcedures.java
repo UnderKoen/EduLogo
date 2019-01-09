@@ -207,6 +207,7 @@ public class FXProcedures implements Procedures, FXView {
         par.add(name);
     }
 
+    @Override
     public void reload() {
         proceduresOrg = new ArrayList<>(procedureHandler.getProcedures().values());
         proceduresNew = new ArrayList<>();
