@@ -4,9 +4,6 @@ import javafx.application.Platform;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 
 /**
  * Created by Under_Koen on 2019-01-08.
@@ -22,7 +19,6 @@ public class Test {
                 Platform.runLater(() -> Starter.startFile(file));
             }
         });
-
         Starter.start();
     }
 }

@@ -91,8 +91,7 @@ public class InvoerVariabele {
                 }
             });
 
-            Button upValue = new Button("+");
-            upValue.setPadding(Insets.EMPTY);
+            Button upValue = new Button();
             upValue.setMaxSize(50, 13);
             upValue.setMinSize(50, 13);
             upValue.setOnAction(event -> {
@@ -102,8 +101,7 @@ public class InvoerVariabele {
                 applet.invoerVarActie(var);
             });
 
-            Button downValue = new Button("-");
-            downValue.setPadding(Insets.EMPTY);
+            Button downValue = new Button();
             downValue.setMaxSize(50, 13);
             downValue.setMinSize(50, 13);
             downValue.setOnAction(event -> {
