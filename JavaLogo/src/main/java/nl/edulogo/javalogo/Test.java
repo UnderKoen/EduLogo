@@ -11,7 +11,7 @@ public class Test extends TekenApplet {
     public void initialiseer() {
         setSize(500, 500);
         maakTraceMogelijk();
-        maakZichtbaar(new InvoerVariabele("t", 0, 10, -10));
+        for (int i = 0; i < 8; i++) maakZichtbaar(new InvoerVariabele("t", 0, 10, -10));
     }
 
     @Override

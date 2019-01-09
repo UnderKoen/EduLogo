@@ -48,7 +48,6 @@ public class FXVariables implements FXView {
             invoerVars.add(var);
         }
         varHeight += 70;
-
     }
 
     public void start() {
@@ -58,14 +57,13 @@ public class FXVariables implements FXView {
             started = true;
         }
         clearscreen();
-        draw();
     }
 
     private void clearscreen() {
         pane.getChildren().clear();
     }
 
-    private void draw() {
+    public void draw() {
 
         if (animationHandler.isMogelijk()) {
             Button animationButton = new Button();
@@ -140,7 +138,9 @@ public class FXVariables implements FXView {
                 }
             });
             pane.getChildren().addAll(traceButton);
-
+        }
+        System.out.println("dab \"" + pane.getChildren().size() + "\"dab");
+        if (pane.getChildren().size() < 1) {
             ((Stage) pane.getScene().getWindow()).close();
         }
     }

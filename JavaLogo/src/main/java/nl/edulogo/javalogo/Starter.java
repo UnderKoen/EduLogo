@@ -6,6 +6,7 @@ import nl.edulogo.display.fx.FXCanvas;
 import nl.edulogo.display.fx.FXDisplay;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 
 /**
  * Created by Under_Koen on 20/09/2018.
@@ -23,6 +24,7 @@ public class Starter extends Application {
             if (TekenApplet.class.isAssignableFrom(cls)) {
                 Class<? extends TekenApplet> appletClass = cls;
                 Constructor constructor = appletClass.getConstructor();
+                System.out.println(Arrays.toString(constructor.getParameterTypes()));
                 applet = (TekenApplet) constructor.newInstance();
                 launch();
             }
