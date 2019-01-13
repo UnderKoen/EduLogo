@@ -17,6 +17,9 @@ import nl.edulogo.javalogo.variabele.SchuifInvoerVariabele;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by D0an
+ */
 public class FXVariables implements FXView {
     private StackPane pane;
     private TekenApplet applet;
@@ -63,11 +66,12 @@ public class FXVariables implements FXView {
         pane.getChildren().clear();
     }
 
+    private boolean ooitgetekend = false;
+
     public void draw() {
 
-        if (animationHandler.isMogelijk()) {
+        if (!ooitgetekend && animationHandler.isMogelijk()) {
             Button animationButton = new Button();
-
             animationButton.setText("animatie");
             animationButton.setTranslateY(-330);
             animationButton.setOnAction(event -> {
@@ -81,7 +85,7 @@ public class FXVariables implements FXView {
             });
             pane.getChildren().addAll(animationButton);
         }
-        if (traceHandler.isMogelijk()) {
+        if (!ooitgetekend && traceHandler.isMogelijk()) {
             Button traceButton = new Button();
             traceButton.setText("trace aanschakelen");
             traceButton.setTranslateY(-300);
@@ -139,7 +143,7 @@ public class FXVariables implements FXView {
             });
             pane.getChildren().addAll(traceButton);
         }
-        System.out.println("dab \"" + pane.getChildren().size() + "\"dab");
+        ooitgetekend = true;
         if (pane.getChildren().size() < 1) {
             ((Stage) pane.getScene().getWindow()).close();
         }

@@ -2,6 +2,10 @@ package nl.edulogo.javalogo;
 
 import nl.edulogo.core.Color;
 
+/**
+ * Created by D0an
+ */
+
 public class Font extends nl.edulogo.core.Font {
 
     public final static String PLAIN = "";

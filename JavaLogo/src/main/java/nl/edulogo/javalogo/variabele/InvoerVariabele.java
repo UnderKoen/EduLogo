@@ -1,6 +1,5 @@
 package nl.edulogo.javalogo.variabele;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,7 +9,7 @@ import javafx.scene.layout.StackPane;
 import nl.edulogo.javalogo.TekenApplet;
 
 /**
- * Created by Under_Koen on 25/09/2018.
+ * Created by D0an
  */
 public class InvoerVariabele {
     private String naam;

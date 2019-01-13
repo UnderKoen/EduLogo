@@ -7,7 +7,7 @@ import javafx.scene.layout.StackPane;
 import nl.edulogo.javalogo.TekenApplet;
 
 /**
- * Created by Under_Koen on 25/09/2018.
+ * Created by D0an
  */
 public class SchuifInvoerVariabele extends InvoerVariabele {
 

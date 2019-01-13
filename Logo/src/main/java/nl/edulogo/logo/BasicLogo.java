@@ -9,12 +9,20 @@ import nl.edulogo.core.utils.MathUtil;
  * Created by Under_Koen on 20/09/2018.
  */
 public abstract class BasicLogo implements Logo {
+
+    private Color lastColor = new Color(255, 255, 255);
+
     public void clearScreen() {
         getCanvas().clear();
     }
 
     public void fillScreen(Color color) {
+        if (color == null) {
+            getCanvas().fillScreen(lastColor);
+            return;
+        }
         getCanvas().fillScreen(color);
+        lastColor = color;
     }
 
     public void drawImage(Image image) {

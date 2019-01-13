@@ -7,6 +7,10 @@ import nl.edulogo.javalogo.utils.ColorUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by D0an
+ */
+
 public class TraceHandler {
     private List<Trace> traces;
     private int index;
@@ -111,7 +115,7 @@ public class TraceHandler {
         applet.getTurtle().setPosition(new Position(applet.getCanvas().getSize().getWidth() / 2, applet.getCanvas().getSize().getHeight() / 2));
         applet.getTurtle().setRotation(0);
         applet.resetPath();
-        applet.fillScreen(Color.WHITE);
+        applet.fillScreen(null);
     }
 
     private void drawArrow() {

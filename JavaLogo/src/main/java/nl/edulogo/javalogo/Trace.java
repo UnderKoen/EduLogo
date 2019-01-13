@@ -1,5 +1,9 @@
 package nl.edulogo.javalogo;
 
+/**
+ * Created by D0an
+ */
+
 public class Trace {
     private TraceSoort traceSoort;
     private Object[] traceValues;

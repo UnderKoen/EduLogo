@@ -1,9 +1,10 @@
 package nl.edulogo.javalogo;
 
 import nl.edulogo.javalogo.variabele.InvoerVariabele;
+import nl.edulogo.javalogo.variabele.SchuifInvoerVariabele;
 
 /**
- * Created by Under_Koen on 20/09/2018.
+ * Created by Under_Koen, D0an on 20/09/2018.
  */
 public class Test extends TekenApplet {
 
@@ -11,7 +12,12 @@ public class Test extends TekenApplet {
     public void initialiseer() {
         setSize(500, 500);
         maakTraceMogelijk();
-        for (int i = 0; i < 8; i++) maakZichtbaar(new InvoerVariabele("t", 0, 10, -10));
+        maakAnimatieMogelijk();
+        achtergrondkleur("geel");
+        maakZichtbaar(new SchuifInvoerVariabele("Grootte", 0, 1000, 100));
+        maakZichtbaar(new InvoerVariabele("Rood", 0, 255, 255));
+        maakZichtbaar(new InvoerVariabele("Groen", 0, 255, 255));
+        maakZichtbaar(new InvoerVariabele("Blauw", 0, 255, 255));
     }
 
     @Override
