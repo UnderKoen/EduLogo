@@ -1,7 +1,9 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 def jdk = System.getProperty("java.home")
 def moduleName = "edulogo.acslogo"
 def mainClass = 'nl.edulogo.acslogo.Test'
-
+def name = 'EduLogo'
 
 // jar file task (we add the main class and classpath attributes to the manifest)
 jar {
@@ -12,32 +14,41 @@ jar {
     }
 }
 
-task copyDependencies(type: Copy) {
+task cleanLibs() {
+    project.delete "${buildDir}/libraries"
+}
+
+task copyDependencies(type: Copy, dependsOn: cleanLibs) {
     from configurations.runtime
     into "${buildDir}/libraries"
 }
 
+processResources {
+    filesMatching('edul.properties') {
+        filter ReplaceTokens, tokens: [
+                'icon': file("${project.projectDir}/package/resources/EduScript.icns").toString()
+        ]
+    }
+    print(file("${project.projectDir}/package/resources/edul.properties").toString())
+}
+
 // creates application bundle (executable + runtime)
-task javaPackager(type: Exec, dependsOn: [assemble, copyDependencies]) {
+task javaPackager(type: Exec, dependsOn: [assemble, copyDependencies, processResources]) {
     workingDir project.projectDir
     commandLine = [
-            '/Library/Java/JavaVirtualMachines/jdk-10.jdk/Contents/Home/bin/javapackager',
-            '-deploy',
-            '-nosign',
-            '-v',
-            '-native', 'image',
-            '-outdir', "${buildDir}/distribution",
-            '-srcdir', "${buildDir}/../src/main/resources",
-            '-outfile', project.name,
-            '-name', project.name,
-            '-appclass', mainClass,
-            '-p', "${jdk}/jmods${File.pathSeparator}${buildDir}/libraries:${buildDir}/libs",
+            "${project.projectDir}/package/jpackager",
+            'create-image',
+            '-o', "${buildDir}/distribution",
+            '-i', "${buildDir}/../src/main/resources",
+            '-n', name,
+            '-v', project.version,
+            '--copyright', 'Copyright © 2019 Koen van Staveren, Daan Docters van Leeuwen en Daniël van Driel. All rights reserved.',
+            '--identifier', 'nl.edulogo.eduscript',
+            '--file-associations', file("${project.projectDir}/package/resources/edul.properties"),
+            '-c', mainClass,
+            '-p', "${jdk}/jmods${File.pathSeparator}${buildDir}/libraries${File.pathSeparator}${buildDir}/libs",
+            '--icon', file("${project.projectDir}/package/resources/EduLogo.icns"),
             '--add-modules', moduleName,
             '-m', "$moduleName/$mainClass"
     ]
-}
-
-task copyResources(type: Copy, dependsOn:javaPackager) {
-    from "${buildDir}/Content"
-    into "${buildDir}/distribution/${project.name}.app/Contents"
 }

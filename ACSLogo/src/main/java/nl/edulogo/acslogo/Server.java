@@ -13,7 +13,7 @@ import java.net.Socket;
 public class Server {
     private static double move_sensitivity = 100;
     private static double rotate_sensitivity = 1;
-    private static double pen_amount = 1;
+    private static double pen_amount = 0.1;
 
     private int port = 8070;
     private ServerSocket serverSocket;
@@ -79,7 +79,7 @@ public class Server {
 
     public void penDown() {
         if (client == null) return;
-        out.println("PenUp " + pen_amount);
+        out.println("PenDown " + pen_amount);
         waitForInput();
     }
 

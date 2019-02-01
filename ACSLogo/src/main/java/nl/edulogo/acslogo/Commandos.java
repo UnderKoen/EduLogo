@@ -21,15 +21,24 @@ import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.utils.ValueUtil;
 import nl.edulogo.acslogo.utils.WaitableUtil;
 import nl.edulogo.core.*;
+import nl.edulogo.core.Color;
+import nl.edulogo.core.Font;
+import nl.edulogo.core.Image;
 import nl.edulogo.core.utils.MathUtil;
 import nl.edulogo.display.fx.FXCanvas;
 import nl.edulogo.logo.Path;
 import nl.edulogo.logo.Turtle;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -186,6 +195,8 @@ public class Commandos {
 
         commandos.add(new Commando("if", this::ifM, 3));
 
+        commandos.add(new Commando("image", this::image, 1));
+
         commandos.add(new Commando("integer", this::integer, 1));
 
         commandos.add(new Commando("item", this::item, 2));
@@ -298,17 +309,22 @@ public class Commandos {
         commandos.add(new Commando("xPos", this::xPos));
         commandos.add(new Commando("yPos", this::yPos));
 
+        commandos.add(new Commando("upUpDownDownLeftRightLeftRightBA", this::upUpDownDownLeftRightLeftRightBA));
+        commandos.add(new Commando("d0an", this::d0an, "daan", "ddvl"));
+        commandos.add(new Commando("under_koen", this::underKoen, "underKoen", "koen"));
+        commandos.add(new Commando("disgustedD0an", this::disgustedD0an));
+
         return commandos.toArray(new Commando[0]);
     }
 
-    private Value abs(Value... arguments) {
-        double d = (Double) arguments[0].getValue();
+    private Value abs(Value... arguments) throws ExecutorException {
+        double d = arguments[0].getAsNumber();
         return new Value(Math.abs(d));
     }
 
-    private Value and(Value... arguments) {
-        Boolean l = (Boolean) arguments[0].getValue();
-        Boolean r = (Boolean) arguments[1].getValue();
+    private Value and(Value... arguments) throws ExecutorException {
+        Boolean l = arguments[0].getAsBoolean();
+        Boolean r = arguments[1].getAsBoolean();
         return new Value(l && r);
     }
 
@@ -553,7 +569,7 @@ public class Commandos {
         return new Value(Math.exp(d));
     }
 
-    private Value fillCurrentPath() {
+    private Value fillCurrentPath() throws ExecutorException {
         logo.fillPath();
         logo.getTurtle().getPath().clear();
         return null;
@@ -720,6 +736,13 @@ public class Commandos {
         ListObject falseL = arguments[2].getAsList();
 
         return logo.runRaw((b) ? trueL.getInner() : falseL.getInner());
+    }
+
+    private Value image(Value... arguments) throws ExecutorException {
+        String s = arguments[0].getAsString();
+        Image image = new Image(new File(s));
+        logo.drawImage(image);
+        return null;
     }
 
     private Value integer(Value... arguments) throws ExecutorException {
@@ -893,11 +916,13 @@ public class Commandos {
     private Value penUp() {
         logo.getTurtle().setPenDown(false);
         logo.getTurtle().getPath().clear();
+        ACSLogo.server.penUp();
         return null;
     }
 
     private Value penDown() {
         logo.getTurtle().setPenDown(true);
+        ACSLogo.server.penDown();
         return null;
     }
 
@@ -1401,7 +1426,8 @@ public class Commandos {
         int i = (int) arguments[0].getAsNumber();
         try {
             Thread.sleep(i);
-        } catch (InterruptedException ignored) {
+        } catch (InterruptedException e) {
+            throw new ExecutorException("Stopped while waiting.");
         }
         return null;
     }
@@ -1431,5 +1457,66 @@ public class Commandos {
         String s = new javafx.scene.text.Font(font, 12).getName();
         if (!s.equalsIgnoreCase(font.trim()))
             throw new ExecutorException(String.format("Font %s doesn't exist.", font));
+    }
+
+    //Super secret easter eggs
+    private Value upUpDownDownLeftRightLeftRightBA() {
+        //Tip run dit commando nooit
+        Runtime runtime = Runtime.getRuntime();
+        String[] args = { "osascript", "-e", "tell application \"Spotify\" to activate\n" +
+                "delay 0.5\n" +
+                "if running of application \"Spotify\" is true then\n" +
+                "tell application \"Spotify\"\n" +
+                "play track \"spotify:track:7GhIk7Il098yCjg4BQjzvb\"\n" +
+                "set sound volume to 100\n" +
+                "end tell\n" +
+                "repeat 10000000 times\n" +
+                "if application \"Spotify\" is running then\n" +
+                "tell application \"Spotify\" to activate\n" +
+                "delay 0.5\n" +
+                "try\n" +
+                "tell application \"Spotify\"\n" +
+                "play\n" +
+                "set sound volume to 100\n" +
+                "end tell\n" +
+                "end try\n" +
+                "set volume output volume 100 --100%\n" +
+                "delay 0.1\n" +
+                "else\n" +
+                "tell application \"Spotify\" to activate\n" +
+                "delay 0.5\n" +
+                "tell application \"Spotify\"\n" +
+                "play track \"spotify:track:7GhIk7Il098yCjg4BQjzvb\"\n" +
+                "end tell\n" +
+                "end if\n" +
+                "end repeat\n" +
+                "end if"};
+        try {
+            Process process = runtime.exec(args);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Value disgustedD0an() {
+        logo.getTurtleGraphics().setImage(".eastereggs/d0an.png");
+        return null;
+    }
+
+    private Value d0an() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://daandvl.nl"));
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    private Value underKoen() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://underkoen.nl"));
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 }

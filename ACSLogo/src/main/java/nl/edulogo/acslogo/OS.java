@@ -1,5 +1,7 @@
 package nl.edulogo.acslogo;
 
+import javafx.scene.input.KeyCombination;
+
 public class OS {
     private String name;
     private Type type;
@@ -27,6 +29,10 @@ public class OS {
     public Type getType() {
         if (type == null) checkType();
         return type;
+    }
+
+    public KeyCombination.Modifier getModifier() {
+        return (getType() == OS.Type.MAC) ? KeyCombination.META_DOWN : KeyCombination.CONTROL_DOWN;
     }
 
     public enum Type {

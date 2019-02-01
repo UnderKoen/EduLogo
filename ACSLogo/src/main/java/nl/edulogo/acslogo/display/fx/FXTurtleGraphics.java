@@ -1,20 +1,21 @@
 package nl.edulogo.acslogo.display.fx;
 
+import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import nl.edulogo.acslogo.ACSLogo;
 import nl.edulogo.acslogo.display.TurtleGraphics;
-import nl.edulogo.core.Image;
 import nl.edulogo.core.Position;
 import nl.edulogo.display.fx.FXCanvas;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class FXTurtleGraphics implements TurtleGraphics<FXCanvas> {
     private StackPane node;
     private ImageView image;
+    private SimpleObjectProperty<Double> rotate;
+    private SimpleObjectProperty<Double> x;
+    private SimpleObjectProperty<Double> y;
 
     public FXTurtleGraphics(int size) {
         node = new StackPane();
@@ -23,17 +24,30 @@ public class FXTurtleGraphics implements TurtleGraphics<FXCanvas> {
         image.setFitWidth(size);
         image.setFitHeight(size);
         node.getChildren().add(image);
+
+        rotate = new SimpleObjectProperty<>(0.0);
+        image.rotateProperty().bind(rotate);
+
+        x = new SimpleObjectProperty<>(image.getTranslateX());
+        y = new SimpleObjectProperty<>(image.getTranslateY());
+
+        image.translateXProperty().bind(x);
+        image.translateYProperty().bind(y);
     }
 
     @Override
     public void setRotation(double degrees) {
-        image.setRotate(degrees);
+        Platform.runLater(() -> {
+            rotate.set(degrees);
+        });
     }
 
     @Override
     public void setPosition(Position position) {
-        image.setTranslateX(position.getX());
-        image.setTranslateY(position.getY());
+        Platform.runLater(() -> {
+            x.set(position.getX());
+            y.set(position.getY());
+        });
     }
 
     @Override

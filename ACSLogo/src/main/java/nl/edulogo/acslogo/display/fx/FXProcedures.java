@@ -5,8 +5,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.Mnemonic;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import nl.edulogo.acslogo.OS;
 import nl.edulogo.acslogo.display.Procedures;
 import nl.edulogo.acslogo.handlers.procedures.EditableProcedure;
 import nl.edulogo.acslogo.handlers.procedures.Procedure;
@@ -52,7 +57,7 @@ public class FXProcedures implements Procedures, FXView {
         EditableProcedure procedure = new EditableProcedure(name, new ArrayList<>(), "", procedureHandler.getLogo());
         proceduresNew.add(procedure);
 
-        displayProcedure(procedure, null);
+        displayProcedure(procedure, null, true);
     }
 
     private boolean contains(String name) {
@@ -61,7 +66,7 @@ public class FXProcedures implements Procedures, FXView {
                 .anyMatch(s -> s.equalsIgnoreCase(name));
     }
 
-    private void displayProcedure(EditableProcedure procedure, Procedure orginal) {
+    private void displayProcedure(EditableProcedure procedure, Procedure orginal, boolean setCurrent) {
         EditableLabel<EditableProcedure> label = new EditableLabel<>(procedure.getName(), procedure);
         boolean even = procedures.getChildren().size() % 2 == 0;
         if (even)
@@ -109,6 +114,8 @@ public class FXProcedures implements Procedures, FXView {
 
 
         label.setContextMenu(contextMenu);
+
+        label.selectedProperty().setValue(setCurrent);
     }
 
     private void displayParameter(String parameter) {
@@ -212,13 +219,16 @@ public class FXProcedures implements Procedures, FXView {
         proceduresOrg = new ArrayList<>(procedureHandler.getProcedures().values());
         proceduresNew = new ArrayList<>();
 
+        String name = null;
+        if (selected != null) name = selected.getHolder().getName();
         select(null);
         procedures.getChildren().clear();
 
+        String n = name;
         proceduresOrg.forEach(procedure -> {
             EditableProcedure p = new EditableProcedure(procedure);
             proceduresNew.add(p);
-            displayProcedure(p, procedure);
+            displayProcedure(p, procedure, p.getName().equalsIgnoreCase(n));
         });
     }
 
@@ -306,6 +316,11 @@ public class FXProcedures implements Procedures, FXView {
         apply.setPrefHeight(24);
         apply.setOnAction(this::apply);
         StackPane.setAlignment(apply, Pos.CENTER_RIGHT);
+
+        //APPLY shortcut
+        KeyCombination.Modifier mod = new OS().getModifier();
+        Mnemonic mn = new Mnemonic(apply, new KeyCodeCombination(KeyCode.K, mod));
+        apply.sceneProperty().addListener((observable, oldValue, newValue) -> newValue.addMnemonic(mn));
 
         buttons.getChildren().addAll(newP, revert, apply);
 

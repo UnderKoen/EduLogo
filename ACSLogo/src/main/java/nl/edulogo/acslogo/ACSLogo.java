@@ -1,9 +1,8 @@
 package nl.edulogo.acslogo;
 
+import javafx.application.Platform;
 import javafx.event.Event;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -13,11 +12,7 @@ import nl.edulogo.acslogo.display.Procedures;
 import nl.edulogo.acslogo.display.TurtleGraphics;
 import nl.edulogo.acslogo.display.fx.FXProcedures;
 import nl.edulogo.acslogo.display.fx.FXTurtleGraphics;
-import nl.edulogo.acslogo.handlers.ColorHandler;
-import nl.edulogo.acslogo.handlers.CommandoHandler;
-import nl.edulogo.acslogo.handlers.ConsoleHandler;
-import nl.edulogo.acslogo.handlers.MouseHandler;
-import nl.edulogo.acslogo.handlers.procedures.Procedure;
+import nl.edulogo.acslogo.handlers.*;
 import nl.edulogo.acslogo.handlers.procedures.ProcedureHandler;
 import nl.edulogo.acslogo.handlers.variable.LocalVariableHandler;
 import nl.edulogo.acslogo.handlers.variable.PropertyHandler;
@@ -27,6 +22,7 @@ import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.Executor;
 import nl.edulogo.acslogo.script.parser.Parser;
+import nl.edulogo.acslogo.utils.WaitableUtil;
 import nl.edulogo.core.*;
 import nl.edulogo.display.Display;
 import nl.edulogo.display.fx.FXCanvas;
@@ -37,7 +33,6 @@ import nl.edulogo.logo.AdvancedLogo;
 import nl.edulogo.logo.Turtle;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -47,7 +42,7 @@ import java.util.ArrayList;
 public class ACSLogo extends AdvancedLogo {
     private static final int TURTLE_SIZE = 48;
     private static final double TURTLE_ALPHA = 0.8;
-    private static Server server = new Server(8070);
+    public static Server server = new Server(8070);
 
     static {
         try {
@@ -146,7 +141,7 @@ public class ACSLogo extends AdvancedLogo {
     }
 
     public void initMenu() {
-        KeyCombination.Modifier mod = (os.getType() == OS.Type.MAC) ? KeyCombination.META_DOWN : KeyCombination.CONTROL_DOWN;
+        KeyCombination.Modifier mod = os.getModifier();
 
         Menu fileMenu = new Menu("File");
         Menu runMenu = new Menu("Run");
@@ -230,7 +225,7 @@ public class ACSLogo extends AdvancedLogo {
     private void open(Event event) {
         updateDocument();
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("EduLogo", "*.edul", "*.edus"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("EduLogo", "*.edus", "*.edul"));
         File file = fileChooser.showOpenDialog(((FXDisplay) editorDisplay).getStage());
         try {
             if (document.getCode().isEmpty() && document.getProcedures().isEmpty()) {
@@ -245,15 +240,34 @@ public class ACSLogo extends AdvancedLogo {
     }
 
     private void close(Event event) {
+        ButtonType save = new ButtonType("Save", ButtonBar.ButtonData.APPLY);
+        ButtonType cancel = new ButtonType("Cancel");
+        ButtonType saveNot = new ButtonType("Don't save");
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to save the changes made to this file?",
+                saveNot, cancel, save);
+
+        ButtonType bt = alert.showAndWait().orElse(null);
+
+        if (bt == cancel) return;
+        if (bt == save) {
+            save(null);
+            return;
+        }
+
         ((FXDisplay) editorDisplay).getStage().close();
         ((FXDisplay) canvasDisplay).getStage().close();
         ((FXDisplay) proceduresDisplay).getStage().close();
     }
 
+    public void close() {
+        Platform.runLater(() -> close(null));
+    }
+
     private void save(Event event) {
         if (document.getOrgin() == null) {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("EduLogo", "*.edul", "*.edus"));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("EduLogo", "*.edus", "*.edul"));
             File file = fileChooser.showSaveDialog(((FXDisplay) editorDisplay).getStage());
             document.setOrgin(file);
         }
@@ -374,4 +388,6 @@ public class ACSLogo extends AdvancedLogo {
             server.right(rotation);
         }
     }
+
+
 }
