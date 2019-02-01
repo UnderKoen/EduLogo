@@ -1,45 +1,57 @@
+version = '1.0'
+
+allprojects {
+    apply plugin: 'idea'
+    idea.module.outputDir file("out/production/classes")
+}
+
 subprojects {
     apply plugin: 'java'
-    group ='nl.edulogo'
-    sourceCompatibility = 1.10
+    group = 'nl.edulogo'
+    sourceCompatibility = 1.11
     repositories {
         mavenCentral()
     }
-
     afterEvaluate {
         compileJava {
-            inputs.property("moduleName", moduleName)
-            doFirst {
-                options.compilerArgs = [
-                        '--module-path', classpath.asPath,
-                ]
-                classpath = files()
+            if (project.hasProperty("moduleName")) {
+                inputs.property("moduleName", moduleName)
+                doFirst {
+                    options.compilerArgs = [
+                            '--module-path', classpath.asPath
+                    ]
+                    classpath = files()
+                }
             }
         }
 
         compileTestJava {
-            inputs.property("moduleName", moduleName)
-            doFirst {
-                options.compilerArgs = [
-                        '--module-path', classpath.asPath,
-                        '--add-modules', 'junit',
-                        '--add-reads', "$moduleName=junit",
-                        '--patch-module', "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
-                ]
-                classpath = files()
+            if (project.hasProperty("moduleName")) {
+                inputs.property("moduleName", moduleName)
+                doFirst {
+                    options.compilerArgs = [
+                            '--module-path', classpath.asPath,
+                            '--add-modules', 'junit',
+                            '--add-reads', "$moduleName=junit",
+                            '--patch-module', "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
+                    ]
+                    classpath = files()
+                }
             }
         }
 
         test {
-            inputs.property("moduleName", moduleName)
-            doFirst {
-                jvmArgs = [
-                        '--module-path', classpath.asPath,
-                        '--add-modules', 'ALL-MODULE-PATH',
-                        '--add-reads', "$moduleName=junit",
-                        '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
-                ]
-                classpath = files()
+            if (project.hasProperty("moduleName")) {
+                inputs.property("moduleName", moduleName)
+                doFirst {
+                    jvmArgs = [
+                            '--module-path', classpath.asPath,
+                            '--add-modules', 'ALL-MODULE-PATH',
+                            '--add-reads', "$moduleName=junit",
+                            '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
+                    ]
+                    classpath = files()
+                }
             }
         }
     }
@@ -47,7 +59,9 @@ subprojects {
     //Default dependencies for all
     dependencies {
         testCompile group: 'junit', name: 'junit', version: '4.12'
-        compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.8.0-beta2'
+        compile "org.openjfx:javafx-base:12-ea+7:mac"
+        compile "org.openjfx:javafx-graphics:12-ea+7:mac"
+        compile "org.openjfx:javafx-controls:12-ea+7:mac"
     }
 }
 
@@ -56,5 +70,56 @@ project(':Core') {
     ext.moduleName = 'edulogo.core'
 
     dependencies {
+    }
+}
+
+project(':Display') {
+    version = '1.0'
+    ext.moduleName = 'edulogo.display'
+
+    dependencies {
+        compile project(':Core')
+    }
+}
+
+project(':JavaLogo') {
+    version = '1.0'
+    ext.moduleName = 'edulogo.javalogo'
+
+    dependencies {
+        compile project(':Core')
+        compile project(':Display')
+        compile project(':Logo')
+    }
+}
+
+project(':Editor') {
+    version = '1.0'
+    ext.moduleName = 'edulogo.editor'
+
+    dependencies {
+        compile project(':Core')
+        compile project(':Display')
+    }
+}
+
+project(':ACSLogo') {
+    version = '1.0'
+    ext.moduleName = 'edulogo.acslogo'
+
+    dependencies {
+        compile project(':Core')
+        compile project(':Display')
+        compile project(':Editor')
+        compile project(':Logo')
+    }
+}
+
+project(':Logo') {
+    version = '1.0'
+    ext.moduleName = 'edulogo.logo'
+
+    dependencies {
+        compile project(':Core')
     }
 }
