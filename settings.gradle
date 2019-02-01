@@ -1,2 +1,8 @@
 rootProject.name = 'EduLogo'
 include 'Core'
+include 'Display'
+include 'JavaLogo'
+include 'Editor'
+include 'Logo'
+include 'ACSLogo'
+
