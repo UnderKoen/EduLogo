@@ -916,13 +916,11 @@ public class Commandos {
     private Value penUp() {
         logo.getTurtle().setPenDown(false);
         logo.getTurtle().getPath().clear();
-        ACSLogo.server.penUp();
         return null;
     }
 
     private Value penDown() {
         logo.getTurtle().setPenDown(true);
-        ACSLogo.server.penDown();
         return null;
     }
 

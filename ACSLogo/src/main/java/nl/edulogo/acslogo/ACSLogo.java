@@ -12,7 +12,10 @@ import nl.edulogo.acslogo.display.Procedures;
 import nl.edulogo.acslogo.display.TurtleGraphics;
 import nl.edulogo.acslogo.display.fx.FXProcedures;
 import nl.edulogo.acslogo.display.fx.FXTurtleGraphics;
-import nl.edulogo.acslogo.handlers.*;
+import nl.edulogo.acslogo.handlers.ColorHandler;
+import nl.edulogo.acslogo.handlers.CommandoHandler;
+import nl.edulogo.acslogo.handlers.ConsoleHandler;
+import nl.edulogo.acslogo.handlers.MouseHandler;
 import nl.edulogo.acslogo.handlers.procedures.ProcedureHandler;
 import nl.edulogo.acslogo.handlers.variable.LocalVariableHandler;
 import nl.edulogo.acslogo.handlers.variable.PropertyHandler;
@@ -22,7 +25,6 @@ import nl.edulogo.acslogo.script.Script;
 import nl.edulogo.acslogo.script.commandos.Value;
 import nl.edulogo.acslogo.script.executor.Executor;
 import nl.edulogo.acslogo.script.parser.Parser;
-import nl.edulogo.acslogo.utils.WaitableUtil;
 import nl.edulogo.core.*;
 import nl.edulogo.display.Display;
 import nl.edulogo.display.fx.FXCanvas;
@@ -42,15 +44,6 @@ import java.util.ArrayList;
 public class ACSLogo extends AdvancedLogo {
     private static final int TURTLE_SIZE = 48;
     private static final double TURTLE_ALPHA = 0.8;
-    public static Server server = new Server(8070);
-
-    static {
-        try {
-            server.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private static OS os = new OS();
 
@@ -368,26 +361,4 @@ public class ACSLogo extends AdvancedLogo {
     public void setCurrent(LocalVariableHandler current) {
         this.current = current;
     }
-
-    @Override
-    public void forward(double amount) {
-        super.forward(amount);
-        if (amount < 0) {
-            server.back(-amount);
-        } else {
-            server.forward(amount);
-        }
-    }
-
-    @Override
-    public void right(double rotation) {
-        super.right(rotation);
-        if (rotation < 0) {
-            server.left(-rotation);
-        } else {
-            server.right(rotation);
-        }
-    }
-
-
 }
