@@ -5,16 +5,16 @@ plugins {
 allprojects {
     version = "1.10"
     group = 'nl.edulogo'
+}
 
+subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'org.openjfx.javafxplugin'
 
     sourceCompatibility = 1.14
     targetCompatibility = 1.14
-}
 
-subprojects {
     repositories {
         mavenCentral()
     }
