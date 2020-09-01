@@ -1,4 +1,4 @@
-rootProject.name = 'EduLogo'
+//rootProject.name = 'EduLogo'
 include 'Core'
 include 'Display'
 include 'JavaLogo'

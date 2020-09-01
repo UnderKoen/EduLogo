@@ -1,5 +1,5 @@
-apply plugin: 'java'
-apply plugin: 'maven'
-group = 'nl.edulogo'
-sourceCompatibility = 1.14
-targetCompatibility = 1.14
+ext.moduleName = 'edulogo.display'
+
+dependencies {
+    compile project(':Core')
+}

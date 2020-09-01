@@ -1,9 +1,13 @@
-apply plugin: 'java'
-apply plugin: 'maven'
-group = 'nl.edulogo'
-sourceCompatibility = 1.14
-targetCompatibility = 1.14
+ext.moduleName = 'edulogo.acslogo'
 
+dependencies {
+    compile project(':Core')
+    compile project(':Display')
+    compile project(':Editor')
+    compile project(':Logo')
+}
+
+/*
 import org.apache.tools.ant.filters.ReplaceTokens
 
 def jdk = System.getProperty("java.home")
@@ -58,3 +62,4 @@ task javaPackager(type: Exec, dependsOn: [assemble, copyDependencies, processRes
             '-m', "$moduleName/$mainClass"
     ]
 }
+//*/
