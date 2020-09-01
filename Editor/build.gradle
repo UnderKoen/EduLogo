@@ -1,0 +1,5 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+group = 'nl.edulogo'
+sourceCompatibility = 1.14
+targetCompatibility = 1.14
