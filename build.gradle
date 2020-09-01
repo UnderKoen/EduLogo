@@ -1,16 +1,17 @@
-apply plugin: 'maven'
-
-version = '1.2'
-
 allprojects {
+    version = '1.5'
+
     apply plugin: 'idea'
     idea.module.outputDir file("out/production/classes")
 }
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'maven'
     group = 'nl.edulogo'
     sourceCompatibility = 1.14
+    targetCompatibility = 1.14
+
     repositories {
         mavenCentral()
     }
@@ -90,12 +91,7 @@ subprojects {
     }
 }
 
-apply plugin: 'java'
-group = 'nl.edulogo'
-sourceCompatibility = 1.14
-
 project(':Core') {
-    version = '1.2'
     ext.moduleName = 'edulogo.core'
 
     dependencies {
@@ -103,7 +99,6 @@ project(':Core') {
 }
 
 project(':Display') {
-    version = '1.2'
     ext.moduleName = 'edulogo.display'
 
     dependencies {
@@ -112,7 +107,6 @@ project(':Display') {
 }
 
 project(':JavaLogo') {
-    version = '1.2'
     ext.moduleName = 'edulogo.javalogo'
 
     dependencies {
@@ -123,7 +117,6 @@ project(':JavaLogo') {
 }
 
 project(':Editor') {
-    version = '1.2'
     ext.moduleName = 'edulogo.editor'
 
     dependencies {
@@ -133,7 +126,6 @@ project(':Editor') {
 }
 
 project(':ACSLogo') {
-    version = '1.2'
     ext.moduleName = 'edulogo.acslogo'
 
     dependencies {
@@ -145,7 +137,6 @@ project(':ACSLogo') {
 }
 
 project(':Logo') {
-    version = '1.2'
     ext.moduleName = 'edulogo.logo'
 
     dependencies {
