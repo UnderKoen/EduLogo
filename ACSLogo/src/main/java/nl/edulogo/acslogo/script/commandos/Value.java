@@ -20,6 +20,7 @@ public class Value {
             type = ValueType.BOOLEAN;
         } else if (value instanceof Number) {
             type = ValueType.NUMBER;
+            this.value = ((Number) value).doubleValue();
         } else if (value instanceof String) {
             type = ValueType.STRING;
         } else if (value instanceof ListObject) {

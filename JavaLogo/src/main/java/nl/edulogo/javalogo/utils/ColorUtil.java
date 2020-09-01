@@ -2,6 +2,9 @@ package nl.edulogo.javalogo.utils;
 
 import nl.edulogo.core.Color;
 
+/**
+ * Created by D0an
+ */
 public class ColorUtil {
 
     public static Color fromString(String color) {

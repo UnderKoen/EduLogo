@@ -6,7 +6,7 @@ import nl.edulogo.javalogo.variabele.SchuifInvoerVariabele;
 import nl.edulogo.logo.BasicLogo;
 
 /**
- * Created by Under_Koen on 25/09/2018.
+ * Created by Under_Koen & D0an on 25/09/2018.
  */
 abstract class JavaLogo extends BasicLogo {
 

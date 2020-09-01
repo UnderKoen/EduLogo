@@ -7,6 +7,10 @@ import nl.edulogo.javalogo.utils.ColorUtil;
 import nl.edulogo.javalogo.variabele.InvoerVariabele;
 import nl.edulogo.logo.Turtle;
 
+/**
+ * Created by D0an
+ */
+
 public abstract class TekenApplet extends JavaLogo {
     private Canvas canvas;
     private Turtle turtle;
@@ -39,7 +43,7 @@ public abstract class TekenApplet extends JavaLogo {
     @Override
     public void maakAnimatieMogelijk() {
         animationHandler.maakMogelijk();
-        fxVariables.start();
+        fxVariables.draw();
     }
 
     @Override
@@ -131,6 +135,7 @@ public abstract class TekenApplet extends JavaLogo {
         achtergrondkleur("wit");
         fxVariables.start();
         initialiseer();
+        fxVariables.draw();
         turtle = new Turtle(new Position(getCanvas().getSize().getWidth() / 2, getCanvas().getSize().getHeight() / 2), 0);
         canDraw = true;
         tekenprogramma();
@@ -210,13 +215,11 @@ public abstract class TekenApplet extends JavaLogo {
     @Override
     public void maakTraceMogelijk() {
         traceHandler.maakMogelijk();
-        fxVariables.start();
     }
 
     @Override
     public void maakZichtbaar(InvoerVariabele iv) {
         fxVariables.makeVisible(iv);
-
     }
 
     @Override
@@ -273,6 +276,7 @@ public abstract class TekenApplet extends JavaLogo {
         vulAan = true;
         //traceHandler.addTrace(new Trace(Trace.TraceSoort.VULAAN, color.getRed(), color.getGreen(), color.getBlue()));
     }
+
     @Override
     public void vulUit() {
         if (!vulAan) return;
@@ -296,6 +300,7 @@ public abstract class TekenApplet extends JavaLogo {
         if (!canDraw) {
             return;
         }
+        pauze(1);
         achtergrondkleur("default");
         turtle = new Turtle(new Position(getCanvas().getSize().getWidth() / 2, getCanvas().getSize().getHeight() / 2), 0);
         tekenprogramma();

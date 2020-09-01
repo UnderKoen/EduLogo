@@ -1,5 +1,6 @@
 package nl.edulogo.acslogo.script.parser;
 
+import nl.edulogo.acslogo.ACSLogo;
 import nl.edulogo.acslogo.handlers.ConsoleHandler;
 import nl.edulogo.acslogo.script.ParsingException;
 import nl.edulogo.acslogo.script.Script;
@@ -22,6 +23,7 @@ public class Parser {
 
     private ConsoleHandler consoleHandler;
     private Executor executor;
+    private ACSLogo logo;
 
     public Script parseSafe(String code) {
         try {
@@ -35,9 +37,10 @@ public class Parser {
         return null;
     }
 
-    public Parser(ConsoleHandler consoleHandler, Executor executor) {
+    public Parser(ConsoleHandler consoleHandler, Executor executor, ACSLogo logo) {
         this.consoleHandler = consoleHandler;
         this.executor = executor;
+        this.logo = logo;
     }
 
     public Script parse(String code) throws ParsingException {
@@ -48,12 +51,13 @@ public class Parser {
 
     public String makeReady(String string) {
         //remove all comments
+        string = string.replaceAll("\t", " ");
         String[] lines = string.split("\n");
         StringBuffer r = new StringBuffer();
         for (String line : lines) {
             line = line.replaceAll("(?<!\\\\)//.*", "");
             r.append(line);
-            r.append('\n');
+            r.append(' ');
         }
 
         return r.toString();
@@ -127,7 +131,7 @@ public class Parser {
                     piece = new BooleanPiece(piece);
                     break;
                 case VARIABLE:
-                    piece = new VariablePiece(piece, executor.getVariableHandler());
+                    piece = new VariablePiece(piece, executor.getVariableHandler(), logo);
                     break;
                 case COMMANDO:
                     piece = new CommandoPiece(piece, executor.getCommandoHandler());

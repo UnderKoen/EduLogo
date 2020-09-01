@@ -11,7 +11,7 @@ public interface TurtleGraphics<T extends Canvas> {
 
     void setAlpha(double alpha);
 
-    void setImage(Image image);
+    void setImage(String file);
 
     void show();
 

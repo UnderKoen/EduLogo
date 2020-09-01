@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import nl.edulogo.core.Size;
 import nl.edulogo.display.fx.FXDisplay;
 import nl.edulogo.display.fx.FXView;
@@ -16,6 +17,9 @@ import nl.edulogo.javalogo.variabele.SchuifInvoerVariabele;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by D0an
+ */
 public class FXVariables implements FXView {
     private StackPane pane;
     private TekenApplet applet;
@@ -47,7 +51,6 @@ public class FXVariables implements FXView {
             invoerVars.add(var);
         }
         varHeight += 70;
-
     }
 
     public void start() {
@@ -57,18 +60,18 @@ public class FXVariables implements FXView {
             started = true;
         }
         clearscreen();
-        draw();
     }
 
     private void clearscreen() {
         pane.getChildren().clear();
     }
 
-    private void draw() {
+    private boolean ooitgetekend = false;
 
-        if (animationHandler.isMogelijk()) {
+    public void draw() {
+
+        if (!ooitgetekend && animationHandler.isMogelijk()) {
             Button animationButton = new Button();
-
             animationButton.setText("animatie");
             animationButton.setTranslateY(-330);
             animationButton.setOnAction(event -> {
@@ -82,7 +85,7 @@ public class FXVariables implements FXView {
             });
             pane.getChildren().addAll(animationButton);
         }
-        if (traceHandler.isMogelijk()) {
+        if (!ooitgetekend && traceHandler.isMogelijk()) {
             Button traceButton = new Button();
             traceButton.setText("trace aanschakelen");
             traceButton.setTranslateY(-300);
@@ -139,8 +142,10 @@ public class FXVariables implements FXView {
                 }
             });
             pane.getChildren().addAll(traceButton);
-
-            //TODO: Hier sluiten als geen Children.
+        }
+        ooitgetekend = true;
+        if (pane.getChildren().size() < 1) {
+            ((Stage) pane.getScene().getWindow()).close();
         }
     }
 

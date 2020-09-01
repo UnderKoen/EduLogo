@@ -45,6 +45,11 @@ public class FXEditor implements Editor, FXView {
     }
 
     @Override
+    public void setText(String text) {
+        textArea.setText(text);
+    }
+
+    @Override
     public String getText() {
         return textArea.getText();
     }

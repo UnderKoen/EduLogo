@@ -8,7 +8,7 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     group = 'nl.edulogo'
-    sourceCompatibility = 1.10
+    sourceCompatibility = 1.11
     repositories {
         mavenCentral()
     }
@@ -18,7 +18,7 @@ subprojects {
                 inputs.property("moduleName", moduleName)
                 doFirst {
                     options.compilerArgs = [
-                            '--module-path', classpath.asPath,
+                            '--module-path', classpath.asPath
                     ]
                     classpath = files()
                 }
@@ -59,6 +59,9 @@ subprojects {
     //Default dependencies for all
     dependencies {
         testCompile group: 'junit', name: 'junit', version: '4.12'
+        compile "org.openjfx:javafx-base:12-ea+7:mac"
+        compile "org.openjfx:javafx-graphics:12-ea+7:mac"
+        compile "org.openjfx:javafx-controls:12-ea+7:mac"
     }
 
     apply plugin: "maven-publish"

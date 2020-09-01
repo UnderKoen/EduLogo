@@ -19,9 +19,9 @@ public abstract class AdvancedLogo extends BasicLogo {
     public void writeRotated(String text) {
         Turtle turtle = getTurtle();
         getCanvas().translate(turtle.getPosition());
-        getCanvas().rotate(turtle.getRotation());
-        getCanvas().write(text, new Position(0, 0), turtle.getFont());
         getCanvas().rotate(-turtle.getRotation());
+        getCanvas().write(text, new Position(0, 0), turtle.getFont());
+        getCanvas().rotate(turtle.getRotation());
         getCanvas().translate(turtle.getPosition().inverted());
     }
 }

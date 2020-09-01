@@ -1,5 +1,6 @@
 package nl.edulogo.display.fx;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
@@ -33,9 +34,11 @@ public class FXCanvas implements Canvas, FXView {
     }
 
     private void setColor(Color color) {
-        javafx.scene.paint.Color fxColor = javafx.scene.paint.Color.color(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0, color.getAlpha());
-        graphics.setStroke(fxColor);
-        graphics.setFill(fxColor);
+        Platform.runLater(() -> {
+            javafx.scene.paint.Color fxColor = javafx.scene.paint.Color.color(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0, color.getAlpha());
+            graphics.setStroke(fxColor);
+            graphics.setFill(fxColor);
+        });
     }
 
     @Override
@@ -46,7 +49,9 @@ public class FXCanvas implements Canvas, FXView {
     @Override
     public void drawLine(Position from, Position to, Color color) {
         setColor(color);
-        graphics.strokeLine(from.getX() + 0.5, from.getY() + 0.5, to.getX() + 0.5, to.getY() + 0.5);
+        Platform.runLater(() -> {
+            graphics.strokeLine(from.getX() + 0.5, from.getY() + 0.5, to.getX() + 0.5, to.getY() + 0.5);
+        });
     }
 
     @Override
@@ -57,11 +62,15 @@ public class FXCanvas implements Canvas, FXView {
     @Override
     public void drawDot(Position position, Color color) {
         setColor(color);
-        graphics.strokeLine(position.getX() + 0.5, position.getY() + 0.5, position.getX() + 0.5, position.getY() + 0.5);
+        Platform.runLater(() -> {
+            graphics.fillRect(position.getX(), position.getY(), 1, 1);
+        });
     }
 
     private void drawImage(javafx.scene.image.Image image, Position position, Size size) {
-        graphics.drawImage(image, position.getX(), position.getY(), size.getWidth(), size.getHeight());
+        Platform.runLater(() -> {
+            graphics.drawImage(image, position.getX(), position.getY(), size.getWidth(), size.getHeight());
+        });
     }
 
     @Override
@@ -83,14 +92,18 @@ public class FXCanvas implements Canvas, FXView {
 
     @Override
     public void setSize(Size size) {
-        this.size = size;
-        canvas.setHeight(size.getHeight());
-        canvas.setWidth(size.getWidth());
+        Platform.runLater(() -> {
+            this.size = size;
+            canvas.setHeight(size.getHeight());
+            canvas.setWidth(size.getWidth());
+        });
     }
 
     private void setFont(Font font) {
         setColor(font.getColor());
-        graphics.setFont(new javafx.scene.text.Font(font.getName(), font.getSize()));
+        Platform.runLater(() -> {
+            graphics.setFont(new javafx.scene.text.Font(font.getName(), font.getSize()));
+        });
     }
 
     @Override
@@ -101,17 +114,24 @@ public class FXCanvas implements Canvas, FXView {
     @Override
     public void write(String text, Position position, Font font) {
         setFont(font);
-        graphics.fillText(text, position.getX(), position.getY());
+        Platform.runLater(() -> {
+            graphics.fillText(text, position.getX(), position.getY());
+        });
     }
 
     @Override
     public void fillScreen(Color color) {
+        clear();
         setColor(color);
-        graphics.fillRect(0, 0, size.getWidth(), size.getHeight());
+        Platform.runLater(() -> {
+            graphics.fillRect(0, 0, size.getWidth(), size.getHeight());
+        });
     }
 
     @Override
     public void fillPolygon(Polygon polygon, Color color) {
+        setColor(color);
+
         Position[] positions = polygon.getPositions();
         double[] x = new double[positions.length];
         double[] y = new double[positions.length];
@@ -121,8 +141,9 @@ public class FXCanvas implements Canvas, FXView {
             y[i] = position.getY();
         }
 
-        setColor(color);
-        graphics.fillPolygon(x, y, positions.length);
+        Platform.runLater(() -> {
+            graphics.fillPolygon(x, y, positions.length);
+        });
     }
 
     @Override
@@ -133,38 +154,52 @@ public class FXCanvas implements Canvas, FXView {
     @Override
     public void arc(Position center, double radiusX, double radiusY, double startAngle, double length, Color color) {
         setColor(color);
-        graphics.strokeArc(center.getX() - radiusX, center.getY() - radiusY, radiusX * 2, radiusY * 2, startAngle, length, ArcType.OPEN);
+        Platform.runLater(() -> {
+            graphics.strokeArc(center.getX() - radiusX, center.getY() - radiusY, radiusX * 2, radiusY * 2, startAngle, length, ArcType.OPEN);
+        });
     }
 
     @Override
     public void rotate(double degrees) {
-        graphics.rotate(degrees);
+        Platform.runLater(() -> {
+            graphics.rotate(degrees);
+        });
     }
 
     @Override
     public void setPenWidth(double width) {
-        graphics.setLineWidth(width);
+        Platform.runLater(() -> {
+            graphics.setLineWidth(width);
+        });
     }
 
     @Override
     public void translate(Position position) {
-        graphics.translate(position.getX(), position.getY());
+        Platform.runLater(() -> {
+            graphics.translate(position.getX(), position.getY());
+        });
     }
 
     @Override
     public void setLineCap(LineCap cap) {
-        graphics.setLineCap(StrokeLineCap.valueOf(cap.name()));
+        Platform.runLater(() -> {
+            graphics.setLineCap(StrokeLineCap.valueOf(cap.name()));
+        });
     }
 
     @Override
     public void setLineDash(double offset, double... dashes) {
-        graphics.setLineDashes(dashes);
-        graphics.setLineDashOffset(offset);
+        Platform.runLater(() -> {
+            graphics.setLineDashes(dashes);
+            graphics.setLineDashOffset(offset);
+        });
     }
 
     @Override
     public void clear() {
-        graphics.clearRect(0, 0, size.getWidth(), size.getHeight());
+        Platform.runLater(() -> {
+            graphics.clearRect(0, 0, size.getWidth(), size.getHeight());
+        });
     }
 
     @Override
