@@ -1,4 +1,4 @@
-version = '1.1'
+version = '1.2'
 
 allprojects {
     apply plugin: 'idea'
@@ -8,7 +8,7 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     group = 'nl.edulogo'
-    sourceCompatibility = 1.11
+    sourceCompatibility = 1.14
     repositories {
         mavenCentral()
     }
@@ -59,9 +59,13 @@ subprojects {
     //Default dependencies for all
     dependencies {
         testCompile group: 'junit', name: 'junit', version: '4.12'
-        compile "org.openjfx:javafx-base:12-ea+7:mac"
-        compile "org.openjfx:javafx-graphics:12-ea+7:mac"
-        compile "org.openjfx:javafx-controls:12-ea+7:mac"
+        compile "org.openjfx:javafx-base:14.0.2.1:win"
+        compile "org.openjfx:javafx-graphics:14.0.2.1:win"
+        compile "org.openjfx:javafx-controls:14.0.2.1:win"
+
+        compile "org.openjfx:javafx-base:14.0.2.1:mac"
+        compile "org.openjfx:javafx-graphics:14.0.2.1:mac"
+        compile "org.openjfx:javafx-controls:14.0.2.1:mac"
     }
 
     apply plugin: "maven-publish"
@@ -86,10 +90,10 @@ subprojects {
 
 apply plugin: 'java'
 group = 'nl.edulogo'
-sourceCompatibility = 1.10
+sourceCompatibility = 1.14
 
 project(':Core') {
-    version = '1.1'
+    version = '1.2'
     ext.moduleName = 'edulogo.core'
 
     dependencies {
@@ -97,7 +101,7 @@ project(':Core') {
 }
 
 project(':Display') {
-    version = '1.1'
+    version = '1.2'
     ext.moduleName = 'edulogo.display'
 
     dependencies {
@@ -106,7 +110,7 @@ project(':Display') {
 }
 
 project(':JavaLogo') {
-    version = '1.1'
+    version = '1.2'
     ext.moduleName = 'edulogo.javalogo'
 
     dependencies {
@@ -117,7 +121,7 @@ project(':JavaLogo') {
 }
 
 project(':Editor') {
-    version = '1.1'
+    version = '1.2'
     ext.moduleName = 'edulogo.editor'
 
     dependencies {
@@ -127,7 +131,7 @@ project(':Editor') {
 }
 
 project(':ACSLogo') {
-    version = '1.1'
+    version = '1.2'
     ext.moduleName = 'edulogo.acslogo'
 
     dependencies {
@@ -139,7 +143,7 @@ project(':ACSLogo') {
 }
 
 project(':Logo') {
-    version = '1.1'
+    version = '1.2'
     ext.moduleName = 'edulogo.logo'
 
     dependencies {
