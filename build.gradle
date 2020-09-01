@@ -1,4 +1,4 @@
-version = '1.0'
+version = '1.1'
 
 allprojects {
     apply plugin: 'idea'
@@ -60,10 +60,33 @@ subprojects {
     dependencies {
         testCompile group: 'junit', name: 'junit', version: '4.12'
     }
+
+    apply plugin: "maven-publish"
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/UnderKoen/EduLogo")
+                credentials {
+                    username = "UnderKoen"
+                    password = "token"
+                }
+            }
+        }
+        publications {
+            gpr(MavenPublication) {
+                from(components.java)
+            }
+        }
+    }
 }
 
+apply plugin: 'java'
+group = 'nl.edulogo'
+sourceCompatibility = 1.10
+
 project(':Core') {
-    version = '1.0'
+    version = '1.1'
     ext.moduleName = 'edulogo.core'
 
     dependencies {
@@ -71,7 +94,7 @@ project(':Core') {
 }
 
 project(':Display') {
-    version = '1.0'
+    version = '1.1'
     ext.moduleName = 'edulogo.display'
 
     dependencies {
@@ -80,7 +103,7 @@ project(':Display') {
 }
 
 project(':JavaLogo') {
-    version = '1.0'
+    version = '1.1'
     ext.moduleName = 'edulogo.javalogo'
 
     dependencies {
@@ -91,7 +114,7 @@ project(':JavaLogo') {
 }
 
 project(':Editor') {
-    version = '1.0'
+    version = '1.1'
     ext.moduleName = 'edulogo.editor'
 
     dependencies {
@@ -101,7 +124,7 @@ project(':Editor') {
 }
 
 project(':ACSLogo') {
-    version = '1.0'
+    version = '1.1'
     ext.moduleName = 'edulogo.acslogo'
 
     dependencies {
@@ -113,7 +136,7 @@ project(':ACSLogo') {
 }
 
 project(':Logo') {
-    version = '1.0'
+    version = '1.1'
     ext.moduleName = 'edulogo.logo'
 
     dependencies {
