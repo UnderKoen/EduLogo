@@ -6,14 +6,15 @@ allprojects {
     version = "1.10"
     group = 'nl.edulogo'
 
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'org.openjfx.javafxplugin'
+
     sourceCompatibility = 1.14
     targetCompatibility = 1.14
 }
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'maven'
-    apply plugin: 'org.openjfx.javafxplugin'
 
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier = 'sources'
